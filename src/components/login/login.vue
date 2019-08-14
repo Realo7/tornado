@@ -31,13 +31,13 @@ export default {
       // input.user = JSON.stringify(this.formdata)
 
       this.$http.post('CRUD/existUser', this.formdata, { emulateJSON: true }).then(res => {
-        if (res.data === '登陆成功') {
+        if (res.data === '登陆失败') {
+          console.log(res)
+          this.$message.error(res.data)
+        } else {
           this.$message.success(res.data)
           //跳转home
           this.$router.push({ name: 'home' })
-        } else {
-          console.log(res)
-          this.$message.error(res.data)
         }
       })
     }
