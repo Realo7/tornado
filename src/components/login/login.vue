@@ -26,20 +26,26 @@ export default {
   methods: {
     //登录请求
 
-    handleLogin() {
+    async handleLogin() {
       // var input = {}
       // input.user = JSON.stringify(this.formdata)
+      // 让异步代码看起来像同步代码
+      // 1.找到一步操作有结果的代码，前面加上await，同时res接收异步操作的结果
+      // 2.找到距离异步操作有结果的代码最近的方法，前面加async
+      // ES2017 async+await
 
-      this.$http.post('CRUD/existUser', this.formdata, { emulateJSON: true }).then(res => {
-        if (res.data === '登陆失败') {
-          console.log(res)
-          this.$message.error(res.data)
-        } else {
-          this.$message.success(res.data)
-          //跳转home
-          this.$router.push({ name: 'home' })
-        }
-      })
+      const res = await this.$http.post('CRUD/existUser', this.formdata, { emulateJSON: true })
+
+      if (res.data === '登陆失败') {
+        console.log(res)
+        this.$message.error(res.data)
+      } else {
+        this.$message.success(res.data)
+        //保存后台返回的"登陆成功"(把这个字符串当做token，返回token需要后台jwt组件)
+        localStorage.setItem('token',res.data)
+        //跳转home
+        this.$router.push({ name: 'home' })
+      }
     }
   }
 }
