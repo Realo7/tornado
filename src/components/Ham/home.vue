@@ -3,62 +3,68 @@
     <el-header class="header">
       <el-row>
         <el-col :span="4">
-          <div class="grid-content bg-purple">
-            <img src="@/assets/img/logo.png" alt="无法显示图片" />
+          <div class="collapse-btn" @click>
+            <i class="el-icon-menu"></i>
           </div>
         </el-col>
         <el-col :span="18">
-          <h3 class="middle">头部标题newbee</h3>
+          <div class="middle">
+            <img src="@/assets/img/logo.png" alt="无法显示图片" />
+          </div>
         </el-col>
         <el-col :span="2">
           <a href="#" class="loginout" @click.prevent="handleSignout()">退出</a>
         </el-col>
       </el-row>
     </el-header>
+
+    <!-- 侧边栏 -->
     <el-container>
       <el-aside width="200px" class="aside">
         <!-- 侧边栏导航 -->
-        <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#d3dce6" unique-opened="true">
+        <el-menu default-active="2" class="el-menu-vertical-demo" background-color="#d3dce6" unique-opened="true" router="true">
           <el-submenu index="1">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              <i class="el-icon-cpu"></i>
               <span>操作界面</span>
             </template>
-
-            <el-menu-item index="1-1">操作界面</el-menu-item>
+            <el-menu-item index="operate">操作界面</el-menu-item>
           </el-submenu>
 
-          <el-submenu index="2">
+          <el-submenu>
             <template slot="title">
-              <i class="el-icon-menu"></i>
+              <i class="el-icon-document"></i>
               <span>客服日志</span>
             </template>
-
-            <el-menu-item index="2-1">客服姓名下拉菜单</el-menu-item>
-            <el-menu-item index="2-2">开始时间检索</el-menu-item>
-            <el-menu-item index="2-3">结束时间检索</el-menu-item>
-            <el-menu-item index="2-4">车场名称检索</el-menu-item>
-            <el-menu-item index="2-5">车牌号检索</el-menu-item>
-            <el-menu-item index="2-6">检索按钮</el-menu-item>
-            <el-menu-item index="2-7">客服报表</el-menu-item>
+            <el-menu-item index="kefu">服务检索</el-menu-item>
+            <el-menu-item index="kefubb">客服报表</el-menu-item>
           </el-submenu>
 
-          <el-menu-item index="3">
-            <i class="el-icon-document"></i>
-            <span slot="title">账户管理</span>
-          </el-menu-item>
-          <el-menu-item index="4">
+          <el-submenu index="3">
+            <template slot="title">
+              <i class="el-icon-user"></i>
+              <span>用户管理</span>
+            </template>
+            <el-menu-item index="user">用户管理</el-menu-item>
+          </el-submenu>
+
+          <el-menu-item index="peizhi">
             <i class="el-icon-setting"></i>
             <span slot="title">配置管理</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
-      <el-main class="main">Main</el-main>
+
+      <el-main class="main">
+        <!-- 设置容器 -->
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
+// import bus from './bus';
 export default {
   methods: {
     handleSignout() {
@@ -92,6 +98,11 @@ export default {
 
 
 
+
+
+
+
+
 <style>
 .container {
   height: 100%;
@@ -114,5 +125,11 @@ export default {
   position: relative;
   left: 80%;
   top: 20px;
+}
+.collapse-btn {
+  float: left;
+  padding: 0 21px;
+  cursor: pointer;
+  line-height: 70px;
 }
 </style>
