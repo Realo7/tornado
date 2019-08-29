@@ -42,9 +42,9 @@
     </el-form>
     <br />
     <hr />
-    <Table :columns="columns1" :data="showlist"></Table>
+    <el-table :columns="columns1" :data="showlist"></el-table>
     <div class="paginationClass"></div>
-    <Page :total="dataCount" :page-size="pagesize" show-total @on-change="changepage" show-elevator on-page-size-change="pagesize"></Page>
+    <el-pagination :total="dataCount" :page-size="pagesize" show-total @on-change="changepage" show-elevator on-page-size-change="pagesize"></el-pagination>
   </div>
 </template>
 

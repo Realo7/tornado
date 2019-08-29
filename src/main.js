@@ -7,9 +7,15 @@ import Router from 'vue-router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import '@/assets/css/reset.css'
+import echarts from 'echarts'
+//用法四
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 //用法二
-import useaxios from '@/plugins/useaxios.js'
-
+// import useaxios from '@/plugins/useaxios.js'
+//用法三
+Vue.prototype.$axios = axios;
+Vue.prototype.$echarts = echarts;
 // axios用法一
 // import axios from 'axios'
 // Vue.prototype.$http = axios
@@ -22,7 +28,8 @@ Router.prototype.push = function push(location) {
 
 //使用vue插件
 Vue.use(ElementUI)
-Vue.use(useaxios)
+Vue.use(VueAxios, axios)
+// Vue.use(useaxios)
 
 
 /* eslint-disable no-new */

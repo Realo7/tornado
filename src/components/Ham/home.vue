@@ -22,16 +22,18 @@
     <el-container>
       <el-aside width="200px" class="aside">
         <!-- 侧边栏导航 -->
-        <el-menu default-active="2" class="el-menu-vertical-demo" background-color="#d3dce6" unique-opened="true" router="true">
+        <el-menu default-active="2" class="el-menu-vertical-demo" background-color="#d3dce6" :router="true">
           <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-cpu"></i>
               <span>操作界面</span>
             </template>
             <el-menu-item index="operate">操作界面</el-menu-item>
+            <el-menu-item index="worktable">工作台</el-menu-item>
+            <el-menu-item index="try">尝试一下</el-menu-item>
           </el-submenu>
 
-          <el-submenu>
+          <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-document"></i>
               <span>客服日志</span>
