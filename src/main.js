@@ -8,17 +8,20 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import '@/assets/css/reset.css'
 import echarts from 'echarts'
-//用法四
+// 为axios的baseurl引入变量文件
+import url from '../static/config'
+
+
 import axios from 'axios'
+
+
+axios.defaults.baseURL = "/api";
 import VueAxios from 'vue-axios'
-//用法二
-// import useaxios from '@/plugins/useaxios.js'
-//用法三
+
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
-// axios用法一
-// import axios from 'axios'
-// Vue.prototype.$http = axios
+
+
 
 Vue.config.productionTip = false
 const originalPush = Router.prototype.push
@@ -29,7 +32,8 @@ Router.prototype.push = function push(location) {
 //使用vue插件
 Vue.use(ElementUI)
 Vue.use(VueAxios, axios)
-// Vue.use(useaxios)
+Vue.use(echarts)
+
 
 
 /* eslint-disable no-new */

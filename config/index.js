@@ -10,7 +10,17 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      //配置代理，解决vue使用axios访问端口的跨域问题
+      "/api": {
+        target: "http://192.168.1.99:3830/Handlers",
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="10" type="flex" justify="start">
-      <el-col :span="16" class="row-bg">
+      <el-col :span="15" class="row-bg">
         <div class="grid-l1">
           照片1
           <img src="@/assets/img/监控01.png" style="width:100%;height:95%;" />
@@ -15,7 +15,7 @@
       <el-col :span="8">
         <div class="grid-l2">
           <div>
-            <h3>查询停车记录</h3>
+            <h3 style="padding-top:30px">查询停车记录</h3>
             <span class="add01">{{address}}</span>
             <span class="add02">{{passwaywhich}} : {{passwayname}}</span>
             <br />
@@ -64,28 +64,29 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 /* 圆角边框border-radius */
 .grid-l1 {
-  background-color: rgb(233, 238, 243);
+  background-color: rgb(255, 255, 255);
   border-radius: 4px;
-  height: 48%;
+  height: 47%;
   font-size: 22px;
   text-align: left;
 }
 .grid-l1-2 {
-  background-color: rgb(233, 238, 243);
+  background-color: rgb(255, 255, 255);
   border-radius: 4px;
-  height: 48%;
+  height: 47%;
   margin-top: 0.75%;
   font-size: 22px;
   text-align: left;
 }
 
 .grid-l2 {
-  background-color: rgb(233, 238, 243);
+  margin-top: -18px;
+  background-color: rgb(255, 255, 255);
   border-radius: 4px;
-  height: 98.6%;
+  height: 96.25%;
 }
 .add01 {
   margin-top: 10%;
@@ -96,10 +97,10 @@ export default {
 .add02 {
   text-align: center;
   font-size: 20px;
-  margin-top: 5%;
+  line-height: 60px;
   display: block;
 }
 .row-bg {
-  min-height: 850px;
+  height: 800px;
 }
 </style>

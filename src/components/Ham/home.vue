@@ -3,14 +3,10 @@
     <el-header class="header">
       <el-row>
         <el-col :span="4">
-          <div class="collapse-btn" @click>
-            <i class="el-icon-menu"></i>
-          </div>
+          <img src="@/assets/img/logo.png" alt="无法显示图片" />
         </el-col>
         <el-col :span="18">
-          <div class="middle">
-            <img src="@/assets/img/logo.png" alt="无法显示图片" />
-          </div>
+          <div class="middle"></div>
         </el-col>
         <el-col :span="2">
           <a href="#" class="loginout" @click.prevent="handleSignout()">退出</a>
@@ -22,7 +18,7 @@
     <el-container>
       <el-aside width="200px" class="aside">
         <!-- 侧边栏导航 -->
-        <el-menu default-active="2" class="el-menu-vertical-demo" background-color="#d3dce6" :router="true">
+        <el-menu default-active="2" class="el-menu-vertical-demo" background-color="white" :router="true">
           <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-cpu"></i>
@@ -48,6 +44,7 @@
               <span>用户管理</span>
             </template>
             <el-menu-item index="user">用户管理</el-menu-item>
+            <el-menu-item index="tt">再尝试一下</el-menu-item>
           </el-submenu>
 
           <el-menu-item index="peizhi">
@@ -110,13 +107,13 @@ export default {
   height: 100%;
 }
 .header {
-  background-color: #b3c0d1;
+  background-color: white;
 }
 .aside {
-  background-color: #d3dce6;
+  background-color: white;
 }
 .main {
-  background-color: #e9eef3;
+  background-color: rgb(242, 242, 242);
 }
 .middle {
   text-align: center;
@@ -124,8 +121,8 @@ export default {
 .loginout {
   text-decoration-line: none;
 
-  position: relative;
-  left: 80%;
+  position: absolute;
+  right: 1%;
   top: 20px;
 }
 .collapse-btn {

@@ -7,6 +7,7 @@
         </div>
 
         <div class="grid-l1-2">
+          <img src="@/assets/img/科尼赛克AgeraRS.png" style="width:100%;height:100%;" />
           <!-- <embed
             src="http://player.youku.com/player.php/Type/Folder/Fid/23680436/Ob/1/sid/XOTMzNzg0MTY4/v.swf"
             quality="high"
@@ -21,7 +22,7 @@
         </div>
 
         <div class="grid-l1-2">
-          <img src="@/assets/img/卡普桌面壁纸1.png" style="width:100%;height:100%" />
+          <img src="@/assets/img/科尼赛克AgeraRS.png" style="width:100%;height:100%" />
         </div>
       </el-col>
       <el-col :span="8">
@@ -55,31 +56,49 @@
       </el-col>
       <el-col :span="9">
         <div class="grid-l3">
-          <el-radio-group v-model="labelPosition" size="small">
-            <el-radio-button label="left">停车详情</el-radio-button>
-            <el-radio-button label="right">车场描述</el-radio-button>
-            <el-radio-button label="top">查询停车记录</el-radio-button>
-          </el-radio-group>
-          <div style="margin: 20px;"></div>
-          <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
-            <el-form-item label="名称">
-              <el-input v-model="formLabelAlign.name"></el-input>
-            </el-form-item>
-            <el-form-item label="活动区域">
-              <el-input v-model="formLabelAlign.region"></el-input>
-            </el-form-item>
-            <el-form-item label="活动形式">
-              <el-input v-model="formLabelAlign.type"></el-input>
-            </el-form-item>
-          </el-form>
+          <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="停车详情" name="first">
+              <div>
+                <br />
+                <span class="spading">入场时间：</span>
+                <br />
+                <span class="spading">算费时间：</span>
+                <br />
+                <span class="spading">电子支付时间：</span>
+                <br />
+                <span class="spading">停车时长：</span>
+                <br />
+                <span class="spading">免费时长：</span>
+                <br />
+                <span class="spading">出场状态：</span>
+                <br />
+                <span class="spading">出场时间：</span>
+                <br />
+                <el-button type="primary" style="display:block;margin:20% 45%;" @click="what">刷新</el-button>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="车场描述" name="second">
+              <br />
+              <span class="spad2">
+                <br />1.现场24小时负责人：李主管 18301050035(优先拨打授权，24小时联系电话)
+                <br />2.授权人：孙艳波 电话：13683290015(紧急联系电话)
+                <br />3.残疾车：有(云端验证证件)
+                <br />4.长租车：(不包含)一位多车，多位多车
+                <br />5.首汽共享授权云端免费放行
+              </span>
+            </el-tab-pane>
+            <el-tab-pane label="查询停车记录" name="third">角色管理</el-tab-pane>
+          </el-tabs>
         </div>
 
         <div class="grid-l3-2">
-          1、停车场名称
-          2、哪个车道呼叫
-          3、呼叫编号
-          （备注：所有自助设备IP对讲的唯一ID,可以实现客服主动呼叫道口，最好是链接按钮)
-          4、停车场计费标准及规则
+          <span>
+            呼叫原因：
+            <el-select v-model="value" placeholder="请选择">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+            <el-button type="danger">完成本次服务</el-button>
+          </span>
         </div>
       </el-col>
     </el-row>
@@ -90,6 +109,7 @@
 export default {
   data() {
     return {
+      activeName: 'first',
       sizeForm: {
         name: '',
         region: '',
@@ -134,6 +154,9 @@ export default {
     }
   },
   methods: {
+    handleClick(tab, event) {
+      console.log(tab, event)
+    },
     onSubmit() {
       console.log('submit!')
     }
@@ -141,56 +164,68 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .grid-l1 {
-  background-color: azure;
+  background-color: white;
   border-radius: 4px;
   height: 32%;
 }
 .grid-l1-2 {
-  background-color: azure;
+  background-color: white;
   border-radius: 4px;
   height: 30%;
   margin-top: 4%;
 }
 
 .grid-l2 {
-  background-color: azure;
+  background-color: white;
   border-radius: 4px;
-  min-height: 64%;
+  height: 64%;
 }
 .grid-l2-2 {
-  background-color: azure;
+  background-color: white;
   border-radius: 4px;
-  min-height: 30%;
+  height: 30%;
   margin-top: 4%;
 }
 
 .grid-l3 {
-  background-color: azure;
+  background-color: white;
   border-radius: 4px;
-  min-height: 48%;
+  height: 64%;
+}
+.spading {
+  padding: 20%;
+  line-height: 35px;
+}
+.spad2 {
+  line-height: 35px;
+  font-size: 18px;
 }
 .grid-l3-2 {
-  background-color: azure;
+  background-color: white;
   border-radius: 4px;
-  min-height: 46%;
+  height: 23%;
   margin-top: 3.5%;
+  text-align: center;
+  vertical-align: middle;
+  padding: 30px;
 }
 .tit01 {
-  padding-top: 10px;
+  line-height: 50px;
+  padding-top: 30px;
   text-align: center;
-  font-size: 50px;
+  font-size: 30px;
   display: block;
 }
 .tit02 {
-  padding-top: 10px;
+  padding-top: 30px;
   text-align: center;
-  font-size: 12px;
+  font-size: 18px;
   display: block;
 }
 
 .row-bg {
-  min-height: 850px;
+  max-height: 850px;
 }
 </style>

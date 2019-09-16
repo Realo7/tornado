@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '../components/login/login.vue'
 import Home from '../components/Ham/home.vue'
 import User from '../components/users/user.vue'
+import Tt from '../components/users/tt.vue'
 import Worktable from '../components/operate/worktable.vue'
 import Operate from '../components/operate/operate.vue'
 import Op1 from '../components/operate/op/op1'
@@ -30,6 +31,7 @@ export default new Router({
       // redirect: { name: 'operate' },
       children: [
         { name: 'user', path: 'user', component: User },
+        { name: 'tt', path: 'tt', component: Tt },
         { name: 'worktable', path: 'worktable', component: Worktable },
         { name: 'operate', path: 'operate', component: Operate },
         { name: 'try', path: 'try', component: Try },

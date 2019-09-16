@@ -64,7 +64,7 @@
         </div>
       </el-col>
       <el-col :span="8">
-        <div class="grid-lt" v-cloak>
+        <div class="grid-l2" v-cloak>
           <h3>呼叫处理记录</h3>
           <el-table :data="tableData" style="margin:0 " max-height="350">
             <el-table-column prop="date" label="时间"></el-table-column>
@@ -115,12 +115,13 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .grid-l2 {
-  background-color: rgb(44, 143, 121);
+  background-color: white;
   border-radius: 4px;
-  min-height: 64%;
-  /* text-align: center; */
+  min-height: 63%;
+  padding: 20px;
+  line-height: 35px;
 }
 
 .grid-l2-2 {
@@ -129,17 +130,9 @@ export default {
   min-height: 30%;
   margin-top: 0.1%;
 }
-.grid-lt {
-  background-color: rgb(44, 143, 121);
-  border-radius: 4px;
-  min-height: 64%;
-}
 
 .row-bg {
-  min-height: 850px;
-}
-.p {
-  padding: 10px 0;
+  min-height: 800px;
 }
 
 [v-cloak] {
