@@ -6,7 +6,9 @@
           <img src="@/assets/img/logo.png" alt="无法显示图片" />
         </el-col>
         <el-col :span="18">
-          <div class="middle"></div>
+          <div class="middle">
+            <span>OM寻呼系统</span>
+          </div>
         </el-col>
         <el-col :span="2">
           <a href="#" class="loginout" @click.prevent="handleSignout()">退出</a>
@@ -49,7 +51,7 @@
 
           <el-menu-item index="peizhi">
             <i class="el-icon-setting"></i>
-            <span slot="title">配置管理</span>
+            <span slot="title">图表展示</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -117,6 +119,7 @@ export default {
 }
 .middle {
   text-align: center;
+  font-size: 25px;
 }
 .loginout {
   text-decoration-line: none;

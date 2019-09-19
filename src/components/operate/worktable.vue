@@ -4,7 +4,11 @@
       <el-col :span="15" class="row-bg">
         <div class="grid-l1">
           照片1
-          <img src="@/assets/img/监控01.png" style="width:100%;height:95%;" />
+          <img
+            src="http://borchaw-parking-image.oss-cn-shanghai.aliyuncs.com/PK0030/192.168.1.101/20190905/20190905112713苏B003A2.jpg?Expires=1568886563&OSSAccessKeyId=LTAI0HvDBA7TWiur&Signature=6syzFDvv7Zgdz8R5T1wz74p2gNQ="
+            style="width:100%;height:95%;"
+          />
+          <!-- <img src="@/assets/img/监控01.png" style="width:100%;height:95%;" /> -->
         </div>
 
         <div class="grid-l1-2">

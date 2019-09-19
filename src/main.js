@@ -40,6 +40,7 @@ Vue.use(echarts)
 new Vue({
   el: '#app',
   router,
+  Router,
   components: { App },
   template: '<App/>'
 })

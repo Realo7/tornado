@@ -3,10 +3,10 @@
     <el-form class="login-form" label-position="top" label-width="80px" :model="formdata">
       <h2>用户登录</h2>
       <el-form-item label="用户名">
-        <el-input v-model="formdata.username"></el-input>
+        <el-input v-model="formdata.datas.userCode"></el-input>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input v-model="formdata.password"></el-input>
+        <el-input v-model="formdata.datas.pwd"></el-input>
       </el-form-item>
       <el-button class="login-btn" type="primary" @click.prevent="handleLogin()" round>登录</el-button>
     </el-form>
@@ -14,38 +14,45 @@
 </template>
 
 <script>
+import homeVue from '../Ham/home.vue'
 export default {
   data() {
     return {
       formdata: {
-        username: '',
-        password: ''
+        appId: '',
+        privatekey: '',
+        datas: {
+          userCode: '',
+          pwd: '',
+          callServerIP: '',
+          callServerPort: ''
+        }
       }
     }
   },
   methods: {
-    //登录请求
-
-    async handleLogin() {
-      // var input = {}
-      // input.user = JSON.stringify(this.formdata)
-      // 让异步代码看起来像同步代码
-      // 1.找到一步操作有结果的代码，前面加上await，同时res接收异步操作的结果
-      // 2.找到距离异步操作有结果的代码最近的方法，前面加async
-      // ES2017 async+await
-
-      const res = await this.$http.post('http://localhost:8080/CRUD/existUser', this.formdata, { emulateJSON: true })
-
-      if (res.data === '登陆失败') {
-        console.log(res)
-        this.$message.error(res.data)
-      } else {
-        this.$message.success(res.data)
-        //保存后台返回的"登陆成功"(把这个字符串当做token，返回token需要后台jwt组件)
-        localStorage.setItem('token', res.data)
-        //跳转home
-        this.$router.push({ name: 'home' })
-      }
+    handleLogin() {
+      let submit = {}
+      submit = JSON.stringify(this.formdata)
+      //console.log(submit)
+      this.$axios({
+        method: 'post',
+        // baseURL: 'api', //重写baseURL
+        url: '/LoginBISHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+        headers: { 'Content-Type': 'application/json' },
+        data: submit
+      })
+        .then(res => {
+          console.log(res)
+          //保存后台返回的token到localStorage
+          localStorage.setItem('token', res.data.datas)
+          localStorage.setItem('user', this.formdata.datas.userCode)
+          //跳转home
+          this.$router.push({ name: 'home' })
+        })
+        .catch(err => {
+          console.log('出现了错误' + err)
+        })
     }
   }
 }
