@@ -1,31 +1,30 @@
 <template>
   <div>
-    <el-row :gutter="10" type="flex" class="row-bg" justify="center">
-      <el-col :span="11" class="row-bg">
+    <el-row :gutter="6" class="row-bg" type="flex">
+      <el-col :span="11" :gutter="6">
         <div class="grid-l1">
-          <img src="@/assets/img/科尼赛克AgeraRS.png" style="width:100%;height:100%;" />
+          <!-- <img src="@/assets/img/科尼赛克AgeraRS.png" style="width:100%;height:100%;" /> -->
+          <img :src="imgsrc01" style="width:100%;height:100%;" />
         </div>
-
         <div class="grid-l1-2">
-          <img src="@/assets/img/科尼赛克AgeraRS.png" style="width:100%;height:100%;" />
-        </div>
-
-        <!-- 中间上方部分 -->
-        <div class="grid-l1-2">
-          <img src="@/assets/img/科尼赛克AgeraRS.png" style="width:100%;height:100%" />
+          <img src="@/assets/img/全景02.jpg" style="width:100%;height:100%;" />
         </div>
       </el-col>
-      <el-col :span="6">
+
+      <!-- 中间上方部分 -->
+      <el-col :span="7">
         <div class="grid-l2">
-          <span class="spadingl2">呼叫话机的编号</span>
+          <!-- <span>呼叫话机的编号</span>
           <div v-for="(item,key) of address">
             <div v-for="inneritem of item">{{inneritem.id}}</div>
-          </div>
-          <div class="spadingl2">通话编号{{address.callid}}</div>
-          <br />
-          <span class="spadingl2" v-if="callback">停车场名称{{callback.parkName}}</span>
+          </div>-->
 
-          <span class="tit01">{{tradeback.Plate}}</span>
+          <span style="font-size:20px;">通话状态{{address.attribute}}</span>
+          <br />
+          <span v-if="address.callid" style="font-size:20px;">通话编号{{address.callid}}</span>
+          <br />
+          <span v-if="callback">停车场名称{{callback.parkName}}</span>
+          <span class="tit01">车牌号{{tradeback.Plate}}</span>
           <div style="text-align:center; vertical-align:middel;padding:30px;">
             <!-- <el-select v-model="value" placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -33,9 +32,10 @@
           </div>
         </div>
 
+        <!-- 中间下方部分 -->
         <div class="grid-l2-2">
           <span class="tit01">
-            {{tradeback.ComboMeal}}
+            状态：{{tradeback.ComboMeal}}
             <br />
             {{tradeback.ShouldPayM}}
           </span>
@@ -51,11 +51,14 @@
           </span>
         </div>
       </el-col>
-      <el-col :span="7">
+      <el-col :span="6">
         <div class="grid-l3">
           <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="停车详情" name="first">
               <div>
+                <span class="spading">主叫{{gocall}}</span>
+                <br />
+                <span class="spading">被叫{{getcall}}</span>
                 <br />
                 <span class="spading">付费ID：{{tradeback.PayDetailID}}</span>
                 <br />
@@ -84,19 +87,42 @@
                 <br />5.首汽共享授权云端免费放行
               </span>
             </el-tab-pane>
+            <!-- 第三个标签页 -->
             <el-tab-pane label="查询停车记录" name="third">
-              <el-button @click="jumpto"></el-button>
+              <div class="grid-l3">
+                <div>
+                  <h3>查询停车记录</h3>
+                  <span class="add01">{{paneaddress}}</span>
+                  <span class="add02">{{passwaywhich}} : {{passwayname}}</span>
+                  <br />
+                  <span class="add02">呼叫编号：{{vistorid}}</span>
+                </div>
+                <el-form label-width="80px" style="width: 100%;margin-top:8%;">
+                  <el-form-item label="车 牌 号">
+                    <el-input v-model="formInline.user" placeholder="车牌号" style="width: 60%;"></el-input>
+                  </el-form-item>
+                  <el-form-item label="呼叫原因">
+                    <el-select v-model="formInline.region" placeholder="呼叫原因" style="width:60%">
+                      <el-option label="原因1" value="shanghai"></el-option>
+                      <el-option label="原因2" value="beijing"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="serch()">查询</el-button>
+                  </el-form-item>
+                </el-form>
+              </div>
             </el-tab-pane>
           </el-tabs>
         </div>
-
+        <!-- 第三列下方 -->
         <div class="grid-l3-2">
           <span>
             呼叫原因：
             <el-select v-model="value" placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
-            <el-button type="danger">完成本次服务</el-button>
+            <el-button type="danger" style="margin-top:30px;">完成本次服务</el-button>
           </span>
         </div>
       </el-col>
@@ -109,16 +135,7 @@ export default {
   data() {
     return {
       activeName: 'first',
-      sizeForm: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
+      imgsrc01: '',
       callerinfo: {
         appId: '',
         privatekey: '',
@@ -129,6 +146,8 @@ export default {
         privatekey: '',
         datas: { parkId: '', devConnId: '', devTag: '', IsZeroOrder: '1' }
       },
+      gocall: '',
+      getcall: '',
       callback: {},
       tradeback: {},
       options: [
@@ -146,38 +165,49 @@ export default {
         }
       ],
       value: '',
-      labelPosition: 'right',
-      formLabelAlign: {
-        name: '',
-        region: '',
-        type: ''
-      },
-      address: []
+
+      address: [],
+      tab_pane3_input: '',
+      paneaddress: '武汉天界',
+      passwaywhich: '这里写哪个口呼叫',
+      passwayname: '这里写呼叫口的名称',
+      vistorid: '这里传呼叫编号vistorid',
+
+      formInline: {
+        user: '',
+        region: ''
+      }
     }
   },
   methods: {
     handleClick(tab, event) {
       console.log(tab, event)
     },
-    jumpto() {
-      this.$router.replace('/worktable')
-    },
+    // jumpto() {
+    //   this.$router.replace('/worktable')
+    // },
     onSubmit() {
       console.log('submit!')
     },
     // 获取对讲机的详细信息，并保存相关记录
     getcaller() {
-      let devMac = this.address.ext[1].id
-      console.log('我带你们打' + devMac)
-      // 处理devMac
-
-      this.callerinfo.datas.devMac = devMac
-      if (this.callerinfo.datas.devIP == '') {
-        this.callerinfo.datas.devIP = devMac
+      //如果OM设备传过来的信息中含有ext数组(是OM设备的状态消息)
+      if (this.address.ext) {
+        var devMac = this.address.ext[1].id
+        //主叫变量gocall
+        this.gocall = this.address.ext[0].id
+        //被叫变量getcall
+        this.getcall = this.address.ext[1].id
       }
+      console.log('呼叫的座机号' + devMac)
+      // 处理devMac
+      this.callerinfo.datas.devMac = devMac
+      //分机呼话机IP取和MAC相同
+      this.callerinfo.datas.devIP = devMac
+
       let submit = {}
       submit = JSON.stringify(this.callerinfo)
-      // console.log(this.callerinfo)
+      console.log(submit)
       this.$axios({
         method: 'post',
         url: '/GetInterphoneDetailHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
@@ -195,6 +225,9 @@ export default {
 
           this.callback = JSON.parse(JSON.parse(acm).datas)
           console.log(this.callback)
+          if (this.callback != '') {
+            this.gettrade()
+          }
         })
         .catch(err => {
           console.log('出现了错误' + err)
@@ -211,6 +244,32 @@ export default {
       this.$axios({
         method: 'post',
         url: '/GetInOutInfoByDevAdrHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+        headers: { 'Content-Type': 'application/json' },
+        data: submit,
+        emulateJSON: true
+      })
+        .then(res => {
+          let trb = JSON.stringify(res.data)
+          console.log('返回的数据' + trb)
+          this.tradeback = JSON.parse(JSON.parse(trb).datas)
+          console.log(this.tradeback)
+          this.imgsrc01 = this.tradeback.inpic
+        })
+        .catch(err => {
+          console.log('出现了错误' + err)
+        })
+    },
+    //操作手动开闸
+    openbyhands() {
+      this.tradeinfo.datas.parkId = this.callback.parkId
+      this.tradeinfo.datas.devConnId = this.callback.devConnId
+      this.tradeinfo.datas.devTag = this.callback.devTag
+      this.tradeinfo.datas.IsZeroOrder = 1
+      let submit = {}
+      submit = JSON.stringify(this.tradeinfo)
+      this.$axios({
+        method: 'post',
+        url: '/OpenDeviceHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
         headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
@@ -250,6 +309,8 @@ export default {
       this.address = JSON.parse(da)
       // console.log(this.address)
       this.getcaller()
+
+      // this.gettrade()
     },
     websocketsend(Data) {
       //数据发送
@@ -262,6 +323,7 @@ export default {
   },
   created() {
     this.initWebSocket()
+    this.gettrade()
   }
 }
 </script>
@@ -275,34 +337,48 @@ export default {
 .grid-l1-2 {
   background-color: white;
   border-radius: 4px;
-  height: 30%;
-  margin-top: 4%;
+  height: 40%;
+  margin-top: 10px;
 }
 
 .grid-l2 {
   background-color: white;
   border-radius: 4px;
-  max-height: 60%;
-  min-height: 60%;
-  padding: 8%;
+  height: 55%;
+  padding: 30px;
+  overflow: auto;
+  line-height: 60px;
+  display: block;
+  font-size: 35px;
 }
 .grid-l2-2 {
   background-color: white;
   border-radius: 4px;
-  max-height: 30%;
-  min-height: 30%;
-  margin-top: 3%;
-  padding: 8%;
+  height: 38%;
+  line-height: 60px;
+  margin-top: 10px;
+  /* padding-top: 20px; */
   font-size: 25px;
+  overflow: auto;
 }
 
 .grid-l3 {
   background-color: white;
   border-radius: 4px;
-  height: 64%;
+  height: 66%;
+  overflow: auto;
+}
+.grid-l3-2 {
+  background-color: white;
+  border-radius: 4px;
+  height: 26.7%;
+  margin-top: 10px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 30px;
 }
 .spading {
-  padding: 20%;
+  padding: 30px;
   line-height: 35px;
 }
 .spadingl2 {
@@ -314,15 +390,7 @@ export default {
   line-height: 35px;
   font-size: 18px;
 }
-.grid-l3-2 {
-  background-color: white;
-  border-radius: 4px;
-  height: 23%;
-  margin-top: 3.5%;
-  text-align: center;
-  vertical-align: middle;
-  padding: 30px;
-}
+
 .tit01 {
   line-height: 50px;
   padding-top: 30px;
@@ -330,8 +398,28 @@ export default {
   font-size: 30px;
   display: block;
 }
-
+.tit02 {
+  line-height: 50px;
+  padding-top: 30px;
+  /* text-align: center; */
+  font-size: 30px;
+  display: block;
+}
+.add01 {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 50px;
+  display: block;
+}
+.add02 {
+  text-align: center;
+  font-size: 20px;
+  line-height: 60px;
+  display: block;
+}
 .row-bg {
-  max-height: 850px;
+  max-height: 950px;
+  /* align-items: flex-start; */
+  justify-content: center;
 }
 </style>

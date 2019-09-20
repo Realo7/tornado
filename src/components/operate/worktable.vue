@@ -16,11 +16,12 @@
           <img src="@/assets/img/全景02.jpg" style="width:100%;height:95%;" />
         </div>
       </el-col>
+      <!-- 第二列 -->
       <el-col :span="8">
         <div class="grid-l2">
           <div>
             <h3 style="padding-top:30px">查询停车记录</h3>
-            <span class="add01">{{address}}</span>
+            <span class="add01">{{paneaddress}}</span>
             <span class="add02">{{passwaywhich}} : {{passwayname}}</span>
             <br />
             <span class="add02">呼叫编号：{{vistorid}}</span>
@@ -49,7 +50,7 @@
 export default {
   data() {
     return {
-      address: '武汉天界',
+      paneaddress: '武汉天界',
       passwaywhich: '这里写哪个口呼叫',
       passwayname: '这里写呼叫口的名称',
       vistorid: '这里传呼叫编号vistorid',

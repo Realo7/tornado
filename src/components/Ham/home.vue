@@ -27,8 +27,8 @@
               <span>操作界面</span>
             </template>
             <el-menu-item index="operate">操作界面</el-menu-item>
-            <el-menu-item index="worktable">工作台</el-menu-item>
-            <el-menu-item index="try">尝试一下</el-menu-item>
+            <!-- <el-menu-item index="worktable">工作台</el-menu-item> -->
+            <!-- <el-menu-item index="try">尝试一下</el-menu-item> -->
           </el-submenu>
 
           <el-submenu index="2">
@@ -46,7 +46,6 @@
               <span>用户管理</span>
             </template>
             <el-menu-item index="user">用户管理</el-menu-item>
-            <el-menu-item index="tt">再尝试一下</el-menu-item>
           </el-submenu>
 
           <el-menu-item index="peizhi">
