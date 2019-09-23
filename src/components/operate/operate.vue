@@ -6,13 +6,14 @@
           <!-- <img src="@/assets/img/科尼赛克AgeraRS.png" style="width:100%;height:100%;" /> -->
           <!-- <img :src="imgsrc01" style="width:100%;height:100%;" /> -->
           <video
-            id="my-video"
-            class="video-js"
-            controls
+            id="myplayer"
+            :src="videosrc01"
             preload="auto"
             poster="@/assets/img/全景02.jpg"
-            src="rtmp://rtmp01open.ys7.com/openlive/f01018a141094b7fa138b9d0b856507b.hd"
             style="width:100%;height:100%;"
+            controls
+            playsinline
+            webkit-playsinline
           ></video>
         </div>
         <div class="grid-l1-2">
@@ -27,6 +28,7 @@
           <div v-for="(item,key) of address">
             <div v-for="inneritem of item">{{inneritem.id}}</div>
           </div>-->
+          <el-button @click="initvideo()">2333</el-button>
 
           <span v-if="!ombackansered.attribute" class="tit03">通话状态</span>
           <span v-if="ombackansered.attribute" class="tit03">{{ombackansered.attribute}}</span>
@@ -145,12 +147,13 @@
 </template>
 
 <script>
+import EZUIKit from 'ezuikit'
 export default {
   data() {
     return {
       activeName: 'first',
       imgsrc01: '',
-      videosrc01: '@/assets/img/5-1.mp4',
+      videosrc01: 'http://hls01open.ys7.com/openlive/f01018a141094b7fa138b9d0b856507b.hd.m3u8',
 
       callerinfo: {
         appId: '',
@@ -347,6 +350,10 @@ export default {
         .catch(err => {
           console.log('出现了错误' + err)
         })
+    },
+    initvideo() {
+      this.player = new EZUIKit.EZUIPlayer('myplayer')
+      this.player.play()
     },
     initWebSocket() {
       //初始化weosocket

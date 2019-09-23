@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import Router from 'vue-router'
 import ElementUI from 'element-ui';
+import EZUIKIT from "ezuikit"
 import 'element-ui/lib/theme-chalk/index.css';
 import '@/assets/css/reset.css'
 import echarts from 'echarts'
@@ -21,7 +22,7 @@ import VueAxios from 'vue-axios'
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
 Vue.prototype.$qs = qs;
-
+Vue.prototype.$ezuikit = EZUIKIT;
 
 
 Vue.config.productionTip = false
@@ -36,7 +37,7 @@ Vue.use(VueAxios, axios)
 Vue.use(echarts)
 Vue.use(qs)
 Vue.use(Notifications)
-
+Vue.use(EZUIKIT)
 
 
 /* eslint-disable no-new */
