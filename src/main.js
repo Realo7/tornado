@@ -8,18 +8,19 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import '@/assets/css/reset.css'
 import echarts from 'echarts'
+import qs from 'qs'
+import Notifications from 'vue-notification'
 // 为axios的baseurl引入变量文件
 import url from '../static/config'
 
-
 import axios from 'axios'
-
 
 axios.defaults.baseURL = "/api";
 import VueAxios from 'vue-axios'
 
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
+Vue.prototype.$qs = qs;
 
 
 
@@ -33,6 +34,8 @@ Router.prototype.push = function push(location) {
 Vue.use(ElementUI)
 Vue.use(VueAxios, axios)
 Vue.use(echarts)
+Vue.use(qs)
+Vue.use(Notifications)
 
 
 

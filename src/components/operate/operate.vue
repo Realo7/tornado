@@ -4,10 +4,19 @@
       <el-col :span="11" :gutter="6">
         <div class="grid-l1">
           <!-- <img src="@/assets/img/科尼赛克AgeraRS.png" style="width:100%;height:100%;" /> -->
-          <img :src="imgsrc01" style="width:100%;height:100%;" />
+          <!-- <img :src="imgsrc01" style="width:100%;height:100%;" /> -->
+          <video
+            id="my-video"
+            class="video-js"
+            controls
+            preload="auto"
+            poster="@/assets/img/全景02.jpg"
+            src="rtmp://rtmp01open.ys7.com/openlive/f01018a141094b7fa138b9d0b856507b.hd"
+            style="width:100%;height:100%;"
+          ></video>
         </div>
         <div class="grid-l1-2">
-          <img src="@/assets/img/全景02.jpg" style="width:100%;height:100%;" />
+          <img :src="imgsrc01" style="width:100%;height:100%;" />
         </div>
       </el-col>
 
@@ -19,12 +28,15 @@
             <div v-for="inneritem of item">{{inneritem.id}}</div>
           </div>-->
 
-          <span style="font-size:20px;">通话状态{{address.attribute}}</span>
+          <span v-if="!ombackansered.attribute" class="tit03">通话状态</span>
+          <span v-if="ombackansered.attribute" class="tit03">{{ombackansered.attribute}}</span>
+          <!-- <span class="tit03">{{ombackrecord.attribute}}</span> -->
           <br />
-          <span v-if="address.callid" style="font-size:20px;">通话编号{{address.callid}}</span>
+
           <br />
-          <span v-if="callback">停车场名称{{callback.parkName}}</span>
-          <span class="tit01">车牌号{{tradeback.Plate}}</span>
+          <span class="tit01" v-if="!callback.parkName">停车场名称</span>
+          <span class="tit01">{{callback.parkName}}</span>
+          <span class="tit01">{{tradeback.Plate}}</span>
           <div style="text-align:center; vertical-align:middel;padding:30px;">
             <!-- <el-select v-model="value" placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -60,6 +72,8 @@
                 <br />
                 <span class="spading">被叫{{getcall}}</span>
                 <br />
+                <span class="spading">通话编号{{ombackrecord.callid}}</span>
+                <br />
                 <span class="spading">付费ID：{{tradeback.PayDetailID}}</span>
                 <br />
                 <span class="spading">票号：{{tradeback.TicketCode}}</span>
@@ -91,7 +105,7 @@
             <el-tab-pane label="查询停车记录" name="third">
               <div class="grid-l3">
                 <div>
-                  <h3>查询停车记录</h3>
+                  <!-- <h3>查询停车记录</h3> -->
                   <span class="add01">{{paneaddress}}</span>
                   <span class="add02">{{passwaywhich}} : {{passwayname}}</span>
                   <br />
@@ -117,12 +131,12 @@
         </div>
         <!-- 第三列下方 -->
         <div class="grid-l3-2">
-          <span>
+          <span class="l3-2-1">
             呼叫原因：
             <el-select v-model="value" placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
-            <el-button type="danger" style="margin-top:30px;">完成本次服务</el-button>
+            <el-button type="danger" style="margin-top:30px;" @click="getvideotoken()">完成本次服务</el-button>
           </span>
         </div>
       </el-col>
@@ -136,6 +150,8 @@ export default {
     return {
       activeName: 'first',
       imgsrc01: '',
+      videosrc01: '@/assets/img/5-1.mp4',
+
       callerinfo: {
         appId: '',
         privatekey: '',
@@ -165,8 +181,10 @@ export default {
         }
       ],
       value: '',
-
       address: [],
+      ombackansered: '',
+      ombackrecord: '',
+
       tab_pane3_input: '',
       paneaddress: '武汉天界',
       passwaywhich: '这里写哪个口呼叫',
@@ -176,7 +194,12 @@ export default {
       formInline: {
         user: '',
         region: ''
-      }
+      },
+      videotoken: {
+        appKey: '1589063f2302486697eb1f29ff814a70',
+        appSecret: 'f333d38075e04ce55ce9204a90ba78ab'
+      },
+      videoback: {}
     }
   },
   methods: {
@@ -198,43 +221,47 @@ export default {
         this.gocall = this.address.ext[0].id
         //被叫变量getcall
         this.getcall = this.address.ext[1].id
+
+        console.log('呼叫的座机号' + devMac)
+        // 处理devMac
+        this.callerinfo.datas.devMac = devMac
+        //分机呼话机IP取和MAC相同
+        this.callerinfo.datas.devIP = devMac
+
+        let submit = {}
+        submit = JSON.stringify(this.callerinfo)
+        console.log(submit)
+        this.$axios({
+          method: 'post',
+          url: '/GetInterphoneDetailHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+          headers: { 'Content-Type': 'application/json' },
+          data: submit,
+          emulateJSON: true
+        })
+          .then(res => {
+            let acm = JSON.stringify(res.data)
+            console.log('返回的数据' + acm)
+
+            // let reg = new RegExp('/\r\n/', 'g')
+            // let acmm = acm.replace(/\\r\n/g, '\\r\\n')
+            // console.log('去掉换行符的json字符串' + acmm)
+
+            this.callback = JSON.parse(JSON.parse(acm).datas)
+            console.log(this.callback)
+            if (this.callback != '') {
+              this.gettrade()
+            }
+          })
+          .catch(err => {
+            console.log('出现了错误' + err)
+          })
+      } else {
+        console.log('通话记录不需要执行下面的方法')
       }
-      console.log('呼叫的座机号' + devMac)
-      // 处理devMac
-      this.callerinfo.datas.devMac = devMac
-      //分机呼话机IP取和MAC相同
-      this.callerinfo.datas.devIP = devMac
-
-      let submit = {}
-      submit = JSON.stringify(this.callerinfo)
-      console.log(submit)
-      this.$axios({
-        method: 'post',
-        url: '/GetInterphoneDetailHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
-        data: submit,
-        emulateJSON: true
-      })
-        .then(res => {
-          let acm = JSON.stringify(res.data)
-          console.log('返回的数据' + acm)
-
-          // let reg = new RegExp('/\r\n/', 'g')
-          // let acmm = acm.replace(/\\r\n/g, '\\r\\n')
-          // console.log('去掉换行符的json字符串' + acmm)
-
-          this.callback = JSON.parse(JSON.parse(acm).datas)
-          console.log(this.callback)
-          if (this.callback != '') {
-            this.gettrade()
-          }
-        })
-        .catch(err => {
-          console.log('出现了错误' + err)
-        })
     },
     //根据设备地址获取最近的一笔交易信息
     gettrade() {
+      // 将获取通话信息传过来的停车场ID,设备地址,设备类型&&&&&是否产生0元订单等传到gettrade方法的request数据中
       this.tradeinfo.datas.parkId = this.callback.parkId
       this.tradeinfo.datas.devConnId = this.callback.devConnId
       this.tradeinfo.datas.devTag = this.callback.devTag
@@ -253,7 +280,9 @@ export default {
           console.log('返回的数据' + trb)
           this.tradeback = JSON.parse(JSON.parse(trb).datas)
           console.log(this.tradeback)
-          this.imgsrc01 = this.tradeback.inpic
+          this.imgsrc01 = this.tradeback.inpic.replace('+', '%2B')
+          // let src = this.imgsrc01.replace('+', '%2B')
+          // this.imgsrc01 = src
         })
         .catch(err => {
           console.log('出现了错误' + err)
@@ -284,7 +313,41 @@ export default {
           console.log('出现了错误' + err)
         })
     },
+    open1() {
+      // this.$notify({
+      //   title: '通话接入',
+      //   dangerouslyUseHTMLString: true,
+      //   type: 'success',
+      //   message: '<div>元</div>'
+      // })
+      this.$notify({
+        group: 'foo',
+        // classes: my_not_style,
+        type: 'success',
+        title: '注意',
+        text: '有电话呼入'
+      })
+    },
+    getvideotoken() {
+      let submit = this.$qs.stringify(this.videotoken)
+      this.$axios({
+        method: 'post',
+        url: 'http://open.ys7.com/api/lapp/token/get',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        data: submit,
+        emulateJSON: true
+      })
+        .then(res => {
+          let token = JSON.stringify(res.data)
+          console.log('返回的数据' + token)
+          this.tokenback = JSON.parse(token)
 
+          console.log('接到了token' + this.tokenback)
+        })
+        .catch(err => {
+          console.log('出现了错误' + err)
+        })
+    },
     initWebSocket() {
       //初始化weosocket
       const wsuri = `ws://localhost:8080/websocket/DPS007` //这个地址由后端童鞋提供
@@ -306,11 +369,18 @@ export default {
     websocketonmessage(e) {
       var da = e.data
       console.log(da)
+
       this.address = JSON.parse(da)
       // console.log(this.address)
-      this.getcaller()
+      // 判断address中是不是有ext.id
+      if (this.address.ext) {
+        this.ombackansered = this.address
 
-      // this.gettrade()
+        this.open1()
+      } else {
+        this.ombackrecord = this.address
+      }
+      this.getcaller()
     },
     websocketsend(Data) {
       //数据发送
@@ -321,6 +391,7 @@ export default {
       console.log('断开连接', e)
     }
   },
+
   created() {
     this.initWebSocket()
     this.gettrade()
@@ -329,6 +400,9 @@ export default {
 </script>
 
 <style scoped>
+.my_not_style {
+  height: 500px;
+}
 .grid-l1 {
   background-color: white;
   border-radius: 4px;
@@ -367,15 +441,20 @@ export default {
   border-radius: 4px;
   height: 66%;
   overflow: auto;
+  vertical-align: middle;
+  /* text-align: center; */
 }
 .grid-l3-2 {
   background-color: white;
   border-radius: 4px;
-  height: 26.7%;
+  height: 24.5%;
   margin-top: 10px;
   text-align: center;
-  vertical-align: middle;
-  padding: 30px;
+  /* vertical-align: middle; */
+  padding-top: 20%;
+}
+.l3-2-1 {
+  padding-top: 50px;
 }
 .spading {
   padding: 30px;
@@ -402,8 +481,12 @@ export default {
   line-height: 50px;
   padding-top: 30px;
   /* text-align: center; */
-  font-size: 30px;
+  font-size: 20px;
   display: block;
+}
+.tit03 {
+  font-size: 20px;
+  padding-left: 70%;
 }
 .add01 {
   margin-top: 10px;
@@ -412,10 +495,15 @@ export default {
   display: block;
 }
 .add02 {
+  margin-top: 0px;
   text-align: center;
   font-size: 20px;
-  line-height: 60px;
+  line-height: 40px;
   display: block;
+}
+.msgbox01 {
+  font-size: 50px;
+  min-height: 200px;
 }
 .row-bg {
   max-height: 950px;
