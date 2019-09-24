@@ -156,16 +156,21 @@ import EZUIPlayer from 'ezuikit/ezuikit'
 export default {
   data() {
     return {
+      // 用来选择标签页
       activeName: 'first',
+      // 用于存图片地址
       imgsrc01: '',
+      // 直播的地址
       videosrc01: 'rtmp://rtmp01open.ys7.com/openlive/caf2867d020c481482ed1ebf9b423649.hd',
+      // 用于存监控地址
       livesrc02: '',
-
+      // 向Spring后端发送的话机信息，用于获取对讲机的详细信息，并保存呼叫记录
       callerinfo: {
         appId: '',
         privatekey: '',
         datas: { devMac: '', devIP: '', status: '', callTm: '', host_serial: '', PA2_serial: '' }
       },
+      // 向Spring后端发送的，根据设备地址获取最近的一笔交易信息
       tradeinfo: {
         appId: '',
         privatekey: '',
@@ -173,8 +178,11 @@ export default {
       },
       gocall: '',
       getcall: '',
+      // 用来接收设备的回复信息
       callback: {},
+      // 用来接收详细的交易信息
       tradeback: {},
+      // 选项框
       options: [
         {
           value: '选项1',
@@ -190,8 +198,12 @@ export default {
         }
       ],
       value: '',
+
+      // 不管OM发来的什么数据，都先通过address保存
       address: [],
+      // 用来2次保存返回的回复信息
       ombackansered: '',
+      // 用来2次保存返回的通话记录
       ombackrecord: '',
 
       tab_pane3_input: '',
@@ -199,16 +211,19 @@ export default {
       passwaywhich: '这里写哪个口呼叫',
       passwayname: '这里写呼叫口的名称',
       vistorid: '这里传呼叫编号vistorid',
-
+      // 页面中选择框的数据
       formInline: {
         user: '',
         region: ''
       },
+      //监控地址的KEY和Secret，在萤石平台获取
       videotoken: {
         appKey: '1589063f2302486697eb1f29ff814a70',
         appSecret: 'f333d38075e04ce55ce9204a90ba78ab'
       },
+      //用来保存监控所需的令牌
       videoback: {},
+      //保存登录时获取到绑定的设备编号
       telephone: {}
     }
   },
@@ -331,6 +346,8 @@ export default {
       //   type: 'success',
       //   message: '<div>元</div>'
       // })
+      let time = new Date()
+      let now = time.toLocaleTimeString()
       this.$notify({
         group: 'foo',
         // classes: my_not_style,
@@ -367,6 +384,7 @@ export default {
       this.livesrc02 =
         'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/C71948995/2.hd.live&autoplay=1&accessToken=at.dauw61242axuwk0y94rpq0hi5f80j2c7-967pawazub-16l3bxu-btpjlhtsm'
     },
+    // 从token中获取账号绑定的话机号，用来绑定socket的shopid
     getlocalTel() {
       let tel = JSON.parse(localStorage.token)
       let tele = JSON.stringify(tel.hostId).replace('"', '')
@@ -375,11 +393,12 @@ export default {
       console.log('巫毒娃娃' + telep[0])
       this.telephone = telep[0]
     },
-
+    // 初始化websocket
     initWebSocket() {
       let telnum = this.telephone
-      //初始化weosocket
-      const wsuri = `ws://localhost:8080/websocket/telnum` //这个地址由后端童鞋提供
+      let dizhi = 'ws://localhost:8080/websocket/'
+      // 拼接地址
+      const wsuri = dizhi + telnum //这个地址由后端童鞋提供
       this.websock = new WebSocket(wsuri)
       this.websock.onmessage = this.websocketonmessage
       this.websock.onopen = this.websocketonopen
@@ -404,7 +423,6 @@ export default {
       // 判断address中是不是有ext.id
       if (this.address.ext) {
         this.ombackansered = this.address
-
         this.open1()
       } else {
         this.ombackrecord = this.address
