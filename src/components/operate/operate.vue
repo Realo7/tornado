@@ -5,7 +5,7 @@
         <div class="grid-l1">
           <!-- <img src="@/assets/img/科尼赛克AgeraRS.png" style="width:100%;height:100%;" /> -->
           <!-- <img :src="imgsrc01" style="width:100%;height:100%;" /> -->
-          <video
+          <!-- <video
             id="myplayer"
             :src="videosrc01"
             preload="auto"
@@ -14,7 +14,8 @@
             controls
             playsinline
             webkit-playsinline
-          ></video>
+          ></video>-->
+          <iframe :src="livesrc02" width="100%" height="100%" id="ysOpenDevice" controls allowfullscreen></iframe>
         </div>
         <div class="grid-l1-2">
           <img :src="imgsrc01" style="width:100%;height:100%;" />
@@ -28,7 +29,7 @@
           <div v-for="(item,key) of address">
             <div v-for="inneritem of item">{{inneritem.id}}</div>
           </div>-->
-          <el-button @click="initvideo()">2333</el-button>
+          <el-button @click="initvideo02">2333</el-button>
 
           <span v-if="!ombackansered.attribute" class="tit03">通话状态</span>
           <span v-if="ombackansered.attribute" class="tit03">{{ombackansered.attribute}}</span>
@@ -148,12 +149,16 @@
 
 <script>
 import EZUIKit from 'ezuikit'
+import EZUIPlayer from 'ezuikit/ezuikit'
+
 export default {
   data() {
     return {
       activeName: 'first',
       imgsrc01: '',
-      videosrc01: 'http://hls01open.ys7.com/openlive/f01018a141094b7fa138b9d0b856507b.hd.m3u8',
+      videosrc01: 'rtmp://rtmp01open.ys7.com/openlive/caf2867d020c481482ed1ebf9b423649.hd',
+      livesrc02:
+        'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/C71948995/2.hd.live&autoplay=1&accessToken=at.dauw61242axuwk0y94rpq0hi5f80j2c7-967pawazub-16l3bxu-btpjlhtsm',
 
       callerinfo: {
         appId: '',
@@ -351,10 +356,12 @@ export default {
           console.log('出现了错误' + err)
         })
     },
-    initvideo() {
+    initvideo01() {
       this.player = new EZUIKit.EZUIPlayer('myplayer')
       this.player.play()
     },
+    initvideo02() {},
+
     initWebSocket() {
       //初始化weosocket
       const wsuri = `ws://localhost:8080/websocket/DPS007` //这个地址由后端童鞋提供

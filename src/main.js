@@ -6,11 +6,13 @@ import router from './router'
 import Router from 'vue-router'
 import ElementUI from 'element-ui';
 import EZUIKIT from "ezuikit"
+
 import 'element-ui/lib/theme-chalk/index.css';
 import '@/assets/css/reset.css'
 import echarts from 'echarts'
 import qs from 'qs'
 import Notifications from 'vue-notification'
+
 // 为axios的baseurl引入变量文件
 import url from '../static/config'
 
@@ -38,6 +40,7 @@ Vue.use(echarts)
 Vue.use(qs)
 Vue.use(Notifications)
 Vue.use(EZUIKIT)
+Vue.use(jquery)
 
 
 /* eslint-disable no-new */
