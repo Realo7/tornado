@@ -29,10 +29,11 @@
           <div v-for="(item,key) of address">
             <div v-for="inneritem of item">{{inneritem.id}}</div>
           </div>-->
-          <el-button @click="initvideo02">2333</el-button>
+          <!-- <el-button @click="initvideo02">2333</el-button> -->
 
           <span v-if="!ombackansered.attribute" class="tit03">通话状态</span>
           <span v-if="ombackansered.attribute" class="tit03">{{ombackansered.attribute}}</span>
+          <span v-if="ombackrecord.attribute" class="tit03">{{ombackrecord.attribute}}</span>
           <!-- <span class="tit03">{{ombackrecord.attribute}}</span> -->
           <br />
 
@@ -49,8 +50,9 @@
 
         <!-- 中间下方部分 -->
         <div class="grid-l2-2">
-          <span class="tit01">
-            状态：{{tradeback.ComboMeal}}
+          <span class="tit01" v-if="!tradeback.ComboMeal">类型：</span>
+          <span class="tit01" v-if="tradeback.ComboMeal">
+            {{tradeback.ComboMeal}}
             <br />
             {{tradeback.ShouldPayM}}
           </span>
@@ -157,8 +159,7 @@ export default {
       activeName: 'first',
       imgsrc01: '',
       videosrc01: 'rtmp://rtmp01open.ys7.com/openlive/caf2867d020c481482ed1ebf9b423649.hd',
-      livesrc02:
-        'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/C71948995/2.hd.live&autoplay=1&accessToken=at.dauw61242axuwk0y94rpq0hi5f80j2c7-967pawazub-16l3bxu-btpjlhtsm',
+      livesrc02: '',
 
       callerinfo: {
         appId: '',
@@ -207,7 +208,8 @@ export default {
         appKey: '1589063f2302486697eb1f29ff814a70',
         appSecret: 'f333d38075e04ce55ce9204a90ba78ab'
       },
-      videoback: {}
+      videoback: {},
+      telephone: {}
     }
   },
   methods: {
@@ -259,6 +261,7 @@ export default {
             if (this.callback != '') {
               this.gettrade()
             }
+            this.initvideo02()
           })
           .catch(err => {
             console.log('出现了错误' + err)
@@ -360,11 +363,23 @@ export default {
       this.player = new EZUIKit.EZUIPlayer('myplayer')
       this.player.play()
     },
-    initvideo02() {},
+    initvideo02() {
+      this.livesrc02 =
+        'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/C71948995/2.hd.live&autoplay=1&accessToken=at.dauw61242axuwk0y94rpq0hi5f80j2c7-967pawazub-16l3bxu-btpjlhtsm'
+    },
+    getlocalTel() {
+      let tel = JSON.parse(localStorage.token)
+      let tele = JSON.stringify(tel.hostId).replace('"', '')
+      let telep = new Array()
+      telep = tele.split(',')
+      console.log('巫毒娃娃' + telep[0])
+      this.telephone = telep[0]
+    },
 
     initWebSocket() {
+      let telnum = this.telephone
       //初始化weosocket
-      const wsuri = `ws://localhost:8080/websocket/DPS007` //这个地址由后端童鞋提供
+      const wsuri = `ws://localhost:8080/websocket/telnum` //这个地址由后端童鞋提供
       this.websock = new WebSocket(wsuri)
       this.websock.onmessage = this.websocketonmessage
       this.websock.onopen = this.websocketonopen
@@ -407,6 +422,9 @@ export default {
   },
 
   created() {
+    this.getlocalTel()
+  },
+  beforeMount() {
     this.initWebSocket()
     this.gettrade()
   }

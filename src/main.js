@@ -40,7 +40,7 @@ Vue.use(echarts)
 Vue.use(qs)
 Vue.use(Notifications)
 Vue.use(EZUIKIT)
-Vue.use(jquery)
+
 
 
 /* eslint-disable no-new */
