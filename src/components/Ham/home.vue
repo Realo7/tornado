@@ -20,7 +20,7 @@
     <el-container>
       <el-aside width="200px" class="aside">
         <!-- 侧边栏导航 -->
-        <el-menu default-active="2" class="el-menu-vertical-demo" background-color="white" :router="true">
+        <el-menu default-active="2" class="el-menu-vertical-demo" :router="true" text-color="#fff">
           <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-cpu"></i>
@@ -97,12 +97,6 @@ export default {
 </script>
 
 
-
-
-
-
-
-
 <style>
 .container {
   height: 100%;
@@ -111,7 +105,7 @@ export default {
   background-color: white;
 }
 .aside {
-  background-color: white;
+  background-color: rgb(34, 30, 67);
 }
 .main {
   background-color: rgb(242, 242, 242);
@@ -119,6 +113,9 @@ export default {
 .middle {
   text-align: center;
   font-size: 25px;
+}
+.el-menu-item {
+  background-color: rgb(34, 30, 67);
 }
 .loginout {
   text-decoration-line: none;
@@ -132,5 +129,8 @@ export default {
   padding: 0 21px;
   cursor: pointer;
   line-height: 70px;
+}
+.el-menu-vertical-demo {
+  background-color: rgb(34, 30, 67);
 }
 </style>

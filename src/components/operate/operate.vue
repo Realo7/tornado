@@ -1,74 +1,59 @@
 <template>
   <div>
     <el-row :gutter="6" class="row-bg" type="flex">
-      <el-col :span="11" :gutter="6">
+      <el-col :span="16" :gutter="6">
         <div class="grid-l1">
-          <!-- <img src="@/assets/img/科尼赛克AgeraRS.png" style="width:100%;height:100%;" /> -->
-          <!-- <img :src="imgsrc01" style="width:100%;height:100%;" /> -->
-          <!-- <video
-            id="myplayer"
-            :src="videosrc01"
-            preload="auto"
-            poster="@/assets/img/全景02.jpg"
-            style="width:100%;height:100%;"
-            controls
-            playsinline
-            webkit-playsinline
-          ></video>-->
-          <iframe :src="livesrc02" width="100%" height="100%" id="ysOpenDevice" controls allowfullscreen></iframe>
-        </div>
-        <div class="grid-l1-2">
-          <img :src="imgsrc01" style="width:100%;height:100%;" />
-        </div>
-      </el-col>
+          <iframe :src="livesrc02" width="100%" height="60%" id="ysOpenDevice" controls allowfullscreen></iframe>
+          <div style="float:left">
+            <img :src="callstatussrc" />
+          </div>
+          <div class="grid-l2">
+            <span v-if="!ombackansered.attribute&&!ombackrecord.attribute" class="tit03">通话状态</span>
+            <span v-if="ombackansered.attribute" class="tit03">{{ombackansered.attribute}}</span>
+            <span v-if="ombackrecord.attribute && ombackansered.attribute=='' " class="tit03">{{ombackrecord.attribute}}</span>
+            <!-- <span class="tit03">{{ombackrecord.attribute}}</span> -->
 
-      <!-- 中间上方部分 -->
-      <el-col :span="7">
-        <div class="grid-l2">
-          <!-- <span>呼叫话机的编号</span>
-          <div v-for="(item,key) of address">
-            <div v-for="inneritem of item">{{inneritem.id}}</div>
-          </div>-->
-          <!-- <el-button @click="initvideo02">2333</el-button> -->
-
-          <span v-if="!ombackansered.attribute" class="tit03">通话状态</span>
-          <span v-if="ombackansered.attribute" class="tit03">{{ombackansered.attribute}}</span>
-          <span v-if="ombackrecord.attribute" class="tit03">{{ombackrecord.attribute}}</span>
-          <!-- <span class="tit03">{{ombackrecord.attribute}}</span> -->
-          <br />
-
-          <br />
-          <span class="tit01" v-if="!callback.parkName">停车场名称</span>
-          <span class="tit01">{{callback.parkName}}</span>
-          <span class="tit01">{{tradeback.Plate}}</span>
-          <div style="text-align:center; vertical-align:middel;padding:30px;">
-            <!-- <el-select v-model="value" placeholder="请选择">
+            <span class="tit00" v-if="!callback.parkName">停车场名称</span>
+            <span class="tit00">{{callback.parkName}}</span>
+            <span class="tit00">{{tradeback.Plate}}</span>
+            <div style="text-align:center; vertical-align:middel;padding:30px;">
+              <!-- <el-select v-model="value" placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            </el-select>-->
+              </el-select>-->
+            </div>
           </div>
         </div>
-
-        <!-- 中间下方部分 -->
-        <div class="grid-l2-2">
-          <span class="tit01" v-if="!tradeback.ComboMeal">类型：</span>
-          <span class="tit01" v-if="tradeback.ComboMeal">
-            {{tradeback.ComboMeal}}
-            <br />
-            {{tradeback.ShouldPayM}}
-          </span>
-          <span class="tit02">
-            应收金额(元)：{{tradeback.ShouldPayM}}
-            <br />
-            优惠金额(元)：{{tradeback.CouponPayM}}
-            <br />
-            实收金额(元)：{{tradeback.RealPayM}}
-            <br />
-            <!-- 套 餐 类 型 ：{{tradeback.ComboMeal}} -->
-            免费离场时间：{{tradeback.FreeLeaveTime}}
-          </span>
+        <div class="grid-l1-2">
+          <table style="width:100%">
+            <td style="width:66%;height:100%">
+              <img :src="imgsrc01" style="width:100%;height:100%;" />
+            </td>
+            <!-- 中间下方部分 -->
+            <td style="width:33%;height:100%">
+              <div class="grid-l2-2">
+                <span class="tit01" v-if="!tradeback.ComboMeal">类型：</span>
+                <span class="tit01" v-if="tradeback.ComboMeal">
+                  {{tradeback.ComboMeal}}
+                  <br />
+                  {{tradeback.ShouldPayM}}
+                </span>
+                <span class="tit02">
+                  应收金额(元)：{{tradeback.ShouldPayM}}
+                  <br />
+                  优惠金额(元)：{{tradeback.CouponPayM}}
+                  <br />
+                  实收金额(元)：{{tradeback.RealPayM}}
+                  <br />
+                  <!-- 套 餐 类 型 ：{{tradeback.ComboMeal}} -->
+                  免费离场时间：{{tradeback.FreeLeaveTime}}
+                </span>
+              </div>
+            </td>
+          </table>
         </div>
       </el-col>
-      <el-col :span="6">
+
+      <el-col :span="8">
         <div class="grid-l3">
           <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="停车详情" name="first">
@@ -93,18 +78,22 @@
                 <br />
                 <span class="spading">套餐类型：{{tradeback.ComboMeal}}</span>
                 <br />
-                <el-button type="primary" style="display:block;margin:20% 45%;" @click="gettrade">刷新</el-button>
+                <el-button type="danger" style="display:block;margin:10% 45%;" @click="gettrade">刷新</el-button>
               </div>
             </el-tab-pane>
             <el-tab-pane label="车场描述" name="second">
-              <br />
-              <span class="spad2">
-                <br />1.现场24小时负责人：李主管 18301050035(优先拨打授权，24小时联系电话)
-                <br />2.授权人：孙艳波 电话：13683290015(紧急联系电话)
-                <br />3.残疾车：有(云端验证证件)
-                <br />4.长租车：(不包含)一位多车，多位多车
-                <br />5.首汽共享授权云端免费放行
-              </span>
+              <div class="spad2">
+                <span class="spading">1.现场24小时负责人：李主管 18301050035(优先拨打授权，24小时联系电话)</span>
+                <br />
+                <span class="spading">2.授权人：孙艳波 电话：13683290015(紧急联系电话)</span>
+                <br />
+                <span class="spading">3.残疾车：有(云端验证证件)</span>
+                <br />
+                <span class="spading">4.长租车：(不包含)一位多车，多位多车</span>
+                <br />
+                <span class="spading">5.首汽共享授权云端免费放行</span>
+                <br />
+              </div>
             </el-tab-pane>
             <!-- 第三个标签页 -->
             <el-tab-pane label="查询停车记录" name="third">
@@ -141,7 +130,8 @@
             <el-select v-model="value" placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
-            <el-button type="danger" style="margin-top:30px;" @click="getvideotoken()">完成本次服务</el-button>
+            <el-button type="primary" style="margin-top:30px;" @click="openbyhands()">开闸</el-button>
+            <!-- <el-button type="danger" style="margin-top:30px;" @click="getvideotoken()">获取视频token</el-button> -->
           </span>
         </div>
       </el-col>
@@ -160,6 +150,8 @@ export default {
       activeName: 'first',
       // 用于存图片地址
       imgsrc01: '',
+      //通话状态的图片地址
+      callstatussrc: '',
       // 直播的地址
       videosrc01: 'rtmp://rtmp01open.ys7.com/openlive/caf2867d020c481482ed1ebf9b423649.hd',
       // 用于存监控地址
@@ -175,6 +167,11 @@ export default {
         appId: '',
         privatekey: '',
         datas: { parkId: '', devConnId: '', devTag: '', IsZeroOrder: '1' }
+      },
+      opendoorinfo: {
+        appId: '',
+        privatekey: '',
+        datas: { userId: '', deviceAdr: '', dealtype: '', serialNum: '', reason: '', callId: '' }
       },
       gocall: '',
       getcall: '',
@@ -271,6 +268,7 @@ export default {
             // let acmm = acm.replace(/\\r\n/g, '\\r\\n')
             // console.log('去掉换行符的json字符串' + acmm)
 
+            this.callstatussrc = 'src/assets/img/itncalling.png'
             this.callback = JSON.parse(JSON.parse(acm).datas)
             console.log(this.callback)
             if (this.callback != '') {
@@ -316,12 +314,26 @@ export default {
     },
     //操作手动开闸
     openbyhands() {
-      this.tradeinfo.datas.parkId = this.callback.parkId
-      this.tradeinfo.datas.devConnId = this.callback.devConnId
-      this.tradeinfo.datas.devTag = this.callback.devTag
-      this.tradeinfo.datas.IsZeroOrder = 1
+      this.opendoorinfo.datas.userId = localStorage.user
+      this.opendoorinfo.datas.deviceAdr = this.callback.devConnId
+      //交易类型
+      if (this.tradeback.ComboMeal == '临停缴费') {
+        this.opendoorinfo.datas.dealtype = '1'
+      } else if (this.tradeback.ComboMeal == '月租') {
+        this.opendoorinfo.datas.dealtype = '2'
+      } else if (this.tradeback.ComboMeal == '群租') {
+        this.opendoorinfo.datas.dealtype = '3'
+      } else {
+        alert('不存在相关套餐')
+      }
+      //交易流水号
+      this.opendoorinfo.datas.serialNum = this.tradeback.datas.TradingInfoID
+      //开闸原因
+      this.opendoorinfo.datas.reason = ''
+      // 对讲记录主键ID
+      this.opendoorinfo.datas.callId = ''
       let submit = {}
-      submit = JSON.stringify(this.tradeinfo)
+      submit = JSON.stringify(this.opendoorinfo)
       this.$axios({
         method: 'post',
         url: '/OpenDeviceHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
@@ -348,12 +360,14 @@ export default {
       // })
       let time = new Date()
       let now = time.toLocaleTimeString()
+      let message = '有电话呼入'
+      let msg = message + now
       this.$notify({
         group: 'foo',
-        // classes: my_not_style,
+        timeout: 7000,
         type: 'success',
         title: '注意',
-        text: '有电话呼入'
+        text: msg
       })
     },
     getvideotoken() {
@@ -382,7 +396,7 @@ export default {
     },
     initvideo02() {
       this.livesrc02 =
-        'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/C71948995/2.hd.live&autoplay=1&accessToken=at.dauw61242axuwk0y94rpq0hi5f80j2c7-967pawazub-16l3bxu-btpjlhtsm'
+        'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/C71948995/2.live&autoplay=1&accessToken=at.dauw61242axuwk0y94rpq0hi5f80j2c7-967pawazub-16l3bxu-btpjlhtsm'
     },
     // 从token中获取账号绑定的话机号，用来绑定socket的shopid
     getlocalTel() {
@@ -425,6 +439,7 @@ export default {
         this.ombackansered = this.address
         this.open1()
       } else {
+        this.ombackansered.attribute = ''
         this.ombackrecord = this.address
       }
       this.getcaller()
@@ -450,46 +465,37 @@ export default {
 </script>
 
 <style scoped>
-.my_not_style {
-  height: 500px;
-}
 .grid-l1 {
   background-color: white;
   border-radius: 4px;
-  height: 60%;
+  height: 75%;
+  background-color: rgb(243, 247, 253);
 }
-.grid-l1-2 {
+.grid-l2 {
+  /* height: 20%; */
   background-color: white;
   border-radius: 4px;
-  height: 40%;
-  margin-top: 10px;
+  overflow: auto;
+  line-height: 60px;
+  /* display: block; */
+  font-size: 35px;
+  background-color: rgb(243, 247, 253);
 }
 
-.grid-l2 {
-  background-color: white;
-  border-radius: 4px;
-  height: 55%;
-  padding: 30px;
-  overflow: auto;
-  line-height: 60px;
-  display: block;
-  font-size: 35px;
+.grid-l1-2 {
+  background-color: rgb(243, 247, 253);
+  height: 38%;
+  margin-top: 10px;
 }
 .grid-l2-2 {
-  background-color: white;
-  border-radius: 4px;
-  height: 38%;
-  line-height: 60px;
-  margin-top: 10px;
-  /* padding-top: 20px; */
-  font-size: 25px;
-  overflow: auto;
+  background-color: rgb(243, 247, 253);
+  margin: auto;
 }
 
 .grid-l3 {
   background-color: white;
   border-radius: 4px;
-  height: 66%;
+  height: 75%;
   overflow: auto;
   vertical-align: middle;
   /* text-align: center; */
@@ -497,7 +503,7 @@ export default {
 .grid-l3-2 {
   background-color: white;
   border-radius: 4px;
-  height: 24.5%;
+  height: 24%;
   margin-top: 10px;
   text-align: center;
   /* vertical-align: middle; */
@@ -518,25 +524,34 @@ export default {
 .spad2 {
   line-height: 35px;
   font-size: 18px;
+  height: 100%;
+  padding: auto;
+  /* display: block; */
 }
-
+.tit00 {
+  line-height: 50px;
+  padding-top: 5px;
+  /* padding-left: 70%; */
+  text-align: right;
+  font-size: 30px;
+  display: block;
+}
 .tit01 {
   line-height: 50px;
-  padding-top: 30px;
+  padding-top: 10px;
   text-align: center;
   font-size: 30px;
   display: block;
 }
 .tit02 {
-  line-height: 50px;
-  padding-top: 30px;
-  /* text-align: center; */
+  line-height: 40px;
+  padding-top: 10px;
   font-size: 20px;
-  display: block;
 }
 .tit03 {
   font-size: 20px;
-  padding-left: 70%;
+  text-align: right;
+  display: block;
 }
 .add01 {
   margin-top: 10px;
@@ -556,7 +571,7 @@ export default {
   min-height: 200px;
 }
 .row-bg {
-  max-height: 950px;
+  height: 800px;
   /* align-items: flex-start; */
   justify-content: center;
 }

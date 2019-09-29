@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view />
-    <notifications group="foo" classes="my-style" />
+    <notifications group="foo" classes="my-style"></notifications>
   </div>
 </template>
 
@@ -14,7 +14,7 @@
   opacity: 0.8;
   width: 400px;
   height: 160px;
-  background-color: rgb(127, 255, 155);
+  background-color: rgb(243, 174, 44);
   font-size: 20px;
   padding-top: 30px;
   padding-left: 20px;

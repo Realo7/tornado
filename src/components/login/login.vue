@@ -25,7 +25,8 @@ export default {
           userCode: '',
           pwd: '',
           callServerIP: '',
-          callServerPort: ''
+          callServerPort: '',
+          logintype: '0'
         }
       }
     }
@@ -48,7 +49,11 @@ export default {
           localStorage.setItem('token', res.data.datas)
           localStorage.setItem('user', this.formdata.datas.userCode)
           //跳转home
-          this.$router.push({ name: 'home' })
+          if (res.data.statusCode == '200') {
+            this.$router.push({ name: 'home' })
+          } else {
+            alert('账号或者密码错误')
+          }
         })
         .catch(err => {
           console.log('出现了错误' + err)
