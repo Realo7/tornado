@@ -8,6 +8,7 @@
 <style>
 #app {
   height: 100%;
+  font-family: Microsoft Yahei;
 }
 .my-style {
   border-radius: 10px;

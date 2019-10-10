@@ -1,59 +1,61 @@
 <template>
   <el-container class="container">
-    <el-header class="header">
-      <el-row>
-        <el-col :span="4">
-          <img src="@/assets/img/logo.png" alt="无法显示图片" />
-        </el-col>
-        <el-col :span="18">
-          <div class="middle">
-            <span>OM寻呼系统</span>
-          </div>
-        </el-col>
-        <el-col :span="2">
-          <a href="#" class="loginout" @click.prevent="handleSignout()">退出</a>
-        </el-col>
-      </el-row>
-    </el-header>
-
     <!-- 侧边栏 -->
+    <el-aside width="160px" class="aside">
+      <!-- 侧边栏导航 -->
+      <!-- default-active，默认激活菜单的index -->
+      <!-- active-text-color,激活菜单字体的颜色 -->
+      <el-menu default-active="2" class="el-menu-vertical-demo" :router="true" text-color="white" active-text-color="#5CA7E7">
+        <el-menu-item index="operate">
+          <i style="font-size:45px;font-weight: bold;color:white" class="el-icon-menu"></i>
+          <br />
+          <span style="font-size:22px;">操作</span>
+          <br />
+          <span style="font-size:22px;">界面</span>
+        </el-menu-item>
+
+        <el-menu-item index="kefu">
+          <i style="font-size:45px;font-weight: bold;color:white" class="el-icon-document"></i>
+          <br />
+          <span style="font-size:22px;">客服</span>
+          <br />
+          <span style="font-size:22px;">日志</span>
+        </el-menu-item>
+
+        <el-menu-item index="user">
+          <i style="font-size:45px;font-weight: bold;color:white" class="el-icon-user"></i>
+          <br />
+          <span style="font-size:22px;">用户</span>
+          <br />
+          <span style="font-size:22px;">管理</span>
+        </el-menu-item>
+
+        <el-menu-item index="peizhi">
+          <i style="font-size:45px;font-weight:bold;color:white;" class="el-icon-s-marketing"></i>
+          <br />
+          <span style="font-size:22px;">图表</span>
+          <br />
+          <span style="font-size:22px;">展示</span>
+        </el-menu-item>
+      </el-menu>
+    </el-aside>
+
     <el-container>
-      <el-aside width="200px" class="aside">
-        <!-- 侧边栏导航 -->
-        <el-menu default-active="2" class="el-menu-vertical-demo" :router="true" text-color="#fff">
-          <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-cpu"></i>
-              <span>操作界面</span>
-            </template>
-            <el-menu-item index="operate">操作界面</el-menu-item>
-            <!-- <el-menu-item index="worktable">工作台</el-menu-item> -->
-            <!-- <el-menu-item index="try">尝试一下</el-menu-item> -->
-          </el-submenu>
-
-          <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-document"></i>
-              <span>客服日志</span>
-            </template>
-            <el-menu-item index="kefu">服务检索</el-menu-item>
-            <el-menu-item index="kefubb">客服报表</el-menu-item>
-          </el-submenu>
-
-          <el-submenu index="3">
-            <template slot="title">
-              <i class="el-icon-user"></i>
-              <span>用户管理</span>
-            </template>
-            <el-menu-item index="user">用户管理</el-menu-item>
-          </el-submenu>
-
-          <el-menu-item index="peizhi">
-            <i class="el-icon-setting"></i>
-            <span slot="title">图表展示</span>
-          </el-menu-item>
-        </el-menu>
-      </el-aside>
+      <el-header class="header">
+        <el-row>
+          <el-col :span="4">
+            <img src="@/assets/img/logo.png" alt="无法显示图片" />
+          </el-col>
+          <el-col :span="18">
+            <div class="middle">
+              <span>OM寻呼系统</span>
+            </div>
+          </el-col>
+          <el-col :span="2">
+            <a style="font-size:24px;font-family:Microsoft YaHei;" href="#" class="loginout" @click.prevent="handleSignout()">退出</a>
+          </el-col>
+        </el-row>
+      </el-header>
 
       <el-main class="main">
         <!-- 设置容器 -->
@@ -105,17 +107,27 @@ export default {
   background-color: white;
 }
 .aside {
-  background-color: rgb(34, 30, 67);
+  background-color: rgb(92, 167, 231);
 }
 .main {
-  background-color: rgb(242, 242, 242);
+  background-color: white;
 }
 .middle {
   text-align: center;
-  font-size: 25px;
+  font-family: Microsoft Yahei;
+  font-size: 36px;
+  /* margin: auto; */
 }
 .el-menu-item {
-  background-color: rgb(34, 30, 67);
+  height: 150px;
+  width: 125px;
+  background-color: rgb(92, 167, 231);
+  border-radius: 6%;
+  margin-left: 33.5px;
+  line-height: 27px;
+  margin-top: 60px;
+  margin-bottom: 50px;
+  /* text-align: center; */
 }
 .loginout {
   text-decoration-line: none;
@@ -131,6 +143,7 @@ export default {
   line-height: 70px;
 }
 .el-menu-vertical-demo {
-  background-color: rgb(34, 30, 67);
+  background-color: rgb(92, 167, 231);
+  font-size: 20px;
 }
 </style>

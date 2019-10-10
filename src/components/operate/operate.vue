@@ -1,138 +1,76 @@
 <template>
   <div>
-    <el-row :gutter="6" class="row-bg" type="flex">
-      <el-col :span="16" :gutter="6">
+    <el-row :gutter="20" class="row-bg" type="flex">
+      <el-col :span="8">
+        <!-- 入口图片 -->
         <div class="grid-l1">
-          <iframe :src="livesrc02" width="100%" height="60%" id="ysOpenDevice" controls allowfullscreen></iframe>
-          <div style="float:left">
-            <img :src="callstatussrc" />
-          </div>
-          <div class="grid-l2">
-            <span v-if="!ombackansered.attribute&&!ombackrecord.attribute" class="tit03">通话状态</span>
-            <span v-if="ombackansered.attribute" class="tit03">{{ombackansered.attribute}}</span>
-            <span v-if="ombackrecord.attribute && ombackansered.attribute=='' " class="tit03">{{ombackrecord.attribute}}</span>
-            <!-- <span class="tit03">{{ombackrecord.attribute}}</span> -->
+          <img :src="callstatussrc" />
+        </div>
+        <!-- 出口图片 -->
+        <div class="grid-l1">
+          <img :src="callstatussrc" />
+        </div>
+        <!-- 呼叫口的监控视频 -->
+        <iframe :src="livesrc02" width="100%" height="40%" id="ysOpenDevice" controls allowfullscreen></iframe>
+      </el-col>
+      <el-col :span="8">
+        <div class="grid-l2-1">
+          <span class="tit01" v-if="!tradeback.ComboMeal">类型：</span>
+          <span class="tit01" v-if="tradeback.ComboMeal">
+            {{tradeback.ComboMeal}}
+            <br />
+            {{tradeback.ShouldPayM}}
+          </span>
+          <span class="tit02">
+            <br />
+            <span class="spading">入场时间：{{tradeback.InTm}}</span>
+            <br />
+            <span class="spading">当前时间：{{tradeback.NowTM}}</span>
+            <br />
+            <span class="spading">通道号：{{tradeback.NowTM}}</span>
+            <br />
+            <span class="spading">停车时长：{{tradeback.LeaveTime}}</span>
+            <br />
+            <span class="spading">应收金额(元)：{{tradeback.ShouldPayM}}</span>
+            <br />
+            <span class="spading">优惠金额(元)：{{tradeback.CouponPayM}}</span>
+            <br />
+            <span class="spading">实收金额(元)：{{tradeback.RealPayM}}</span>
+            <br />
+            <span class="spading">免费离场时间：{{tradeback.FreeLeaveTime}}</span>
+          </span>
+        </div>
 
-            <span class="tit00" v-if="!callback.parkName">停车场名称</span>
-            <span class="tit00">{{callback.parkName}}</span>
-            <span class="tit00">{{tradeback.Plate}}</span>
-            <div style="text-align:center; vertical-align:middel;padding:30px;">
-              <!-- <el-select v-model="value" placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-              </el-select>-->
-            </div>
-          </div>
-        </div>
-        <div class="grid-l1-2">
-          <table style="width:100%">
-            <td style="width:66%;height:100%">
-              <img :src="imgsrc01" style="width:100%;height:100%;" />
-            </td>
-            <!-- 中间下方部分 -->
-            <td style="width:33%;height:100%">
-              <div class="grid-l2-2">
-                <span class="tit01" v-if="!tradeback.ComboMeal">类型：</span>
-                <span class="tit01" v-if="tradeback.ComboMeal">
-                  {{tradeback.ComboMeal}}
-                  <br />
-                  {{tradeback.ShouldPayM}}
-                </span>
-                <span class="tit02">
-                  应收金额(元)：{{tradeback.ShouldPayM}}
-                  <br />
-                  优惠金额(元)：{{tradeback.CouponPayM}}
-                  <br />
-                  实收金额(元)：{{tradeback.RealPayM}}
-                  <br />
-                  <!-- 套 餐 类 型 ：{{tradeback.ComboMeal}} -->
-                  免费离场时间：{{tradeback.FreeLeaveTime}}
-                </span>
-              </div>
-            </td>
-          </table>
-        </div>
+        <div class="grid-l2-2"></div>
       </el-col>
 
       <el-col :span="8">
-        <div class="grid-l3">
-          <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="停车详情" name="first">
-              <div>
-                <span class="spading">主叫{{gocall}}</span>
-                <br />
-                <span class="spading">被叫{{getcall}}</span>
-                <br />
-                <span class="spading">通话编号{{ombackrecord.callid}}</span>
-                <br />
-                <span class="spading">付费ID：{{tradeback.PayDetailID}}</span>
-                <br />
-                <span class="spading">票号：{{tradeback.TicketCode}}</span>
-                <br />
-                <span class="spading">入场时间：{{tradeback.InTm}}</span>
-                <br />
-                <span class="spading">当前时间：{{tradeback.NowTM}}</span>
-                <br />
-                <span class="spading">停留时长：{{tradeback.LeaveTime}}</span>
-                <br />
-                <span class="spading">免费离场时间：{{tradeback.FreeLeaveTime}}</span>
-                <br />
-                <span class="spading">套餐类型：{{tradeback.ComboMeal}}</span>
-                <br />
-                <el-button type="danger" style="display:block;margin:10% 45%;" @click="gettrade">刷新</el-button>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="车场描述" name="second">
-              <div class="spad2">
-                <span class="spading">1.现场24小时负责人：李主管 18301050035(优先拨打授权，24小时联系电话)</span>
-                <br />
-                <span class="spading">2.授权人：孙艳波 电话：13683290015(紧急联系电话)</span>
-                <br />
-                <span class="spading">3.残疾车：有(云端验证证件)</span>
-                <br />
-                <span class="spading">4.长租车：(不包含)一位多车，多位多车</span>
-                <br />
-                <span class="spading">5.首汽共享授权云端免费放行</span>
-                <br />
-              </div>
-            </el-tab-pane>
-            <!-- 第三个标签页 -->
-            <el-tab-pane label="查询停车记录" name="third">
-              <div class="grid-l3">
-                <div>
-                  <!-- <h3>查询停车记录</h3> -->
-                  <span class="add01">{{paneaddress}}</span>
-                  <span class="add02">{{passwaywhich}} : {{passwayname}}</span>
-                  <br />
-                  <span class="add02">呼叫编号：{{vistorid}}</span>
-                </div>
-                <el-form label-width="80px" style="width: 100%;margin-top:8%;">
-                  <el-form-item label="车 牌 号">
-                    <el-input v-model="formInline.user" placeholder="车牌号" style="width: 60%;"></el-input>
-                  </el-form-item>
-                  <el-form-item label="呼叫原因">
-                    <el-select v-model="formInline.region" placeholder="呼叫原因" style="width:60%">
-                      <el-option label="原因1" value="shanghai"></el-option>
-                      <el-option label="原因2" value="beijing"></el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" @click="serch()">查询</el-button>
-                  </el-form-item>
-                </el-form>
-              </div>
-            </el-tab-pane>
-          </el-tabs>
+        <div class="grid-l3-1">
+          <span class="tit00" v-if="!callback.parkName">停车场名称</span>
+          <span class="tit00">{{callback.parkName}}</span>
+          <span class="tit03">通道号：{{tradeback.NowTM}}</span>
+          <div class="tit04">
+            <img src="@/assets/img/incalling.png" alt="显示不能" width="50%" />
+            <span v-if="!ombackansered.attribute&&!ombackrecord.attribute" class="tit04">通话状态:</span>
+            <span v-if="ombackansered.attribute" class="tit04">{{ombackansered.attribute}}</span>
+            <span v-if="ombackrecord.attribute && ombackansered.attribute=='' " class="tit04">{{ombackrecord.attribute}}</span>
+          </div>
+          <div style="text-align:center; vertical-align:middel;padding:30px;"></div>
+        </div>
+        <!-- 第三列中间 -->
+        <div class="grid-l3-2">
+          <span class="tit05">收费标准 : 07:00-22:00</span>
+          <span class="tit06">3元/小时</span>
+          <span class="tit06">22:00-07:00</span>
+          <span class="tit06">2元/小时</span>
         </div>
         <!-- 第三列下方 -->
-        <div class="grid-l3-2">
-          <span class="l3-2-1">
-            呼叫原因：
-            <el-select v-model="value" placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-            <el-button type="primary" style="margin-top:30px;" @click="openbyhands()">开闸</el-button>
-            <!-- <el-button type="danger" style="margin-top:30px;" @click="getvideotoken()">获取视频token</el-button> -->
-          </span>
+        <div class="grid-l3-3">
+          <span class="tit00">车场业务信息</span>
+          <span class="tit03">免费车辆：小型车</span>
+          <span class="tit03" style="padding-left:99px">客车</span>
+          <span class="tit03" style="padding-left:99px">中型车</span>
+          <span class="tit03" style="padding-left:99px">微型车</span>
         </div>
       </el-col>
     </el-row>
@@ -179,21 +117,6 @@ export default {
       callback: {},
       // 用来接收详细的交易信息
       tradeback: {},
-      // 选项框
-      options: [
-        {
-          value: '选项1',
-          label: 'A型车'
-        },
-        {
-          value: '选项2',
-          label: 'B型车'
-        },
-        {
-          value: '选项3',
-          label: 'C型车'
-        }
-      ],
       value: '',
 
       // 不管OM发来的什么数据，都先通过address保存
@@ -466,52 +389,49 @@ export default {
 
 <style scoped>
 .grid-l1 {
-  background-color: white;
-  border-radius: 4px;
-  height: 75%;
-  background-color: rgb(243, 247, 253);
+  height: 29%;
+  margin-bottom: 1%;
+  background-color: gainsboro;
+  border-radius: 8px;
 }
-.grid-l2 {
-  /* height: 20%; */
-  background-color: white;
+.grid-l2-1 {
+  background-color: rgb(248, 248, 252);
+  margin: auto;
+  height: 59%;
+  margin-bottom: 1%;
+}
+.grid-l2-2 {
+  height: 40%;
   border-radius: 4px;
   overflow: auto;
   line-height: 60px;
   /* display: block; */
   font-size: 35px;
-  background-color: rgb(243, 247, 253);
+  background-color: rgb(248, 248, 252);
 }
 
-.grid-l1-2 {
-  background-color: rgb(243, 247, 253);
-  height: 38%;
-  margin-top: 10px;
-}
-.grid-l2-2 {
-  background-color: rgb(243, 247, 253);
-  margin: auto;
-}
-
-.grid-l3 {
-  background-color: white;
-  border-radius: 4px;
-  height: 75%;
-  overflow: auto;
+.grid-l3-1 {
+  background-color: rgb(216, 228, 246);
+  border-radius: 6px;
+  /* overflow: auto; */
   vertical-align: middle;
-  /* text-align: center; */
+  padding-left: 40px;
+  height: 45%;
 }
 .grid-l3-2 {
-  background-color: white;
-  border-radius: 4px;
-  height: 24%;
-  margin-top: 10px;
-  text-align: center;
-  /* vertical-align: middle; */
-  padding-top: 20%;
+  height: 18%;
+  margin-bottom: 2%;
+  background-color: rgb(216, 228, 246);
+  padding-left: 20px;
+  line-height: 20px;
 }
-.l3-2-1 {
-  padding-top: 50px;
+.grid-l3-3 {
+  background-color: rgb(216, 228, 246);
+  border-radius: 12px;
+  height: 35%;
+  padding-left: 30px;
 }
+
 .spading {
   padding: 30px;
   line-height: 35px;
@@ -531,8 +451,7 @@ export default {
 .tit00 {
   line-height: 50px;
   padding-top: 5px;
-  /* padding-left: 70%; */
-  text-align: right;
+  text-align: left;
   font-size: 30px;
   display: block;
 }
@@ -550,8 +469,28 @@ export default {
 }
 .tit03 {
   font-size: 20px;
-  text-align: right;
+  text-align: left;
+  padding-bottom: 30px;
   display: block;
+  white-space: pre-wrap;
+}
+.tit04 {
+  text-align: center;
+  font-size: 20px;
+  display: block;
+}
+.tit05 {
+  line-height: 30px;
+  font-size: 20px;
+  display: block;
+  white-space: pre-wrap;
+}
+.tit06 {
+  font-size: 20px;
+  line-height: 30px;
+  padding-left: 95px;
+  display: block;
+  white-space: pre-wrap;
 }
 .add01 {
   margin-top: 10px;
@@ -571,7 +510,7 @@ export default {
   min-height: 200px;
 }
 .row-bg {
-  height: 800px;
+  height: 960px;
   /* align-items: flex-start; */
   justify-content: center;
 }
