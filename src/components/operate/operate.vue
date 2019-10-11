@@ -91,6 +91,7 @@
         <div class="grid-l3-1">
           <span class="tit00" v-if="!callback.parkName">停车场名称</span>
           <span class="tit00">{{callback.parkName}}</span>
+          <span class="tit03">通道号：{{tradeback.NowTM}}</span>
           <span class="tit03" style="padding-bottom:20px;">通道号：{{tradeback.NowTM}}</span>
           <div class="tit04">
             <img src="@/assets/img/incalling.png" alt="显示不能" width="40%" />
@@ -110,10 +111,10 @@
         <!-- 第三列下方 -->
         <div class="grid-l3-3">
           <span class="tit00">车场业务信息</span>
-          <span class="tit03" style="font-size:24px">免费车辆：小型车</span>
-          <span class="tit03" style="padding-left:119px;font-size:24px">客车</span>
-          <span class="tit03" style="padding-left:119px;font-size:24px">中型车</span>
-          <span class="tit03" style="padding-left:119px;font-size:24px">微型车</span>
+          <span class="tit03">免费车辆：小型车</span>
+          <span class="tit03" style="padding-left:119px;">客车</span>
+          <span class="tit03" style="padding-left:119px;">中型车</span>
+          <span class="tit03" style="padding-left:119px;">微型车</span>
         </div>
         <div class="orangepart">剩余车位数：num</div>
       </el-col>
@@ -505,7 +506,7 @@ export default {
 .tit00 {
   line-height: 50px;
   padding-top: 5px;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
   text-align: left;
   font-size: 30px;
   display: block;
@@ -525,7 +526,7 @@ export default {
   font-size: 20px;
 }
 .tit03 {
-  font-size: 30px;
+  font-size: 24px;
   text-align: left;
   padding-bottom: 10px;
   display: block;
