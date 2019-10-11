@@ -41,16 +41,59 @@
           </span>
         </div>
 
-        <div class="grid-l2-2"></div>
+        <div class="grid-l2-2">
+          <table width="92%" height="30%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
+            <tr height="30%">
+              <td width="40%" style="font-size:24px;padding-left:30px;">车辆信息查询:</td>
+              <td width="60%">
+                <el-input></el-input>
+              </td>
+            </tr>
+            <tr height="30%">
+              <td width="40%"></td>
+              <td width="60%" style="padding-left:10px;">
+                <el-button style="height:90%;width:95%;background-color:rgb(11,186,19);font-size:24px;" type="success" icon="el-icon-search" round>搜索</el-button>
+              </td>
+            </tr>
+            <tr height="40%"></tr>
+          </table>
+
+          <table width="92%" height="40%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed;font-size:24px;">
+            <tr>
+              <td width="30%" style="padding-left:20px;">放行类型:</td>
+              <td width="70%" style="padding-left:20px;">
+                <el-select v-model="value" clearable placeholder="请选择">
+                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+              </td>
+            </tr>
+            <tr>
+              <td width="30%" style="padding-left:20px;">放行原因:</td>
+              <td width="70%" style="padding-left:20px;">
+                <el-select v-model="value" clearable placeholder="请选择">
+                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+              </td>
+            </tr>
+            <tr></tr>
+          </table>
+          <table width="92%" height="20%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed;font-size:24px;padding-left:80px;">
+            <tr>
+              <td>
+                <el-button style="height:90%;width:90%;background-color:rgb(0,174,255);font-size:24px;" type="success" icon="el-icon-unlock" round>抬杆</el-button>
+              </td>
+            </tr>
+          </table>
+        </div>
       </el-col>
 
       <el-col :span="8">
         <div class="grid-l3-1">
           <span class="tit00" v-if="!callback.parkName">停车场名称</span>
           <span class="tit00">{{callback.parkName}}</span>
-          <span class="tit03">通道号：{{tradeback.NowTM}}</span>
+          <span class="tit03" style="padding-bottom:20px;">通道号：{{tradeback.NowTM}}</span>
           <div class="tit04">
-            <img src="@/assets/img/incalling.png" alt="显示不能" width="50%" />
+            <img src="@/assets/img/incalling.png" alt="显示不能" width="40%" />
             <span v-if="!ombackansered.attribute&&!ombackrecord.attribute" class="tit04">通话状态:</span>
             <span v-if="ombackansered.attribute" class="tit04">{{ombackansered.attribute}}</span>
             <span v-if="ombackrecord.attribute && ombackansered.attribute=='' " class="tit04">{{ombackrecord.attribute}}</span>
@@ -59,7 +102,7 @@
         </div>
         <!-- 第三列中间 -->
         <div class="grid-l3-2">
-          <span class="tit05">收费标准 : 07:00-22:00</span>
+          <span class="tit05" style="padding-top:50px;">收费标准 : 07:00-22:00</span>
           <span class="tit06">3元/小时</span>
           <span class="tit06">22:00-07:00</span>
           <span class="tit06">2元/小时</span>
@@ -67,11 +110,12 @@
         <!-- 第三列下方 -->
         <div class="grid-l3-3">
           <span class="tit00">车场业务信息</span>
-          <span class="tit03">免费车辆：小型车</span>
-          <span class="tit03" style="padding-left:99px">客车</span>
-          <span class="tit03" style="padding-left:99px">中型车</span>
-          <span class="tit03" style="padding-left:99px">微型车</span>
+          <span class="tit03" style="font-size:24px">免费车辆：小型车</span>
+          <span class="tit03" style="padding-left:119px;font-size:24px">客车</span>
+          <span class="tit03" style="padding-left:119px;font-size:24px">中型车</span>
+          <span class="tit03" style="padding-left:119px;font-size:24px">微型车</span>
         </div>
+        <div class="orangepart">剩余车位数：num</div>
       </el-col>
     </el-row>
   </div>
@@ -397,16 +441,17 @@ export default {
 .grid-l2-1 {
   background-color: rgb(248, 248, 252);
   margin: auto;
-  height: 59%;
+  height: 58%;
   margin-bottom: 1%;
 }
 .grid-l2-2 {
-  height: 40%;
-  border-radius: 4px;
+  height: 41%;
+  border-radius: 0 0 10px 10px;
   overflow: auto;
   line-height: 60px;
   /* display: block; */
-  font-size: 35px;
+  padding-left: 40px;
+  padding-top: 40px;
   background-color: rgb(248, 248, 252);
 }
 
@@ -416,10 +461,10 @@ export default {
   /* overflow: auto; */
   vertical-align: middle;
   padding-left: 40px;
-  height: 45%;
+  height: 41%;
 }
 .grid-l3-2 {
-  height: 18%;
+  height: 22%;
   margin-bottom: 2%;
   background-color: rgb(216, 228, 246);
   padding-left: 20px;
@@ -427,11 +472,20 @@ export default {
 }
 .grid-l3-3 {
   background-color: rgb(216, 228, 246);
-  border-radius: 12px;
-  height: 35%;
+  border-radius: 0 0 0px 0px;
+  height: 28%;
   padding-left: 30px;
 }
-
+.orangepart {
+  border-radius: 0 0 20px 20px;
+  background-color: rgb(255, 84, 0);
+  height: 7%;
+  font-size: 38px;
+  text-align: center;
+  padding-top: 10px;
+  color: aliceblue;
+  display: block;
+}
 .spading {
   padding: 30px;
   line-height: 35px;
@@ -451,32 +505,37 @@ export default {
 .tit00 {
   line-height: 50px;
   padding-top: 5px;
+  padding-bottom: 10px;
   text-align: left;
   font-size: 30px;
   display: block;
+  font-weight: 550;
 }
 .tit01 {
   line-height: 50px;
   padding-top: 10px;
-  text-align: center;
-  font-size: 30px;
+  padding-left: 30px;
+  text-align: left;
+  font-size: 36px;
   display: block;
 }
 .tit02 {
-  line-height: 40px;
+  line-height: 45px;
   padding-top: 10px;
   font-size: 20px;
 }
 .tit03 {
-  font-size: 20px;
+  font-size: 30px;
   text-align: left;
-  padding-bottom: 30px;
+  padding-bottom: 10px;
   display: block;
   white-space: pre-wrap;
 }
 .tit04 {
+  padding-top: 10px;
+  padding-bottom: 50px;
   text-align: center;
-  font-size: 20px;
+  font-size: 30px;
   display: block;
 }
 .tit05 {
@@ -492,6 +551,13 @@ export default {
   display: block;
   white-space: pre-wrap;
 }
+.tit07 {
+  line-height: 50px;
+  padding-top: 30px;
+  display: block;
+  font-size: 20px;
+}
+
 .add01 {
   margin-top: 10px;
   text-align: center;
@@ -514,4 +580,10 @@ export default {
   /* align-items: flex-start; */
   justify-content: center;
 }
+/* .grid-l2-2 table tr td {
+  border: 1px solid #f00;
+}
+.grid-l2-2 table tr {
+  border: 1px solid blue;
+} */
 </style>

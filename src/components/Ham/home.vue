@@ -111,6 +111,7 @@ export default {
 }
 .main {
   background-color: white;
+  font-family: Microsoft YaHei;
 }
 .middle {
   text-align: center;
