@@ -60,6 +60,11 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      searchcallinfo: {
+        appId: '',
+        privatekey: '',
+        datas: { plate: '', useId: '', opUseId: '', parkId: '', startTm: '', endTm: '', pageNumber: '', pagesize: '' }
+      },
       input: {
         username: '',
         password: ''
@@ -90,47 +95,35 @@ export default {
   },
 
   methods: {
-    handleClose(done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done()
+    getuserinfo() {
+      let submit = {}
+      submit = JSON.stringify(this.userinfo)
+      this.$axios({
+        method: 'post',
+        url: '/GetUserCallInfoListHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+        headers: { 'Content-Type': 'application/json' },
+        data: submit,
+        emulateJSON: true
+      })
+        .then(res => {
+          let back = JSON.stringify(res.data)
+          //处理数据
+          //
+          //
+          //
+          //
+          //
+          //                    留白
+          //
+          //
+          //
+          //
+          //
+          //
         })
-        .catch(_ => {})
-    },
-    handleEdit(index, row) {
-      console.log(index, row)
-    },
-    handleDelete(index, row) {
-      console.log(index, row)
-    },
-    getdata1() {
-      var apiall = ''
-      this.$http.get(apiall).then(
-        response => {
-          console.log(response)
-          this.list = response.body
-        },
-        function(err) {
-          console.log(err)
-        }
-      )
-    },
-    useradd() {
-      var apiadd = ''
-      var jsonuser = {}
-      jsonuser.input = JSON.stringify(this.input)
-      console.log(jsonuser)
-
-      this.$http.post(apiadd, jsonuser, { emulateJSON: true }).then(
-        response => {
-          console.log(response.body), alert('提交成功')
-          this.getdata1()
-        },
-        response => {
-          console.log(response)
-          alert('出问题了')
-        }
-      )
+        .catch(err => {
+          console.log('出现了错误' + err)
+        })
     }
   }
 }

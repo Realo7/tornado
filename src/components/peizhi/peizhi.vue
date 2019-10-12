@@ -1,7 +1,7 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
   <div>
-    <div id="main" style="width: 600px;height: 400px;"></div>
+    <div id="main" style="width: 800px;height: 600px;font-size:30px;"></div>
   </div>
 </template>
 <script>
@@ -11,17 +11,49 @@ export default {
   data() {
     return {
       charts: '',
-      opinion: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎'],
-      opinionData: [
-        { value: 335, name: '直接访问' },
-        { value: 310, name: '邮件营销' },
-        { value: 234, name: '联盟广告' },
-        { value: 535, name: '视频广告' },
-        { value: 1548, name: '搜索引擎' }
-      ]
+      opinion: ['当前在线人数', '总共处理服务数量', '半小时内呼入量'],
+      opinionData: [{ value: 335, name: '当前在线人数' }, { value: 310, name: '总共处理服务数量' }, { value: 310, name: '半小时内呼入量' }],
+      someinfo: {
+        appId: '',
+        privatekey: '',
+        datas: { useId: '' }
+      }
     }
   },
   methods: {
+    // 接收数据，获取运行状态信息
+    getchartnum() {
+      let submit = {}
+      submit = JSON.stringify(this.someinfo)
+      this.$axios({
+        method: 'get',
+        url: '/GetRunningInfoHandler.ashx?method=GET&lan=zh-CN&type=app&compress=00',
+        headers: { 'Content-Type': 'application/json' },
+        data: submit,
+        emulateJSON: true
+      })
+        .then(res => {
+          let back = JSON.stringify(res.data)
+          console.log('chart部分返回的数据' + back)
+          //处理数据
+          //
+          //
+          //
+          //
+          //
+          //                    留白
+          //
+          //
+          //
+          //
+          //
+          //
+        })
+        .catch(err => {
+          console.log('出现了错误' + err)
+        })
+    },
+    //画个圆
     drawPie(id) {
       this.charts = echarts.init(document.getElementById(id))
       this.charts.setOption({
@@ -48,7 +80,7 @@ export default {
               emphasis: {
                 show: true,
                 textStyle: {
-                  fontSize: '30',
+                  fontSize: '80',
                   fontWeight: 'blod'
                 }
               }
@@ -85,6 +117,7 @@ export default {
 
   //调用
   mounted() {
+    this.getchartnum()
     this.$nextTick(function() {
       this.drawPie('main')
     })

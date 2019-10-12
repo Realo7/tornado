@@ -1,50 +1,80 @@
 <template>
   <div>
-    <el-form ref="form" :model="form" label-width="120px">
-      <!--  -->
-      <el-form-item label="车牌号检索">
-        <el-input v-model="form.name" style="width: 45.4%;"></el-input>
-      </el-form-item>
-      <el-form-item label="按客服姓名检索">
-        <el-select v-model="form.fenlei" placeholder="请选择是哪个客服">
-          <el-option label="客服01" value="客服01"></el-option>
-          <el-option label="客服02" value="客服02"></el-option>
-          <el-option label="客服03" value="客服03"></el-option>
-          <el-option label="客服04" value="客服04"></el-option>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item label="停车场名称检索">
-        <el-select v-model="form.fenlei" placeholder="请选择是哪个停车场">
-          <el-option label="停车场01" value="停车场01"></el-option>
-          <el-option label="停车场02" value="停车场02"></el-option>
-          <el-option label="停车场03" value="停车场03"></el-option>
-          <el-option label="停车场04" value="停车场04"></el-option>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item label="开始时间检索">
-        <el-col :span="11">
-          <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 99%;"></el-date-picker>
+    <el-form label-width="120px">
+      <el-row>
+        <el-col :span="5">
+          <el-form-item label="车牌号检索">
+            <el-input v-model="plate" style="width:80%;"></el-input>
+          </el-form-item>
         </el-col>
-      </el-form-item>
-
-      <el-form-item label="结束时间检索">
-        <el-col :span="11">
-          <el-date-picker type="date" placeholder="选择日期" v-model="form.date2" style="width: 99%;"></el-date-picker>
+        <el-col :span="4">
+          <!-- v-model绑定的是选中的value -->
+          <el-form-item label="按客服姓名检索">
+            <el-select v-model="opUseId" placeholder="请选择是哪个客服" style="width: 80%;">
+              <el-option label="客服01" value="客服01"></el-option>
+              <el-option label="客服02" value="客服02"></el-option>
+              <el-option label="客服03" value="客服03"></el-option>
+              <el-option label="客服04" value="客服04"></el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
-      </el-form-item>
-
-      <el-form-item>
-        <el-button type="primary" @click="submitForm()">立即检索</el-button>
-        <el-button>取消</el-button>
-      </el-form-item>
+        <el-col :span="5">
+          <el-form-item label="停车场名称检索">
+            <el-select v-model="parkId" placeholder="请选择是哪个停车场" style="width: 80%;">
+              <el-option label="停车场01" value="停车场01"></el-option>
+              <el-option label="停车场02" value="停车场02"></el-option>
+              <el-option label="停车场03" value="停车场03"></el-option>
+              <el-option label="停车场04" value="停车场04"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="5">
+          <el-form-item label="开始时间检索">
+            <el-col :span="12">
+              <el-date-picker type="date" placeholder="选择日期" v-model="startTm" style="width:200%;"></el-date-picker>
+            </el-col>
+          </el-form-item>
+        </el-col>
+        <el-col :span="2">
+          <el-form-item>
+            <el-button type="primary" @click="searchcallinfo()">立即检索</el-button>
+          </el-form-item>
+        </el-col>
+        <el-col :span="2">
+          <el-form-item>
+            <el-button>取消</el-button>
+          </el-form-item>
+        </el-col>
+        <!-- <el-col :span="6">
+          <el-form-item label="结束时间检索">
+            <el-col :span="11">
+              <el-date-picker type="date" placeholder="选择日期" v-model="form.date2" style="width: 55%;"></el-date-picker>
+            </el-col>
+          </el-form-item>
+        </el-col>-->
+      </el-row>
     </el-form>
+    <!-- <span contenteditable="true">这是一段可以编辑的文字</span> -->
     <br />
     <hr />
-    <el-table :columns="columns1" :data="showlist"></el-table>
-    <div class="paginationClass"></div>
-    <el-pagination :total="dataCount" :page-size="pagesize" show-total @on-change="changepage" show-elevator on-page-size-change="pagesize"></el-pagination>
+    <el-table :data="showlist" style="width: 100%" max-height="600">
+      <el-table-column prop="plate" label="车牌号" width="150" fixed></el-table-column>
+      <el-table-column prop="parkName" label="停车场名称" width="120"></el-table-column>
+      <el-table-column prop="startTm" label="入场时间" width="120"></el-table-column>
+      <el-table-column prop="endTm" label="出场时间" width="120"></el-table-column>
+      <el-table-column prop="dealMode" label="停车类型" width="120"></el-table-column>
+      <el-table-column prop="ticketCode" label="票号" width="120"></el-table-column>
+      <el-table-column prop="opUseId" label="开闸客服id" width="120"></el-table-column>
+
+      <el-table-column fixed="right" label="操作" width="120">
+        <template slot-scope="scope">
+          <el-button @click="getdetail" type="text" size="small">查看详细</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div class="paginationClass">
+      <el-pagination :total="dataCount" :page-size="pagesize" show-total @on-change="changepage" show-elevator on-page-size-change="pagesize"></el-pagination>
+    </div>
   </div>
 </template>
 
@@ -52,86 +82,89 @@
 export default {
   data() {
     return {
-      columns1: [
-        { title: '停车场名称', key: 'KeyValue' },
-        { title: '车辆牌照', key: 'Title' },
-        { title: '入场时间', key: 'Type' },
-        { title: '出场时间', key: 'Department' },
-        { title: '入场通道', key: 'DutyMan' },
-        { title: '出场通道', key: 'BeginTime' },
-        { title: '停车类型', key: 'DutyMan' },
-        { title: '车辆型号', key: 'DutyMan' },
-        { title: '账单金额', key: 'DutyMan' },
-        { title: '入场通道', key: 'DutyMan' }
-      ],
-      form: {
-        carnum: '',
-        fenlei: '',
-        xmfl: '',
-        bumen: '',
-        dutyman: '',
-        date1: '',
-        date1: ''
-      },
-      list: [],
-      showlist: [],
-      dataCount: 0,
+      plate: '',
+      useId: '',
+      opUseId: '',
+      parkId: '',
+      startTm: '',
+      endTm: '',
       pagesize: 6,
-      page: 1
+      page: 1,
+      userinfo: {
+        appId: '',
+        privatekey: '',
+        datas: { plate: '', useId: '', opUseId: '', parkId: '', startTm: '', endTm: '', pageNumber: '', pagesize: '' }
+      },
+      userback: {},
+
+      list: [],
+      showlist: [
+        {
+          plate: '苏B 23333',
+          opUseId: 'lmf001',
+          parkName: '上海外滩',
+          startTm: '2019-10-1',
+          endTm: '20119-10-12',
+          dealMode: '月租车',
+          ticketCode: '232323232'
+        }
+      ],
+      // showlist: { dealInfo: { parkName: '1222' } },
+      dataCount: 0
     }
   },
   methods: {
-    submitForm() {
-      var formData = {}
-      formData.input = JSON.stringify(this.form)
+    searchcallinfo() {
+      this.searchcallinfo.datas.userId = localStorage.user
+      this.searchcallinfo.datas.plate = this.plate
+      this.searchcallinfo.datas.opUseId = this.opUseId
+      this.searchcallinfo.datas.parkId = this.parkId
+      this.searchcallinfo.datas.startTm = this.startTm
 
-      console.log(formData)
-      var apiDocfind = 'http://192.168.1.3:44318/Docfind.ashx'
-
-      this.$http.post(apiDocfind, formData, { emulateJSON: true }).then(
-        Response => {
-          console.log(Response)
-          this.list = Response.body
-          this.dataCount = this.list.length
-          if (this.dataCount < this.pagesize) {
-            this.showlist = this.list
-          } else {
-            this.showlist = this.list.slice(0, this.pagesize)
-          }
-        },
-        function(err) {
-          console.log('error')
-        }
-      )
+      let submit = {}
+      submit = JSON.stringify(this.searchcallinfo)
+      this.$axios({
+        method: 'get',
+        url: '/GetCallRecordInfoHandler.ashx?method=GET&lan=zh-CN&type=app&compress=00',
+        headers: { 'Content-Type': 'application/json' },
+        data: submit,
+        emulateJSON: true
+      })
+        .then(res => {
+          let back = JSON.stringify(res.data)
+          console.log('报表返回的数据' + back)
+          this.list = JSON.parse(JSON.parse(back).datas)
+          console.log('分页后需要显示的数据' + this.showlist)
+          //处理数据
+          //
+          //
+          //
+          //
+          //
+          //                    留白
+          //
+          //
+          //
+          //
+          //
+          //
+        })
+        .catch(err => {
+          console.log('出现了错误' + err)
+        })
     },
-    getall() {
-      var apiall = 'http://192.168.1.3:44318/Docshow.ashx'
-
-      this.$http.get(apiall).then(
-        response => {
-          console.log(response)
-          this.list = response.body
-          this.dataCount = this.list.length
-          if (this.dataCount < this.pagesize) {
-            this.showlist = this.list
-          } else {
-            this.showlist = this.list.slice(0, this.pagesize)
-          }
-        },
-        function(err) {
-          console.log(err)
-        }
-      )
+    //点击查看详情触发的事件
+    getdetail() {
+      this.$router.push({ name: 'kefubb' })
     },
+
     changepage(index) {
       var _start = (index - 1) * this.pagesize
       var _end = index * this.pagesize
       this.showlist = this.list.slice(_start, _end)
     }
   },
-  mounted() {
-    this.getall()
-  }
+  mounted() {}
 }
 </script>
       

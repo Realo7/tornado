@@ -46,13 +46,19 @@
             <tr height="30%">
               <td width="40%" style="font-size:24px;padding-left:30px;">车辆信息查询:</td>
               <td width="60%">
-                <el-input></el-input>
+                <el-input type="text" v-model="searchinfo.datas.palte"></el-input>
               </td>
             </tr>
             <tr height="30%">
               <td width="40%"></td>
               <td width="60%" style="padding-left:10px;">
-                <el-button style="height:90%;width:95%;background-color:rgb(11,186,19);font-size:24px;" type="success" icon="el-icon-search" round>搜索</el-button>
+                <el-button
+                  style="height:90%;width:95%;background-color:rgb(11,186,19);font-size:24px;"
+                  type="success"
+                  icon="el-icon-search"
+                  round
+                  @click="searchinfo"
+                >搜索</el-button>
               </td>
             </tr>
             <tr height="40%"></tr>
@@ -62,16 +68,17 @@
             <tr>
               <td width="30%" style="padding-left:20px;">放行类型:</td>
               <td width="70%" style="padding-left:20px;">
-                <el-select v-model="value" clearable placeholder="请选择">
-                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <!-- 获取选取的值只需要取this.kind即可 -->
+                <el-select v-model="kind" clearable placeholder="请选择">
+                  <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value"></el-option>
                 </el-select>
               </td>
             </tr>
             <tr>
               <td width="30%" style="padding-left:20px;">放行原因:</td>
               <td width="70%" style="padding-left:20px;">
-                <el-select v-model="value" clearable placeholder="请选择">
-                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-select v-model="reasonId" clearable placeholder="请选择">
+                  <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
                 </el-select>
               </td>
             </tr>
@@ -80,7 +87,13 @@
           <table width="92%" height="20%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed;font-size:24px;padding-left:80px;">
             <tr>
               <td>
-                <el-button style="height:90%;width:90%;background-color:rgb(0,174,255);font-size:24px;" type="success" icon="el-icon-unlock" round>抬杆</el-button>
+                <el-button
+                  style="height:90%;width:90%;background-color:rgb(0,174,255);font-size:24px;"
+                  type="success"
+                  icon="el-icon-unlock"
+                  round
+                  @click="openbyhands"
+                >抬杆</el-button>
               </td>
             </tr>
           </table>
@@ -91,8 +104,8 @@
         <div class="grid-l3-1">
           <span class="tit00" v-if="!callback.parkName">停车场名称</span>
           <span class="tit00">{{callback.parkName}}</span>
-          <span class="tit03">通道号：{{tradeback.NowTM}}</span>
-          <span class="tit03" style="padding-bottom:20px;">通道号：{{tradeback.NowTM}}</span>
+          <span class="tit03">车道：{{tradeback.NowTM}}</span>
+          <span class="tit03" style="padding-bottom:20px;">呼叫编号：{{ombackansered.callid}}</span>
           <div class="tit04">
             <img src="@/assets/img/incalling.png" alt="显示不能" width="40%" />
             <span v-if="!ombackansered.attribute&&!ombackrecord.attribute" class="tit04">通话状态:</span>
@@ -125,10 +138,30 @@
 <script>
 import EZUIKit from 'ezuikit'
 import EZUIPlayer from 'ezuikit/ezuikit'
+import { get } from 'https'
 
 export default {
   data() {
     return {
+      kind: '',
+      options1: [
+        {
+          value: '1',
+          label: '放行类型1'
+        },
+        { value: '2', label: '放行类型2' }
+      ],
+      reasonId: '',
+      options2: [
+        {
+          value: '1',
+          label: '原因1'
+        },
+        {
+          value: '2',
+          label: '原因2'
+        }
+      ],
       // 用来选择标签页
       activeName: 'first',
       // 用于存图片地址
@@ -143,7 +176,7 @@ export default {
       callerinfo: {
         appId: '',
         privatekey: '',
-        datas: { devMac: '', devIP: '', status: '', callTm: '', host_serial: '', PA2_serial: '' }
+        datas: { devMac: '', devIP: '', status: '', callTm: '', host_serial: '', PA2_serial: '', callsumtm: '159', om_callId: '001' }
       },
       // 向Spring后端发送的，根据设备地址获取最近的一笔交易信息
       tradeinfo: {
@@ -151,17 +184,31 @@ export default {
         privatekey: '',
         datas: { parkId: '', devConnId: '', devTag: '', IsZeroOrder: '1' }
       },
+      searchinfo: {
+        appId: '',
+        privatekey: '',
+        datas: { plate: '', reasonId: '', userId: '' }
+      },
       opendoorinfo: {
         appId: '',
         privatekey: '',
-        datas: { userId: '', deviceAdr: '', dealtype: '', serialNum: '', reason: '', callId: '' }
+        datas: { userId: '', deviceAdr: '', dealtype: '', serialNum: '', reason: '', callId: '', reasonId: '' }
       },
+      reasoninfo: {
+        appId: '',
+        privatekey: '',
+        datas: { userId: '' }
+      },
+
       gocall: '',
       getcall: '',
       // 用来接收设备的回复信息
       callback: {},
       // 用来接收详细的交易信息
       tradeback: {},
+      //搜索模块返回的信息
+      searchback: {},
+      reasonback: {},
       value: '',
 
       // 不管OM发来的什么数据，都先通过address保存
@@ -171,11 +218,6 @@ export default {
       // 用来2次保存返回的通话记录
       ombackrecord: '',
 
-      tab_pane3_input: '',
-      paneaddress: '武汉天界',
-      passwaywhich: '这里写哪个口呼叫',
-      passwayname: '这里写呼叫口的名称',
-      vistorid: '这里传呼叫编号vistorid',
       // 页面中选择框的数据
       formInline: {
         user: '',
@@ -248,6 +290,8 @@ export default {
             console.log('出现了错误' + err)
           })
       } else {
+        this.callerinfo.datas.callsumtm = this.ombackrecord.Duration
+        this.callerinfo.datas.om_callId = this.ombackrecord.callId
         console.log('通话记录不需要执行下面的方法')
       }
     },
@@ -284,6 +328,9 @@ export default {
     openbyhands() {
       this.opendoorinfo.datas.userId = localStorage.user
       this.opendoorinfo.datas.deviceAdr = this.callback.devConnId
+      console.log('打印一下开闸原因看看' + this.reasonId)
+      this.opendoorinfo.datas.reasonId = this.reasonId
+
       //交易类型
       if (this.tradeback.ComboMeal == '临停缴费') {
         this.opendoorinfo.datas.dealtype = '1'
@@ -294,10 +341,10 @@ export default {
       } else {
         alert('不存在相关套餐')
       }
-      //交易流水号
+
       this.opendoorinfo.datas.serialNum = this.tradeback.datas.TradingInfoID
       //开闸原因
-      this.opendoorinfo.datas.reason = ''
+      // console.log('打印一下开闸原因看看' + this.opendoorinfo.datas.reasonId)
       // 对讲记录主键ID
       this.opendoorinfo.datas.callId = ''
       let submit = {}
@@ -311,9 +358,9 @@ export default {
       })
         .then(res => {
           let trb = JSON.stringify(res.data)
-          console.log('返回的数据' + trb)
+          console.log('手动开闸返回的数据' + trb)
           this.tradeback = JSON.parse(JSON.parse(trb).datas)
-          console.log(this.tradeback)
+          console.log('手动开闸模块需要显示的数据' + this.tradeback)
         })
         .catch(err => {
           console.log('出现了错误' + err)
@@ -338,6 +385,75 @@ export default {
         text: msg
       })
     },
+    //通过车牌号搜索信息
+    searchinfo() {
+      this.searchinfo.datas.userId = localStorage.token.user
+      submit = Json.stringify(this.searchinfo)
+      this.$axios({
+        methods: 'get',
+        url: '/GetLastCallRecordHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+        headers: { 'Content-Type': 'application/json' },
+        data: submit,
+        emulateJSON: true
+      })
+        .then(res => {
+          let trb = JSON.stringify(res.data)
+          console.log('搜素模块返回的数据' + trb)
+          this.searchback = JSON.parse(JSON.parse(trb).datas)
+          console.log('搜索模块返回的需要显示的信息' + this.searchback)
+          // 在下面部分进行数据的替换，提示：主要替换callback，tradeback
+          //
+          //
+          //
+          //                         留白
+          //
+          //
+          //
+          //
+          //
+          //
+        })
+        .catch(err => {
+          console.log('搜索模块出现了错误' + err)
+        })
+    },
+    //获取呼入原因信息
+    getreasoninfo() {
+      this.reasoninfo.datas.userId = localStorage.token.user
+      submit = Json.stringify(this.reasoninfo)
+      this.$axios({
+        methods: 'get',
+        url: '/GetCallReasonListHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+        headers: { 'Content-Type': 'application/json' },
+        data: submit,
+        emulateJSON: true
+      })
+        .then(res => {
+          let back = JSON.stringify(res.data)
+          console.log('原因模块返回的数据' + back)
+          this.reasonback = JSON.parse(JSON.parse(back).datas)
+          console.log('原因模块返回的需要显示的信息' + this.reasonback)
+          // 在下面部分进行数据的替换，提示：主要替换callback，tradeback
+          //让获取到的值和options2中的label和value相等
+          //或者说把获取到的值遍历到options2中，2个属性label和value
+          //label用于对外界显示，value用于保存key(即呼入原因ID)
+          //
+          //
+          //
+          //
+          //                         留白
+          //
+          //
+          //
+          //
+          //
+          //
+        })
+        .catch(err => {
+          console.log('搜索模块出现了错误' + err)
+        })
+    },
+    // 获取视频的令牌
     getvideotoken() {
       let submit = this.$qs.stringify(this.videotoken)
       this.$axios({
@@ -349,7 +465,7 @@ export default {
       })
         .then(res => {
           let token = JSON.stringify(res.data)
-          console.log('返回的数据' + token)
+          console.log('获取视频令牌模块返回的数据' + token)
           this.tokenback = JSON.parse(token)
 
           console.log('接到了token' + this.tokenback)
@@ -364,7 +480,7 @@ export default {
     },
     initvideo02() {
       this.livesrc02 =
-        'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/C71948995/2.live&autoplay=1&accessToken=at.dauw61242axuwk0y94rpq0hi5f80j2c7-967pawazub-16l3bxu-btpjlhtsm'
+        'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/C71948995/2.live&autoplay=1&accessToken=at.9wiz6ml83s7oy1cy50se9wc6aerts23b-6t53ia6nke-152k8ob-m9i35gmdm'
     },
     // 从token中获取账号绑定的话机号，用来绑定socket的shopid
     getlocalTel() {
@@ -372,7 +488,7 @@ export default {
       let tele = JSON.stringify(tel.hostId).replace('"', '')
       let telep = new Array()
       telep = tele.split(',')
-      console.log('巫毒娃娃' + telep[0])
+      console.log('从localStorage中获取到token中保存的与账号绑定的话机一号' + telep[0])
       this.telephone = telep[0]
     },
     // 初始化websocket
