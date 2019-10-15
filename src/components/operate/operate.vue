@@ -33,7 +33,10 @@
             <br />
             <span class="spading">停车时长：{{tradeback.LeaveTime}}</span>
             <br />
-            <span class="spading">应收金额(元)：{{tradeback.ShouldPayM}}</span>
+            <span class="spading">
+              应收金额(元)：
+              <span style="color:red">{{tradeback.ShouldPayM}}</span>
+            </span>
             <br />
             <span class="spading">优惠金额(元)：{{tradeback.CouponPayM}}</span>
             <br />
@@ -48,7 +51,7 @@
             <tr height="30%">
               <td width="40%" style="font-size:24px;padding-left:20px;">车辆信息查询:</td>
               <td width="60%">
-                <el-input type="text" v-model="searchinfo.datas.palte"></el-input>
+                <el-input type="text" v-model="searchinfo.datas.plate"></el-input>
               </td>
             </tr>
             <tr height="30%">
@@ -186,6 +189,7 @@ export default {
         privatekey: '',
         datas: { devMac: '', devIP: '', status: '', callTm: '', host_serial: '', PA2_serial: '', callsumtm: '', om_callId: '' }
       },
+      devMac: '',
       // 向Spring后端发送的，根据设备地址获取最近的一笔交易信息
       tradeinfo: {
         appId: '',
@@ -195,7 +199,7 @@ export default {
       searchinfo: {
         appId: '',
         privatekey: '',
-        datas: { plate: '', reasonId: '', userId: '' }
+        datas: { parkId: '', devConnId: '', devTag: '', IsZeroOrder: '1' }
       },
       opendoorinfo: {
         appId: '',
@@ -282,64 +286,65 @@ export default {
     getcaller() {
       //如果OM设备传过来的信息中含有ext数组(是OM设备的状态消息)
       if (this.address.ext) {
-        var devMac = this.address.ext[1].id
+        //上线之前需要改1为0
+        this.devMac = this.address.ext[1].id
         //主叫变量gocall
         this.gocall = this.address.ext[0].id
         //被叫变量getcall
         this.getcall = this.address.ext[1].id
 
-        console.log('呼叫的座机号' + devMac)
+        console.log('呼叫的座机号' + this.devMac)
         //上传状态代号
-        if (this.ombackansered.attribute == '正在应答') {
-          this.callerinfo.datas.status = 1
-        } else if (this.ombackrecord.attribute == '已挂断') {
-          this.callerinfo.datas.status = 2
-          this.callerinfo.datas.callsumtm = this.ombackrecord.Duration
-          this.callerinfo.datas.om_callId = this.ombackrecord.callid
-        } else {
-          this.callerinfo.attribute == 0
-        }
-        //获取当前时间
-        this.callerinfo.datas.callTm = this.getNow()
-        // 处理devMac
-        this.callerinfo.datas.devMac = devMac
-        //分机呼话机IP取和MAC相同
-        this.callerinfo.datas.devIP = devMac
-
-        let submit = {}
-        submit = JSON.stringify(this.callerinfo)
-        console.log(submit)
-        this.$axios({
-          method: 'post',
-          url: '/GetInterphoneDetailHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
-          headers: { 'Content-Type': 'application/json' },
-          data: submit,
-          emulateJSON: true
-        })
-          .then(res => {
-            let acm = JSON.stringify(res.data)
-            console.log('返回的数据' + acm)
-
-            // let reg = new RegExp('/\r\n/', 'g')
-            // let acmm = acm.replace(/\\r\n/g, '\\r\\n')
-            // console.log('去掉换行符的json字符串' + acmm)
-
-            this.callstatussrc = 'src/assets/img/itncalling.png'
-            this.callback = JSON.parse(JSON.parse(acm).datas)
-            console.log(this.callback)
-            if (this.callback != '') {
-              this.gettrade()
-            }
-            this.initvideo02()
-          })
-          .catch(err => {
-            console.log('出现了错误' + err)
-          })
-      } else {
-        this.callerinfo.datas.callsumtm = this.ombackrecord.Duration
-        this.callerinfo.datas.om_callId = this.ombackrecord.callId
-        console.log('通话记录不需要执行下面的方法')
       }
+      if (this.ombackansered.attribute == '正在应答') {
+        this.callerinfo.datas.status = 1
+      } else if (this.ombackrecord.attribute == '已挂断') {
+        this.callerinfo.datas.status = 2
+        this.callerinfo.datas.callsumtm = this.ombackrecord.Duration
+        this.callerinfo.datas.om_callId = this.ombackrecord.callid
+      } else {
+        this.callerinfo.attribute == 0
+      }
+      //获取当前时间
+      this.callerinfo.datas.callTm = this.getNow()
+      // 处理devMac
+      this.callerinfo.datas.devMac = this.devMac
+      //分机呼话机IP取和MAC相同
+      this.callerinfo.datas.devIP = this.devMac
+
+      this.callerinfo.datas.callsumtm = this.ombackrecord.Duration
+      this.callerinfo.datas.om_callId = this.ombackrecord.callId
+      console.log('通话记录不需要执行下面的方法')
+
+      let submit = {}
+      submit = JSON.stringify(this.callerinfo)
+      console.log(submit)
+      this.$axios({
+        method: 'post',
+        url: '/GetInterphoneDetailHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+        headers: { 'Content-Type': 'application/json' },
+        data: submit,
+        emulateJSON: true
+      })
+        .then(res => {
+          let acm = JSON.stringify(res.data)
+          console.log('返回的数据' + acm)
+
+          // let reg = new RegExp('/\r\n/', 'g')
+          // let acmm = acm.replace(/\\r\n/g, '\\r\\n')
+          // console.log('去掉换行符的json字符串' + acmm)
+
+          this.callstatussrc = 'src/assets/img/itncalling.png'
+          this.callback = JSON.parse(JSON.parse(acm).datas)
+          console.log(this.callback)
+          if (this.callback != '') {
+            this.gettrade()
+          }
+          this.initvideo02()
+        })
+        .catch(err => {
+          console.log('出现了错误' + err)
+        })
     },
     //根据设备地址获取最近的一笔交易信息
     gettrade() {
@@ -425,7 +430,7 @@ export default {
       let msg = message + now
       this.$notify({
         group: 'foo',
-        timeout: 7000,
+        timeout: 70000,
         type: 'success',
         title: '注意',
         text: msg
@@ -433,36 +438,44 @@ export default {
     },
     //通过车牌号搜索信息
     searchinfo0() {
-      this.searchinfo.datas.userId = localStorage.token.user
+      // 将获取通话信息传过来的停车场ID,设备地址,设备类型&&&&&是否产生0元订单等传到gettrade方法的request数据中
+      this.searchinfo.datas.parkId = this.callback.parkId
+      // this.searchinfo.datas.devConnId = this.plate
+      this.searchinfo.datas.devTag = '3'
+      this.searchinfo.datas.IsZeroOrder = 1
       let submit = {}
       submit = JSON.stringify(this.searchinfo)
       this.$axios({
-        methods: 'get',
-        url: '/GetLastCallRecordHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+        method: 'post',
+        url: '/GetInOutInfoByDevAdrHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
         headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })
         .then(res => {
           let trb = JSON.stringify(res.data)
-          console.log('搜素模块返回的数据' + trb)
-          this.searchback = JSON.parse(JSON.parse(trb).datas)
-          console.log('搜索模块返回的需要显示的信息' + this.searchback)
-          // 在下面部分进行数据的替换，提示：主要替换callback，tradeback
-          //
-          //
-          //
-          //                         留白
-          //
-          //
-          //
-          //
-          //
-          //
+
+          console.log('搜索车牌号返回的数据' + trb)
+          this.tradeback = JSON.parse(JSON.parse(trb).datas)
+          console.log(this.tradeback)
+          this.imgsrc01 = this.tradeback.inpic
         })
         .catch(err => {
-          console.log('搜索模块出现了错误' + err)
+          console.log('通过车牌号搜索部分出现了错误' + err)
+
+          this.msgbox(err, '搜索不到啊')
         })
+    },
+    msgbox(a, b) {
+      this.$alert(a, b, {
+        confirmButtonText: '确定',
+        callback: action => {
+          this.$message({
+            type: 'info',
+            message: `已点击确定`
+          })
+        }
+      })
     },
     //获取呼入原因信息
     getreasoninfo() {
@@ -572,6 +585,7 @@ export default {
       } else {
         this.ombackansered.attribute = ''
         this.ombackrecord = this.address
+        this.gettrade()
       }
       this.getcaller()
     },

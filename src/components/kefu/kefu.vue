@@ -4,13 +4,13 @@
       <el-row>
         <el-col :span="4">
           <el-form-item label="车牌号检索">
-            <el-input v-model="plate" style="width:80%;"></el-input>
+            <el-input v-model="userinfo.datas.plate" style="width:80%;"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="4">
           <!-- v-model绑定的是选中的value -->
           <el-form-item label="按客服姓名检索">
-            <el-select v-model="opUseId" placeholder="请选择是哪个客服" style="width: 80%;">
+            <el-select v-model="userinfo.datas.opUserId" placeholder="请选择是哪个客服" style="width: 80%;">
               <el-option label="客服01" value="客服01"></el-option>
               <el-option label="客服02" value="客服02"></el-option>
               <el-option label="客服03" value="客服03"></el-option>
@@ -20,7 +20,7 @@
         </el-col>
         <el-col :span="4">
           <el-form-item label="停车场名称检索">
-            <el-select v-model="parkId" placeholder="请选择是哪个停车场" style="width: 80%;">
+            <el-select v-model="userinfo.datas.parkId" placeholder="请选择是哪个停车场" style="width: 80%;">
               <el-option label="停车场01" value="停车场01"></el-option>
               <el-option label="停车场02" value="停车场02"></el-option>
               <el-option label="停车场03" value="停车场03"></el-option>
@@ -67,7 +67,7 @@
       <el-table-column prop="endTm" label="出场时间" width="120"></el-table-column>
       <el-table-column prop="dealMode" label="停车类型" width="120"></el-table-column>
       <el-table-column prop="ticketCode" label="票号" width="120"></el-table-column>
-      <el-table-column prop="opUseId" label="开闸客服id" width="120"></el-table-column>
+      <el-table-column prop="opUserId" label="开闸客服id" width="120"></el-table-column>
 
       <el-table-column fixed="right" label="操作" width="120">
         <template slot-scope="scope">
@@ -85,18 +85,12 @@
 export default {
   data() {
     return {
-      // plate: '',
-      // useId: '',
-      // opUseId: '',
-      // parkId: '',
-      // startTm: '',
-      // endTm: '',
       pagesize: 6,
       page: 1,
       userinfo: {
         appId: '',
         privatekey: '',
-        datas: { plate: '', useId: '', opUseId: '', parkId: '', startTm: '', endTm: '', pageNumber: '', pagesize: '' }
+        datas: { plate: '', userId: '', opUserId: '', parkId: '', startTm: '', endTm: '', pageNumber: '', pagesize: '' }
       },
       userback: {},
 
@@ -104,7 +98,7 @@ export default {
       showlist: [
         {
           plate: '苏B 23333',
-          opUseId: 'lmf001',
+          opUserId: 'lmf001',
           parkName: '上海外滩',
           startTm: '2019-10-1',
           endTm: '20119-10-12',
@@ -118,15 +112,12 @@ export default {
   },
   methods: {
     searchcallinfo() {
-      this.userinfo.datas.useId = localStorage.user
-      this.userinfo.datas.plate = this.plate
-      this.userinfo.datas.opUseId = this.opUseId
-      this.userinfo.datas.parkId = this.parkId
-      this.userinfo.datas.startTm = this.startTm
-
+      this.userinfo.datas.userId = localStorage.user
+      this.userinfo.datas.pagesize = '6'
+      this.userinfo.datas.pageNumber = '1'
       let submit = {}
       submit = JSON.stringify(this.userinfo)
-      console.log('提交' + submit)
+      console.log('提交的数据' + submit)
       this.$axios({
         method: 'get',
         url: '/GetCallRecordInfoHandler.ashx?method=GET&lan=zh-CN&type=app&compress=00',
@@ -138,7 +129,7 @@ export default {
           let back = JSON.stringify(res.data)
           console.log('报表返回的数据' + back)
           this.list = JSON.parse(JSON.parse(back).datas)
-          console.log('分页后需要显示的数据' + this.showlist)
+          console.log('分页后需要显示的数据' + this.list)
           //处理数据
           //
           //
@@ -159,7 +150,13 @@ export default {
     },
     //点击查看详情触发的事件
     getdetail() {
-      this.$router.push({ name: 'kefubb' })
+      this.$router.push({
+        name: 'kefubb',
+        params: {
+          nameYouWant: name1,
+          nameYouWant2: name2
+        }
+      })
     },
 
     changepage(index) {
