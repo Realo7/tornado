@@ -5,9 +5,9 @@
       <!-- 侧边栏导航 -->
       <!-- default-active，默认激活菜单的index -->
       <!-- active-text-color,激活菜单字体的颜色 -->
-      <el-menu default-active="$route.path" class="el-menu-vertical-demo" :router="true" text-color="white" active-text-color="#5CA7E7">
+      <el-menu default-active="operate" class="el-menu-vertical-demo" :router="true" text-color="white" active-text-color="#5CA7E7">
         <el-menu-item index="operate">
-          <i style="font-size:45px;font-weight: bold;color:white" class="el-icon-menu"></i>
+          <i style="font-size:45px;font-weight: bold;" class="el-icon-menu"></i>
           <br />
           <span style="font-size:22px;">操作</span>
           <br />
@@ -15,7 +15,8 @@
         </el-menu-item>
 
         <el-menu-item index="kefu">
-          <i style="font-size:45px;font-weight: bold;color:white" class="el-icon-document"></i>
+          <i style="font-size:45px;font-weight: bold;" class="el-icon-document"></i>
+
           <br />
           <span style="font-size:22px;">客服</span>
           <br />
@@ -23,15 +24,15 @@
         </el-menu-item>
 
         <el-menu-item index="user">
-          <i style="font-size:45px;font-weight: bold;color:white" class="el-icon-user"></i>
+          <i style="font-size:45px;font-weight: bold;" class="el-icon-user"></i>
           <br />
-          <span style="font-size:22px;">用户</span>
+          <span style="font-size:22px;">远程</span>
           <br />
-          <span style="font-size:22px;">管理</span>
+          <span style="font-size:22px;">呼叫</span>
         </el-menu-item>
 
         <el-menu-item index="peizhi">
-          <i style="font-size:45px;font-weight:bold;color:white;" class="el-icon-s-marketing"></i>
+          <i style="font-size:45px;font-weight:bold;" class="el-icon-s-marketing"></i>
           <br />
           <span style="font-size:22px;">图表</span>
           <br />
@@ -70,6 +71,7 @@
 export default {
   data() {
     return {
+      state: false,
       formdata: {
         appId: '',
         privatekey: '',
@@ -94,6 +96,9 @@ export default {
     }
   },
   methods: {
+    // changecolor() {
+    //   this.state = true
+    // },
     handleSignout() {
       //清除token
       localStorage.clear()
@@ -170,6 +175,7 @@ export default {
 }
 .aside {
   background-color: rgb(92, 167, 231);
+  border: none;
 }
 .main {
   background-color: white;
@@ -185,13 +191,18 @@ export default {
   height: 150px;
   width: 125px;
   background-color: rgb(92, 167, 231);
-  border-radius: 6%;
-  margin-left: 33.5px;
+  border-radius: 12px 0px 0px 12px;
+  margin-left: 35px;
   line-height: 27px;
   margin-top: 60px;
   margin-bottom: 50px;
-  /* text-align: center; */
+  border: none;
 }
+.el-menu-item.is-active {
+  background-color: white;
+  color: white;
+}
+
 .loginout {
   text-decoration-line: none;
 
@@ -208,5 +219,6 @@ export default {
 .el-menu-vertical-demo {
   background-color: rgb(92, 167, 231);
   font-size: 20px;
+  border: none;
 }
 </style>

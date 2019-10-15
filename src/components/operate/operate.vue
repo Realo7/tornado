@@ -19,15 +19,17 @@
           <span class="tit01" v-if="tradeback.ComboMeal">
             {{tradeback.ComboMeal}}
             <br />
-            {{tradeback.ShouldPayM}}
+            {{tradeback.Plate}}
           </span>
           <span class="tit02">
+            <br />
+            <span class="spading">通道：{{callback.devConnName}}</span>
+            <br />
+            <span class="spading">票号：{{tradeback.TicketCode}}</span>
             <br />
             <span class="spading">入场时间：{{tradeback.InTm}}</span>
             <br />
             <span class="spading">当前时间：{{tradeback.NowTM}}</span>
-            <br />
-            <span class="spading">通道号：{{tradeback.NowTM}}</span>
             <br />
             <span class="spading">停车时长：{{tradeback.LeaveTime}}</span>
             <br />
@@ -44,7 +46,7 @@
         <div class="grid-l2-2">
           <table width="92%" height="30%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
             <tr height="30%">
-              <td width="40%" style="font-size:24px;padding-left:30px;">车辆信息查询:</td>
+              <td width="40%" style="font-size:24px;padding-left:20px;">车辆信息查询:</td>
               <td width="60%">
                 <el-input type="text" v-model="searchinfo.datas.palte"></el-input>
               </td>
@@ -57,7 +59,7 @@
                   type="success"
                   icon="el-icon-search"
                   round
-                  @click="searchinfo"
+                  @click="searchinfo0"
                 >搜索</el-button>
               </td>
             </tr>
@@ -66,8 +68,8 @@
 
           <table width="92%" height="40%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed;font-size:24px;">
             <tr>
-              <td width="30%" style="padding-left:20px;">放行类型:</td>
-              <td width="70%" style="padding-left:20px;">
+              <td width="35%" style="padding-left:20px;text-align:center;">放行类型:</td>
+              <td width="65%" style="padding-left:20px;">
                 <!-- 获取选取的值只需要取this.kind即可 -->
                 <el-select v-model="kind" clearable placeholder="请选择">
                   <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -75,9 +77,9 @@
               </td>
             </tr>
             <tr>
-              <td width="30%" style="padding-left:20px;">放行原因:</td>
-              <td width="70%" style="padding-left:20px;">
-                <el-select v-model="reasonId" clearable placeholder="请选择">
+              <td width="35%" style="padding-left:20px;text-align:center;">放行原因:</td>
+              <td width="65%" style="padding-left:20px;">
+                <el-select v-model="reasonId" clearable placeholder="请选择" style="font-size:24px;">
                   <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
                 </el-select>
               </td>
@@ -104,32 +106,38 @@
         <div class="grid-l3-1">
           <span class="tit00" v-if="!callback.parkName">停车场名称</span>
           <span class="tit00">{{callback.parkName}}</span>
-          <span class="tit03">车道：{{tradeback.NowTM}}</span>
-          <span class="tit03" style="padding-bottom:20px;">呼叫编号：{{ombackansered.callid}}</span>
+          <span class="tit03">通道：{{callback.devConnName}}</span>
+          <span class="tit03" style="padding-bottom:20px;">呼叫编号：{{ombackrecord.callid}}</span>
           <div class="tit04">
-            <img src="@/assets/img/incalling.png" alt="显示不能" width="40%" />
-            <span v-if="!ombackansered.attribute&&!ombackrecord.attribute" class="tit04">通话状态:</span>
+            <div v-if="!ombackansered.attribute&&!ombackrecord.attribute">
+              <img src="@/assets/img/comm.png" alt="显示不能" height="30%" width="30%" />
+            </div>
+            <span v-if="!ombackansered.attribute&&!ombackrecord.attribute" class="tit04">通话状态</span>
+            <div v-if="ombackansered.attribute">
+              <img src="@/assets/img/incalling.png" alt="显示不能" height="30%" width="30%" />
+            </div>
             <span v-if="ombackansered.attribute" class="tit04">{{ombackansered.attribute}}</span>
+            <div v-if="ombackrecord.attribute && ombackansered.attribute=='' ">
+              <img src="@/assets/img/hangup.png" alt="显示不能" height="30%" width="30%" />
+            </div>
             <span v-if="ombackrecord.attribute && ombackansered.attribute=='' " class="tit04">{{ombackrecord.attribute}}</span>
           </div>
           <div style="text-align:center; vertical-align:middel;padding:30px;"></div>
         </div>
         <!-- 第三列中间 -->
         <div class="grid-l3-2">
-          <span class="tit05" style="padding-top:50px;">收费标准 : 07:00-22:00</span>
-          <span class="tit06">3元/小时</span>
-          <span class="tit06">22:00-07:00</span>
-          <span class="tit06">2元/小时</span>
+          <span class="tit05" style="padding-top:20px;">收费标准 :</span>
+          <span class="tit06">{{callback.parkRules}}</span>
+          <!-- <span class="tit06">22:00-07:00</span>
+          <span class="tit06">2元/小时</span>-->
         </div>
         <!-- 第三列下方 -->
         <div class="grid-l3-3">
           <span class="tit00">车场业务信息</span>
-          <span class="tit03">免费车辆：小型车</span>
-          <span class="tit03" style="padding-left:119px;">客车</span>
-          <span class="tit03" style="padding-left:119px;">中型车</span>
-          <span class="tit03" style="padding-left:119px;">微型车</span>
+          <span class="tit03">免费车辆:{{callback.freeCars}}</span>
+          <!-- <span class="tit03" style="padding-left:119px;">客车</span> -->
         </div>
-        <div class="orangepart">剩余车位数：num</div>
+        <div class="orangepart">剩余车位数：{{callback.remainSpace}}</div>
       </el-col>
     </el-row>
   </div>
@@ -176,7 +184,7 @@ export default {
       callerinfo: {
         appId: '',
         privatekey: '',
-        datas: { devMac: '', devIP: '', status: '', callTm: '', host_serial: '', PA2_serial: '', callsumtm: '159', om_callId: '001' }
+        datas: { devMac: '', devIP: '', status: '', callTm: '', host_serial: '', PA2_serial: '', callsumtm: '', om_callId: '' }
       },
       // 向Spring后端发送的，根据设备地址获取最近的一笔交易信息
       tradeinfo: {
@@ -241,8 +249,34 @@ export default {
     // jumpto() {
     //   this.$router.replace('/worktable')
     // },
-    onSubmit() {
-      console.log('submit!')
+    // 获取当前时间
+    getNow() {
+      var date = new Date()
+      var seperator1 = '-'
+      var year = date.getFullYear()
+      var month = date.getMonth() + 1
+      var day = date.getDate()
+      var hours = date.getHours()
+      var minutes = date.getMinutes()
+      var seconds = date.getSeconds()
+      if (month >= 1 && month <= 9) {
+        month = '0' + month
+      }
+      if (day >= 0 && day <= 9) {
+        day = '0' + day
+      }
+      if (hours >= 0 && hours <= 9) {
+        hours = '0' + hours
+      }
+      if (minutes >= 0 && minutes <= 9) {
+        minutes = '0' + minutes
+      }
+      if (seconds >= 0 && seconds <= 9) {
+        seconds = '0' + seconds
+      }
+      var currentdate = year + seperator1 + month + seperator1 + day + ' ' + hours + ':' + minutes + ':' + seconds
+      //  console.log(currentdate)
+      return currentdate
     },
     // 获取对讲机的详细信息，并保存相关记录
     getcaller() {
@@ -255,6 +289,18 @@ export default {
         this.getcall = this.address.ext[1].id
 
         console.log('呼叫的座机号' + devMac)
+        //上传状态代号
+        if (this.ombackansered.attribute == '正在应答') {
+          this.callerinfo.datas.status = 1
+        } else if (this.ombackrecord.attribute == '已挂断') {
+          this.callerinfo.datas.status = 2
+          this.callerinfo.datas.callsumtm = this.ombackrecord.Duration
+          this.callerinfo.datas.om_callId = this.ombackrecord.callid
+        } else {
+          this.callerinfo.attribute == 0
+        }
+        //获取当前时间
+        this.callerinfo.datas.callTm = this.getNow()
         // 处理devMac
         this.callerinfo.datas.devMac = devMac
         //分机呼话机IP取和MAC相同
@@ -386,9 +432,10 @@ export default {
       })
     },
     //通过车牌号搜索信息
-    searchinfo() {
+    searchinfo0() {
       this.searchinfo.datas.userId = localStorage.token.user
-      submit = Json.stringify(this.searchinfo)
+      let submit = {}
+      submit = JSON.stringify(this.searchinfo)
       this.$axios({
         methods: 'get',
         url: '/GetLastCallRecordHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
@@ -420,7 +467,7 @@ export default {
     //获取呼入原因信息
     getreasoninfo() {
       this.reasoninfo.datas.userId = localStorage.token.user
-      submit = Json.stringify(this.reasoninfo)
+      submit = JSON.stringify(this.reasoninfo)
       this.$axios({
         methods: 'get',
         url: '/GetCallReasonListHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
@@ -543,7 +590,7 @@ export default {
   },
   beforeMount() {
     this.initWebSocket()
-    this.gettrade()
+    // this.gettrade()
   }
 }
 </script>
@@ -586,6 +633,7 @@ export default {
   background-color: rgb(216, 228, 246);
   padding-left: 20px;
   line-height: 20px;
+  overflow: auto;
 }
 .grid-l3-3 {
   background-color: rgb(216, 228, 246);
@@ -664,7 +712,7 @@ export default {
 .tit06 {
   font-size: 20px;
   line-height: 30px;
-  padding-left: 95px;
+  padding-left: 30px;
   display: block;
   white-space: pre-wrap;
 }

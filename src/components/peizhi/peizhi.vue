@@ -1,7 +1,39 @@
 <template>
-  <!--为echarts准备一个具备大小的容器dom-->
   <div>
-    <div id="main" style="width: 800px;height: 600px;font-size:30px;"></div>
+    <el-row>
+      <div>
+        <table style="width:100%;height:200px;">
+          <tr>
+            <td class="backg">
+              <div>人工呼入量</div>
+            </td>
+            <td class="backg">
+              <div>接通量</div>
+            </td>
+            <td class="backg">
+              <div>接通率</div>
+            </td>
+            <td class="backg">
+              <div>20秒接通率</div>
+            </td>
+            <td class="backg">
+              <div>运行状态</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <br />
+      <br />
+    </el-row>
+    <el-row>
+      <el-col :span="18">
+        <!--为echarts准备一个具备大小的容器dom-->
+        <div id="chartLineBox" style="width: 1200px;height: 400px;font-size:30px;"></div>
+      </el-col>
+      <el-col :span="6">
+        <div id="main" style="width: 400px;height: 400px;font-size:30px;"></div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -17,7 +49,21 @@ export default {
         appId: '',
         privatekey: '',
         datas: { useId: '' }
-      }
+      },
+      series: [
+        {
+          name: '人工呼入量',
+          type: 'line',
+          stack: '人工呼入量',
+          data: [120, 132, 101, 134, 90, 230, 210]
+        },
+        {
+          name: '接通量',
+          type: 'line',
+          stack: '接通量',
+          data: [220, 182, 191, 234, 290, 330, 310]
+        }
+      ]
     }
   },
   methods: {
@@ -53,9 +99,44 @@ export default {
           console.log('出现了错误' + err)
         })
     },
+    //画个折线图
+    drawChartLine() {
+      this.chartLine = echarts.init(document.getElementById('chartLineBox'))
+      this.chartLine.setOption({
+        title: {
+          text: '折线图堆叠'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: this.series
+      })
+    },
     //画个圆
     drawPie(id) {
-      this.charts = echarts.init(document.getElementById(id))
+      this.charts = echarts.init(document.getElementById('main'))
       this.charts.setOption({
         tooltip: {
           trigger: 'item',
@@ -120,6 +201,7 @@ export default {
     this.getchartnum()
     this.$nextTick(function() {
       this.drawPie('main')
+      this.drawChartLine('chartLineBox')
     })
   }
 }
@@ -129,5 +211,10 @@ export default {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+.backg {
+  background-color: rgb(92, 167, 231);
+  border-radius: 12px;
+  width: 20%;
 }
 </style>

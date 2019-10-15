@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-form label-width="120px">
+    <el-form label-width="110px">
       <el-row>
-        <el-col :span="5">
+        <el-col :span="4">
           <el-form-item label="车牌号检索">
             <el-input v-model="plate" style="width:80%;"></el-input>
           </el-form-item>
@@ -18,7 +18,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="4">
           <el-form-item label="停车场名称检索">
             <el-select v-model="parkId" placeholder="请选择是哪个停车场" style="width: 80%;">
               <el-option label="停车场01" value="停车场01"></el-option>
@@ -28,23 +28,26 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="4">
           <el-form-item label="开始时间检索">
             <el-col :span="12">
-              <el-date-picker type="date" placeholder="选择日期" v-model="startTm" style="width:200%;"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择日期" v-model="userinfo.datas.startTm" style="width:200%;"></el-date-picker>
             </el-col>
           </el-form-item>
         </el-col>
-        <el-col :span="2">
-          <el-form-item>
-            <el-button type="primary" @click="searchcallinfo()">立即检索</el-button>
+        <el-col :span="4">
+          <el-form-item label="结束时间检索">
+            <el-col :span="12">
+              <el-date-picker type="date" placeholder="选择日期" v-model="userinfo.datas.endTm" style="width:200%;"></el-date-picker>
+            </el-col>
           </el-form-item>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="4">
           <el-form-item>
-            <el-button>取消</el-button>
+            <el-button type="primary" @click="searchcallinfo()" style="margin-left:-100px;">立即检索</el-button>
           </el-form-item>
         </el-col>
+
         <!-- <el-col :span="6">
           <el-form-item label="结束时间检索">
             <el-col :span="11">
@@ -82,12 +85,12 @@
 export default {
   data() {
     return {
-      plate: '',
-      useId: '',
-      opUseId: '',
-      parkId: '',
-      startTm: '',
-      endTm: '',
+      // plate: '',
+      // useId: '',
+      // opUseId: '',
+      // parkId: '',
+      // startTm: '',
+      // endTm: '',
       pagesize: 6,
       page: 1,
       userinfo: {
@@ -115,14 +118,15 @@ export default {
   },
   methods: {
     searchcallinfo() {
-      this.searchcallinfo.datas.userId = localStorage.user
-      this.searchcallinfo.datas.plate = this.plate
-      this.searchcallinfo.datas.opUseId = this.opUseId
-      this.searchcallinfo.datas.parkId = this.parkId
-      this.searchcallinfo.datas.startTm = this.startTm
+      this.userinfo.datas.useId = localStorage.user
+      this.userinfo.datas.plate = this.plate
+      this.userinfo.datas.opUseId = this.opUseId
+      this.userinfo.datas.parkId = this.parkId
+      this.userinfo.datas.startTm = this.startTm
 
       let submit = {}
-      submit = JSON.stringify(this.searchcallinfo)
+      submit = JSON.stringify(this.userinfo)
+      console.log('提交' + submit)
       this.$axios({
         method: 'get',
         url: '/GetCallRecordInfoHandler.ashx?method=GET&lan=zh-CN&type=app&compress=00',
