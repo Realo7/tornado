@@ -117,10 +117,9 @@ export default {
       this.userinfo.datas.pageNumber = '1'
       let submit = {}
       submit = JSON.stringify(this.userinfo)
-      console.log('提交的数据' + submit)
       this.$axios({
-        method: 'get',
-        url: '/GetCallRecordInfoHandler.ashx?method=GET&lan=zh-CN&type=app&compress=00',
+        method: 'post',
+        url: '/GetCallRecordInfoHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
         headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true

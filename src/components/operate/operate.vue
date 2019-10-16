@@ -51,7 +51,12 @@
             <tr height="30%">
               <td width="40%" style="font-size:24px;padding-left:20px;">车辆信息查询:</td>
               <td width="60%">
-                <el-input type="text" v-model="searchinfo.datas.plate"></el-input>
+                <el-input
+                  type="text"
+                  v-model="searchinfo.datas.devConnId"
+                  onkeyup="value=value.replace(/[\W]/g,'') "
+                  onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
+                ></el-input>
               </td>
             </tr>
             <tr height="30%">
@@ -82,22 +87,29 @@
             <tr>
               <td width="35%" style="padding-left:20px;text-align:center;">放行原因:</td>
               <td width="65%" style="padding-left:20px;">
-                <el-select v-model="reasonId" clearable placeholder="请选择" style="font-size:24px;">
-                  <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-select v-model="reasonId" clearable placeholder="请选择" style="font-size:24px;" @click.native="getreasoninfo()">
+                  <el-option v-for="item in options2" :key="item.reasonId" :label="item.reason" :value="item.reason"></el-option>
                 </el-select>
               </td>
             </tr>
             <tr></tr>
           </table>
-          <table width="92%" height="20%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed;font-size:24px;padding-left:80px;">
+          <table width="100%" height="20%" cellpadding="0" cellspacing="0" style="table-layout:fixed;font-size:24px;padding-left:10px;border:1px solid #F00">
             <tr>
               <td>
                 <el-button
-                  style="height:90%;width:90%;background-color:rgb(0,174,255);font-size:24px;"
-                  type="success"
+                  style="height:90%;width:45%;background-color:rgb(0,174,255);font-size:24px;"
+                  type="primary"
+                  icon="el-icon-check"
+                  round
+                  @click="msgbox2('您确定要完成本次服务吗？','提示')"
+                >完成本次服务</el-button>
+                <el-button
+                  style="height:90%;width:45%;background-color:rgb(0,174,255);font-size:24px;"
+                  type="primary"
                   icon="el-icon-unlock"
                   round
-                  @click="openbyhands"
+                  @click="msgbox1('您确定要抬杆吗？','提示')"
                 >抬杆</el-button>
               </td>
             </tr>
@@ -165,12 +177,12 @@ export default {
       reasonId: '',
       options2: [
         {
-          value: '1',
-          label: '原因1'
+          reasonId: '1',
+          reason: '原因1'
         },
         {
-          value: '2',
-          label: '原因2'
+          reasonId: '2',
+          reason: '原因2'
         }
       ],
       // 用来选择标签页
@@ -211,7 +223,11 @@ export default {
         privatekey: '',
         datas: { userId: '' }
       },
-
+      cominfo: {
+        appId: '',
+        privatekey: '',
+        datas: { userId: '', dealtype: '', serialNum: '', callId: '', reasonId: '' }
+      },
       gocall: '',
       getcall: '',
       // 用来接收设备的回复信息
@@ -220,7 +236,7 @@ export default {
       tradeback: {},
       //搜索模块返回的信息
       searchback: {},
-      reasonback: {},
+      reasonback: [],
       value: '',
 
       // 不管OM发来的什么数据，都先通过address保存
@@ -328,7 +344,7 @@ export default {
       })
         .then(res => {
           let acm = JSON.stringify(res.data)
-          console.log('返回的数据' + acm)
+          console.log('getcaller返回的数据' + acm)
 
           // let reg = new RegExp('/\r\n/', 'g')
           // let acmm = acm.replace(/\\r\n/g, '\\r\\n')
@@ -364,8 +380,9 @@ export default {
       })
         .then(res => {
           let trb = JSON.stringify(res.data)
-          console.log('返回的数据' + trb)
+          console.log('gettrade返回的数据' + trb)
           this.tradeback = JSON.parse(JSON.parse(trb).datas)
+          this.tradeback.FreeLeaveTime = this.tradeback.FreeLeaveTime + '分钟'
           console.log(this.tradeback)
           this.imgsrc01 = this.tradeback.inpic.replace('+', '%2B')
           // let src = this.imgsrc01.replace('+', '%2B')
@@ -393,7 +410,7 @@ export default {
         alert('不存在相关套餐')
       }
 
-      this.opendoorinfo.datas.serialNum = this.tradeback.datas.TradingInfoID
+      this.opendoorinfo.datas.serialNum = this.tradeback.TradingInfoID
       //开闸原因
       // console.log('打印一下开闸原因看看' + this.opendoorinfo.datas.reasonId)
       // 对讲记录主键ID
@@ -417,20 +434,15 @@ export default {
           console.log('出现了错误' + err)
         })
     },
+    // 提示信息
     open1() {
-      // this.$notify({
-      //   title: '通话接入',
-      //   dangerouslyUseHTMLString: true,
-      //   type: 'success',
-      //   message: '<div>元</div>'
-      // })
       let time = new Date()
       let now = time.toLocaleTimeString()
       let message = '有电话呼入'
       let msg = message + now
       this.$notify({
         group: 'foo',
-        timeout: 70000,
+        timeout: 1000000,
         type: 'success',
         title: '注意',
         text: msg
@@ -442,9 +454,10 @@ export default {
       this.searchinfo.datas.parkId = this.callback.parkId
       // this.searchinfo.datas.devConnId = this.plate
       this.searchinfo.datas.devTag = '3'
-      this.searchinfo.datas.IsZeroOrder = 1
+      this.searchinfo.datas.IsZeroOrder = '1'
       let submit = {}
       submit = JSON.stringify(this.searchinfo)
+      console.log('搜索信息模块发送的数据' + submit)
       this.$axios({
         method: 'post',
         url: '/GetInOutInfoByDevAdrHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
@@ -454,18 +467,61 @@ export default {
       })
         .then(res => {
           let trb = JSON.stringify(res.data)
-
-          console.log('搜索车牌号返回的数据' + trb)
-          this.tradeback = JSON.parse(JSON.parse(trb).datas)
-          console.log(this.tradeback)
-          this.imgsrc01 = this.tradeback.inpic
+          let partrb = JSON.parse(trb)
+          console.log('收到的信息' + trb)
+          console.log('搜索车牌号返回的数据' + partrb.message)
+          this.msgbox(partrb.message, '提示')
+          if (partrb.status == 200) {
+            this.tradeback = JSON.parse(JSON.parse(trb).datas)
+            console.log(this.tradeback)
+            this.imgsrc01 = this.tradeback.inpic
+          }
         })
         .catch(err => {
-          console.log('通过车牌号搜索部分出现了错误' + err)
-
-          this.msgbox(err, '搜索不到啊')
+          let cuowu = JSON.stringify(err)
         })
     },
+    // 完成本次服务调用接口
+    comService() {
+      this.cominfo.datas.userId = localStorage.user
+      //交易类型
+      if (this.tradeback.ComboMeal == '临停缴费') {
+        this.opendoorinfo.datas.dealtype = '1'
+      } else if (this.tradeback.ComboMeal == '月租') {
+        this.opendoorinfo.datas.dealtype = '2'
+      } else if (this.tradeback.ComboMeal == '群租') {
+        this.opendoorinfo.datas.dealtype = '3'
+      } else {
+        alert('不存在相关完成服务交易类型')
+      }
+      this.cominfo.datas.serialNum = this.tradeback.TradingInfoID
+      this.cominfo.datas.callId = this.ombackrecord.callid
+      //获取到原因后需要更改
+      this.cominfo.datas.reasonId = '1'
+      let submit = {}
+      submit = JSON.stringify(this.cominfo)
+      console.log('结束服务模块发送的数据' + submit)
+      this.$axios({
+        method: 'post',
+        url: '/EndServiceHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+        headers: { 'Content-Type': 'application/json' },
+        data: submit,
+        emulateJSON: true
+      })
+        .then(res => {
+          let trb = JSON.stringify(res.data)
+          let partrb = JSON.parse(trb)
+          console.log('收到的信息' + trb)
+          console.log('完成服务返回的信息:' + partrb.message)
+          if (partrb.status == 200) {
+            this.msgbox(partrb.message, '提示')
+          }
+        })
+        .catch(err => {
+          console.log('完成本次服务接口未联通')
+        })
+    },
+    //搜索出现问题时返回的信息
     msgbox(a, b) {
       this.$alert(a, b, {
         confirmButtonText: '确定',
@@ -477,13 +533,49 @@ export default {
         }
       })
     },
+    // 抬杆之前的确认信息
+    msgbox1(a, b) {
+      this.$confirm(a, b, {
+        // showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+        .then(() => {
+          this.openbyhands()
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: 'ok'
+          })
+        })
+    },
+    msgbox2(a, b) {
+      this.$confirm(a, b, {
+        // showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+        .then(() => {
+          this.comService()
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: 'ok'
+          })
+        })
+    },
     //获取呼入原因信息
     getreasoninfo() {
-      this.reasoninfo.datas.userId = localStorage.token.user
+      this.reasoninfo.datas.userId = localStorage.user
+      let submit = {}
       submit = JSON.stringify(this.reasoninfo)
+      // submit = this.reasoninfo
+      console.log('原因模块发送的数据：' + submit)
       this.$axios({
-        methods: 'get',
-        url: '/GetCallReasonListHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+        method: 'post',
+        url: '/GetCallReasonListHandler.ashx?method=GET&lan=zh-CN&type=app&compress=00',
         headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
@@ -491,26 +583,18 @@ export default {
         .then(res => {
           let back = JSON.stringify(res.data)
           console.log('原因模块返回的数据' + back)
-          this.reasonback = JSON.parse(JSON.parse(back).datas)
-          console.log('原因模块返回的需要显示的信息' + this.reasonback)
-          // 在下面部分进行数据的替换，提示：主要替换callback，tradeback
+          this.reasonback = JSON.parse(JSON.parse(back).datas).list
+
           //让获取到的值和options2中的label和value相等
           //或者说把获取到的值遍历到options2中，2个属性label和value
           //label用于对外界显示，value用于保存key(即呼入原因ID)
-          //
-          //
-          //
-          //
-          //                         留白
-          //
-          //
-          //
-          //
-          //
-          //
+
+          this.options2 = JSON.parse(this.reasonback)
+
+          console.log('options2中的信息' + this.options2)
         })
         .catch(err => {
-          console.log('搜索模块出现了错误' + err)
+          console.log('原因模块出现了错误' + err)
         })
     },
     // 获取视频的令牌
