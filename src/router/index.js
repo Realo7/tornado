@@ -28,14 +28,13 @@ export default new Router({
       component: Home,
       redirect: { name: 'operate' },
       children: [
-        { name: 'user', path: 'user', component: User },
-        // { name: 'tt', path: 'tt', component: Tt },
-        { name: 'worktable', path: 'worktable', component: Worktable },
-        { name: 'operate', path: 'operate', component: Operate },
-        { name: 'try', path: 'try', component: Try },
-        { name: 'kefu', path: 'kefu', component: Kefu },
-        { name: 'kefubb', path: 'kefubb', component: Kefubb },
-        { name: 'peizhi', path: 'peizhi', component: Peizhi }
+        { name: 'user', path: '/user', component: User },
+        { name: 'worktable', path: '/worktable', component: Worktable },
+        { name: 'operate', path: '/operate', component: Operate },
+        { name: 'try', path: '/try', component: Try },
+        { name: 'kefu', path: '/kefu', component: Kefu },
+        { name: 'kefubb', path: '/kefubb', component: Kefubb },
+        { name: 'peizhi', path: '/peizhi', component: Peizhi }
       ]
     }
   ]

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <div>{{time}}</div> -->
     <el-form label-width="110px">
       <el-row>
         <el-col :span="4">
@@ -30,16 +31,12 @@
         </el-col>
         <el-col :span="4">
           <el-form-item label="开始时间检索">
-            <el-col :span="12">
-              <el-date-picker type="date" placeholder="选择日期" v-model="userinfo.datas.startTm" style="width:200%;"></el-date-picker>
-            </el-col>
+            <el-date-picker type="datetime" placeholder="选择日期时间" v-model="userinfo.datas.startTm" default-value="2019-01-01 00:00:00" style="width:90%;"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="4">
           <el-form-item label="结束时间检索">
-            <el-col :span="12">
-              <el-date-picker type="date" placeholder="选择日期" v-model="userinfo.datas.endTm" style="width:200%;"></el-date-picker>
-            </el-col>
+            <el-date-picker type="datetime" placeholder="选择日期时间" v-model="userinfo.datas.endTm" default-value="2019-01-01 00:00:00" style="width:90%;"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="4">
@@ -60,15 +57,16 @@
     <!-- <span contenteditable="true">这是一段可以编辑的文字</span> -->
     <br />
     <hr />
-    <el-table :data="list" style="width: 100%" max-height="600">
-      <el-table-column prop="plate" label="车牌号" width="150" fixed></el-table-column>
+    <el-table :data="list" style="width: 100%" max-height="700">
+      <el-table-column type="index" :index="indexMethod" width="100" label="序号" fixed></el-table-column>
+      <el-table-column prop="plate" label="车牌号" width="150"></el-table-column>
       <el-table-column prop="parkName" label="停车场名称" width="120"></el-table-column>
-      <el-table-column prop="startTm" label="入场时间" width="120"></el-table-column>
-      <el-table-column prop="endTm" label="出场时间" width="120"></el-table-column>
-      <el-table-column prop="callTm" label="出场时间" width="120"></el-table-column>
       <el-table-column prop="dealMode" label="停车类型" width="120"></el-table-column>
       <el-table-column prop="ticketCode" label="票号" width="120"></el-table-column>
-      <el-table-column prop="opUserId" label="开闸客服id" width="120"></el-table-column>
+      <el-table-column prop="startTm" label="入场时间" width="120"></el-table-column>
+      <el-table-column prop="endTm" label="出场时间" width="120"></el-table-column>
+      <el-table-column prop="callTm" label="呼叫时间" width="120"></el-table-column>
+      <el-table-column prop="opUserId" label="客服名称" width="120"></el-table-column>
 
       <el-table-column fixed="right" label="操作" width="120">
         <template slot-scope="scope">
@@ -76,13 +74,12 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="block">
-      <span class="demonstration">完整功能</span>
+    <div class="block" style="padding-left:50px;">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[5, 10, 15, 20]"
+        :page-sizes="[9, 15, 20]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="dataCount"
@@ -100,7 +97,7 @@ export default {
       // 总数
       dataCount: 0,
       // 每页显示条数
-      pageSize: 5,
+      pageSize: 9,
       //第几页
       page: 1,
       userinfo: {
@@ -112,6 +109,7 @@ export default {
       list: [],
       dealInfo: {},
       operateLogList: [],
+      time: '',
       showlist: [
         {
           plate: '苏B 23333',
@@ -155,6 +153,24 @@ export default {
           console.log('出现了错误' + err)
         })
     },
+    getnow() {
+      var now = new Date()
+      let year = now.getFullYear()
+      let month = now.getMonth() + 1
+      let date = now.getDate()
+      let hours = now.getHours()
+      let minutes = now.getMinutes()
+      let seconds = now.getSeconds()
+
+      var nowtime =
+        year + '-' + this.conver(month) + '-' + this.conver(date) + ' ' + this.conver(hours) + ':' + this.conver(minutes) + ':' + this.conver(seconds)
+
+      this.time = nowtime.toString()
+      return nowtime.toString()
+    },
+    conver(a) {
+      return a < 10 ? '0' + a : a
+    },
     // 处理页面变化
     handleCurrentChange(val) {
       this.page = val
@@ -166,6 +182,10 @@ export default {
       this.pageSize = val
       console.log(`每页 ${val} 条`)
       this.searchcallinfo()
+    },
+    // 处理序号
+    indexMethod(index) {
+      return index + 1
     },
     //点击查看详情触发的事件
     getdetail(index) {
@@ -180,7 +200,10 @@ export default {
       })
     }
   },
-  mounted() {}
+  mounted() {
+    this.searchcallinfo()
+    this.userinfo.datas.endTm = this.getnow()
+  }
 }
 </script>
       

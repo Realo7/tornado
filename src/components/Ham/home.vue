@@ -5,8 +5,8 @@
       <!-- 侧边栏导航 -->
       <!-- default-active，默认激活菜单的index -->
       <!-- active-text-color,激活菜单字体的颜色 -->
-      <el-menu default-active="operate" class="el-menu-vertical-demo" :router="true" text-color="white" active-text-color="#5CA7E7">
-        <el-menu-item index="operate">
+      <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :router="true" text-color="white" active-text-color="#5CA7E7">
+        <el-menu-item index="/operate">
           <i style="font-size:45px;font-weight: bold;" class="el-icon-menu"></i>
           <br />
           <span style="font-size:22px;">操作</span>
@@ -14,7 +14,7 @@
           <span style="font-size:22px;">界面</span>
         </el-menu-item>
 
-        <el-menu-item index="kefu">
+        <el-menu-item index="/kefu">
           <i style="font-size:45px;font-weight: bold;" class="el-icon-document"></i>
 
           <br />
@@ -23,7 +23,7 @@
           <span style="font-size:22px;">日志</span>
         </el-menu-item>
 
-        <el-menu-item index="user">
+        <el-menu-item index="/user">
           <i style="font-size:45px;font-weight: bold;" class="el-icon-user"></i>
           <br />
           <span style="font-size:22px;">远程</span>
@@ -31,7 +31,7 @@
           <span style="font-size:22px;">呼叫</span>
         </el-menu-item>
 
-        <el-menu-item index="peizhi">
+        <el-menu-item index="/peizhi">
           <i style="font-size:45px;font-weight:bold;" class="el-icon-s-marketing"></i>
           <br />
           <span style="font-size:22px;">图表</span>
@@ -49,7 +49,7 @@
           </el-col>
           <el-col :span="18">
             <div class="middle">
-              <span>OM寻呼系统</span>
+              <span>云坐席服务平台</span>
             </div>
           </el-col>
           <el-col :span="2">
