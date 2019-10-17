@@ -48,7 +48,7 @@ export default {
       someinfo: {
         appId: '',
         privatekey: '',
-        datas: { useId: '' }
+        datas: { userId: '' }
       },
       series: [
         {
@@ -69,10 +69,11 @@ export default {
   methods: {
     // 接收数据，获取运行状态信息
     getchartnum() {
+      this.someinfo.datas.userId = localStorage.user
       let submit = {}
       submit = JSON.stringify(this.someinfo)
       this.$axios({
-        method: 'get',
+        method: 'post',
         url: '/GetRunningInfoHandler.ashx?method=GET&lan=zh-CN&type=app&compress=00',
         headers: { 'Content-Type': 'application/json' },
         data: submit,
@@ -82,17 +83,10 @@ export default {
           let back = JSON.stringify(res.data)
           console.log('chart部分返回的数据' + back)
           //处理数据
-          //
-          //
-          //
-          //
-          //
-          //                    留白
-          //
-          //
-          //
-          //
-          //
+          let someback = JSON.parse(JSON.parse(back).datas)
+          this.opinionData[0].value = someback.onlinecount
+          this.opinionData[1].value = someback.sumnum
+          this.opinionData[2].value = someback.halfhourcallincount
           //
         })
         .catch(err => {

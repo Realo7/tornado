@@ -3,26 +3,34 @@
     <el-row :gutter="8" type="flex" class="row-bg" justify="start">
       <el-col :span="8" class="row-bg">
         <div v-model="stops" class="grid-l2">
-          <h3>车辆停放信息</h3>
-          车场名称：{{stops.name}}
+          <h3>车辆交易信息</h3>
+          总表交易流水号：{{dealinfo.tradingInfoID}}
           <br />
-          车辆牌号：{{stops.name}}
+          停车场名称：{{dealinfo.parkName}}
           <br />
-          入场时间：{{stops.name}}
+          票号：{{dealinfo.ticketCode}}
           <br />
-          出场时间：{{stops.name}}
+          车牌号：{{dealinfo.plate}}
           <br />
-          入场通道：{{stops.name}}
+          入场时间：{{dealinfo.inTm}}
           <br />
-          出场通道：{{stops.name}}
+          当前时间：{{dealinfo.nowTm}}
           <br />
-          停车类型：{{stops.name}}
+          出场时间：{{dealinfo.outTime}}
           <br />
-          车辆型号：{{stops.name}}
+          应收金额：{{dealinfo.shouldPayM}}
           <br />
-          账单金额：{{stops.name}}
+          优惠金额：{{dealinfo.couponPayM}}
           <br />
-          入场照片：{{stops.name}}
+          实收金额：{{dealinfo.realPayM}}
+          <br />
+          停车类型：{{dealinfo.dealMode}}
+          <br />
+          入场图片：{{dealinfo.picin}}
+          <br />
+          出厂图片：{{dealinfo.picout}}
+          <br />
+          停车状态：{{dealinfo.dealState}}
           <br />
         </div>
 
@@ -33,30 +41,30 @@
       <el-col :span="8">
         <div v-model="stops" class="grid-l2">
           <h3>呼叫处理信息</h3>
-          车场名称：{{stops.name}}
+          呼叫编号：{{detail.callId}}
           <br />
-          呼叫通道：{{stops.name}}
+          呼叫时间：{{detail.callTm}}
           <br />
-          入场牌号：{{stops.name}}
+          回答时间：{{detail.answerTm}}
           <br />
-          呼叫原因：{{stops.name}}
+          挂断时间：{{detail.hangUpTm}}
           <br />
-          呼叫方式：{{stops.name}}
+          通话时长：{{detail.duration}}
           <br />
-          客服人员：{{stops.name}}
+          呼叫出入口名称：{{detail.callDevice}}
           <br />
-          账单组成：{{stops.name}}
+          呼叫方式：{{detail.callType}}
           <br />
-          客户呼叫时间：{{stops.name}}
+          呼叫原因：{{detail.callReason}}
           <br />
-          客户接听时间：{{stops.name}}
+          服务员工：{{detail.useName}}
           <br />
-          服务挂断时间：{{stops.name}}
+          设备类型：{{detail.devTag}}
           <br />
-          客服服务时长：{{stops.name}}
-          <br />
-          呼叫照片：{{stops.name}}
-          <br />
+          <!-- 停放记录信息：{{dealinfo}}
+          <br />-->
+          <!-- 呼叫照片：{{stops.name}}
+          <br />-->
         </div>
 
         <div class="grid-l2-2">
@@ -65,12 +73,7 @@
       </el-col>
       <el-col :span="8">
         <div class="grid-l2" v-cloak>
-          <h3>呼叫处理记录</h3>
-          <el-table :data="tableData" style="margin:0 " max-height="350">
-            <el-table-column prop="date" label="时间"></el-table-column>
-            <el-table-column prop="name" label="车牌号"></el-table-column>
-            <el-table-column prop="address" label="对应操作"></el-table-column>
-          </el-table>
+          <h3>操作记录</h3>
         </div>
 
         <div class="grid-l2-2">
@@ -85,33 +88,26 @@
 export default {
   data() {
     return {
+      detail: '',
+      dealinfo: [],
+      operateLogList: '',
       stops: {
         name: '停车场名称',
         carnum: '车辆牌号'
-      },
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        },
-        {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-      ]
+      }
     }
+  },
+  methods: {
+    getdetail() {
+      let list = this.$route.params.list
+      console.log(list)
+      this.detail = list
+      this.dealinfo = JSON.parse(list.dealInfo)
+      this.operateLogList = JSON.parse(list.operateLogList)
+    }
+  },
+  mounted() {
+    this.getdetail()
   }
 }
 </script>
@@ -119,7 +115,7 @@ export default {
 .grid-l2 {
   background-color: white;
   border-radius: 4px;
-  min-height: 63%;
+  min-height: 69%;
   padding: 20px;
   line-height: 35px;
 }
