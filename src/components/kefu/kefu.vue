@@ -4,13 +4,13 @@
     <el-form label-width="110px">
       <el-row>
         <el-col :span="4">
-          <el-form-item label="车牌号检索">
+          <el-form-item label="车牌号">
             <el-input v-model="userinfo.datas.plate" style="width:80%;"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="4">
           <!-- v-model绑定的是选中的value -->
-          <el-form-item label="按客服姓名检索">
+          <el-form-item label="客服姓名">
             <el-select v-model="userinfo.datas.opUserId" placeholder="请选择是哪个客服" style="width: 80%;">
               <el-option label="客服01" value="客服01"></el-option>
               <el-option label="客服02" value="客服02"></el-option>
@@ -20,7 +20,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-form-item label="停车场名称检索">
+          <el-form-item label="停车场名称">
             <el-select v-model="userinfo.datas.parkId" placeholder="请选择是哪个停车场" style="width: 80%;">
               <el-option label="停车场01" value="停车场01"></el-option>
               <el-option label="停车场02" value="停车场02"></el-option>
@@ -30,12 +30,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-form-item label="开始时间检索">
+          <el-form-item label="呼叫开始时间">
             <el-date-picker type="datetime" placeholder="选择日期时间" v-model="userinfo.datas.startTm" default-value="2019-01-01 00:00:00" style="width:90%;"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-form-item label="结束时间检索">
+          <el-form-item label="呼叫结束时间">
             <el-date-picker type="datetime" placeholder="选择日期时间" v-model="userinfo.datas.endTm" default-value="2019-01-01 00:00:00" style="width:90%;"></el-date-picker>
           </el-form-item>
         </el-col>
@@ -59,13 +59,13 @@
     <hr />
     <el-table :data="list" style="width: 100%" max-height="700">
       <el-table-column type="index" :index="indexMethod" width="100" label="序号" fixed></el-table-column>
-      <el-table-column prop="plate" label="车牌号" width="150"></el-table-column>
+      <el-table-column prop="dealInfo.plate" label="车牌号" width="150"></el-table-column>
       <el-table-column prop="parkName" label="停车场名称" width="120"></el-table-column>
       <el-table-column prop="dealMode" label="停车类型" width="120"></el-table-column>
       <el-table-column prop="ticketCode" label="票号" width="120"></el-table-column>
       <el-table-column prop="startTm" label="入场时间" width="120"></el-table-column>
       <el-table-column prop="endTm" label="出场时间" width="120"></el-table-column>
-      <el-table-column prop="callTm" label="呼叫时间" width="120"></el-table-column>
+      <el-table-column prop="callTm" label="呼叫时间" width="240"></el-table-column>
       <el-table-column prop="opUserId" label="客服名称" width="120"></el-table-column>
 
       <el-table-column fixed="right" label="操作" width="120">
@@ -110,17 +110,7 @@ export default {
       dealInfo: {},
       operateLogList: [],
       time: '',
-      showlist: [
-        {
-          plate: '苏B 23333',
-          opUserId: 'lmf001',
-          parkName: '上海外滩',
-          startTm: '2019-10-1',
-          endTm: '20119-10-12',
-          dealMode: '月租车',
-          ticketCode: '232323232'
-        }
-      ]
+      showlist: [{}]
     }
   },
   methods: {
@@ -141,9 +131,11 @@ export default {
         .then(res => {
           let back = JSON.stringify(res.data)
           console.log('报表返回的数据' + back)
+          this.open1(JSON.parse(back).message)
           let rrr = JSON.parse(JSON.parse(back).datas)
           this.dataCount = parseInt(rrr.totalCount)
           this.list = JSON.parse(rrr.list)
+
           // this.dealInfo = JSON.stringify(this.list.dealInfo)
           console.log('分页后需要显示的数据' + this.list)
           //处理数据
@@ -152,6 +144,35 @@ export default {
         .catch(err => {
           console.log('出现了错误' + err)
         })
+    },
+    msgbox1(a, b) {
+      this.$confirm(a, b, {
+        // showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+        .then(() => {
+          this.open1(a)
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: 'ok'
+          })
+        })
+    },
+    open1(a) {
+      let time = new Date()
+      let now = time.toLocaleTimeString()
+      let message = a
+      let msg = message + ' ' + now
+      this.$notify({
+        group: 'foo',
+        duration: 3000,
+        type: 'success',
+        title: '注意',
+        text: msg
+      })
     },
     getnow() {
       var now = new Date()

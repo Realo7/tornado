@@ -4,7 +4,7 @@
       <el-col :span="8" class="row-bg">
         <div v-model="stops" class="grid-l2">
           <h3>车辆交易信息</h3>
-          总表交易流水号：{{dealinfo.tradingInfoID}}
+          流水号：{{dealinfo.tradingInfoID}}
           <br />
           停车场名称：{{dealinfo.parkName}}
           <br />
@@ -26,16 +26,12 @@
           <br />
           停车类型：{{dealinfo.dealMode}}
           <br />
-          入场图片：{{dealinfo.picin}}
-          <br />
-          出厂图片：{{dealinfo.picout}}
-          <br />
           停车状态：{{dealinfo.dealState}}
           <br />
         </div>
-
+        <!-- 入场图片 -->
         <div class="grid-l2-2">
-          <img src="@/assets/img/科尼赛克AgeraRS.png" style="width:100%" />
+          <img :src="dealinfo.picin" style="width:100%" />
         </div>
       </el-col>
       <el-col :span="8">
@@ -45,7 +41,7 @@
           <br />
           呼叫时间：{{detail.callTm}}
           <br />
-          回答时间：{{detail.answerTm}}
+          应答时间：{{detail.answerTm}}
           <br />
           挂断时间：{{detail.hangUpTm}}
           <br />
@@ -61,14 +57,10 @@
           <br />
           设备类型：{{detail.devTag}}
           <br />
-          <!-- 停放记录信息：{{dealinfo}}
-          <br />-->
-          <!-- 呼叫照片：{{stops.name}}
-          <br />-->
         </div>
-
+        <!-- 出厂图片 -->
         <div class="grid-l2-2">
-          <img src="@/assets/img/科尼赛克AgeraRS.png" style="width:100%" />
+          <img :src="dealinfo.picout" style="width:100%" />
         </div>
       </el-col>
       <el-col :span="8">

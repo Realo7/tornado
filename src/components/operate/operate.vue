@@ -4,11 +4,21 @@
       <el-col :span="8">
         <!-- 入口图片 -->
         <div class="grid-l1">
-          <img :src="callstatussrc" />
+          <div v-if="!callstatussrc" style="width:100%;height:100%">
+            <img src="@/assets/img/carbw.png" width="100%" height="100%" />
+          </div>
+          <div v-if="callstatussrc">
+            <img :src="callstatussrc" alt="未搜索到照片" οnerrοr="javascript:this.src='..assets/images/carbw.png';" />
+          </div>
         </div>
         <!-- 出口图片 -->
         <div class="grid-l1">
-          <img :src="callstatussrc" />
+          <div v-if="!callstatussrc" style="width:100%;height:100%">
+            <img src="@/assets/img/carbw.png" width="100%" height="100%" />
+          </div>
+          <div v-if="callstatussrc">
+            <img :src="callstatussrc" alt="未搜索到照片" οnerrοr="javascript:this.callstatussrc='@/assets/img/carbw.png';this.onerror = null" />
+          </div>
         </div>
         <!-- 呼叫口的监控视频 -->
         <iframe :src="livesrc02" width="100%" height="40%" id="ysOpenDevice" controls allowfullscreen></iframe>
@@ -76,7 +86,7 @@
 
           <table width="92%" height="40%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed;font-size:24px;">
             <tr>
-              <td width="35%" style="padding-left:20px;text-align:center;">放行类型:</td>
+              <td width="35%" style="padding-left:20px;text-align:center;">抬杆原因:</td>
               <td width="65%" style="padding-left:20px;">
                 <!-- 获取选取的值只需要取this.kind即可 -->
                 <el-select v-model="kind" clearable placeholder="请选择">
@@ -85,16 +95,16 @@
               </td>
             </tr>
             <tr>
-              <td width="35%" style="padding-left:20px;text-align:center;">放行原因:</td>
+              <td width="35%" style="padding-left:20px;text-align:center;">呼入原因:</td>
               <td width="65%" style="padding-left:20px;">
                 <el-select v-model="reasonId" clearable placeholder="请选择" style="font-size:24px;" @click.native="getreasoninfo()">
-                  <el-option v-for="item in options2" :key="item.reasonId" :label="item.reason" :value="item.reason"></el-option>
+                  <el-option v-for="item in options2" :key="item.reasonId" :label="item.reason" :value="item.reasonId"></el-option>
                 </el-select>
               </td>
             </tr>
             <tr></tr>
           </table>
-          <table width="100%" height="20%" cellpadding="0" cellspacing="0" style="table-layout:fixed;font-size:24px;padding-left:10px;border:1px solid #F00">
+          <table width="100%" height="20%" cellpadding="0" cellspacing="0" style="table-layout:fixed;font-size:24px;padding-left:10px;">
             <tr>
               <td>
                 <el-button
@@ -102,10 +112,10 @@
                   type="primary"
                   icon="el-icon-check"
                   round
-                  @click="msgbox2('您确定要完成本次服务吗？','提示')"
+                  @click="comService()"
                 >完成本次服务</el-button>
                 <el-button
-                  style="height:90%;width:45%;background-color:rgb(0,174,255);font-size:24px;"
+                  style="height:90%;width:45%;background-color:rgb(255, 84, 0);font-size:24px;"
                   type="primary"
                   icon="el-icon-unlock"
                   round
@@ -162,6 +172,7 @@
 import EZUIKit from 'ezuikit'
 import EZUIPlayer from 'ezuikit/ezuikit'
 import { get } from 'https'
+import { stringify } from 'querystring'
 
 export default {
   data() {
@@ -253,9 +264,10 @@ export default {
       },
       //监控地址的KEY和Secret，在萤石平台获取
       videotoken: {
-        appKey: '1589063f2302486697eb1f29ff814a70',
-        appSecret: 'f333d38075e04ce55ce9204a90ba78ab'
+        appKey: 'fb8fe2aceedd4e358141eb1eec6c2173',
+        appSecret: '3466edb75c40555187c5fe06aa57aed6'
       },
+      tokenback: '',
       //用来保存监控所需的令牌
       videoback: {},
       //保存登录时获取到绑定的设备编号
@@ -344,12 +356,12 @@ export default {
       })
         .then(res => {
           let acm = JSON.stringify(res.data)
-          console.log('getcaller返回的数据' + acm)
+          console.log('callerback返回的数据' + acm)
 
           // let reg = new RegExp('/\r\n/', 'g')
           // let acmm = acm.replace(/\\r\n/g, '\\r\\n')
           // console.log('去掉换行符的json字符串' + acmm)
-
+          this.initvideo02()
           this.callstatussrc = 'src/assets/img/itncalling.png'
           this.callback = JSON.parse(JSON.parse(acm).datas)
           console.log(this.callback)
@@ -383,10 +395,9 @@ export default {
           console.log('gettrade返回的数据' + trb)
           this.tradeback = JSON.parse(JSON.parse(trb).datas)
           this.tradeback.FreeLeaveTime = this.tradeback.FreeLeaveTime + '分钟'
-          console.log(this.tradeback)
+          console.log('tradeback中的数据' + this.tradeback)
+          // 对图片进行处理
           this.imgsrc01 = this.tradeback.inpic.replace('+', '%2B')
-          // let src = this.imgsrc01.replace('+', '%2B')
-          // this.imgsrc01 = src
         })
         .catch(err => {
           console.log('出现了错误' + err)
@@ -398,8 +409,9 @@ export default {
       this.opendoorinfo.datas.deviceAdr = this.callback.devConnId
       console.log('打印一下开闸原因看看' + this.reasonId)
       this.opendoorinfo.datas.reasonId = this.reasonId
+      // console.log('打印一下tradeback' + JSON.stringify(this.tradeback))
+      // 交易类型
 
-      //交易类型
       if (this.tradeback.ComboMeal == '临停缴费') {
         this.opendoorinfo.datas.dealtype = '1'
       } else if (this.tradeback.ComboMeal == '月租') {
@@ -407,19 +419,20 @@ export default {
       } else if (this.tradeback.ComboMeal == '群租') {
         this.opendoorinfo.datas.dealtype = '3'
       } else {
-        alert('不存在相关套餐')
+        this.open1('请输入开闸原因或类型')
       }
 
       this.opendoorinfo.datas.serialNum = this.tradeback.TradingInfoID
       //开闸原因
       // console.log('打印一下开闸原因看看' + this.opendoorinfo.datas.reasonId)
       // 对讲记录主键ID
-      this.opendoorinfo.datas.callId = ''
+      this.opendoorinfo.datas.callId = this.callback.callId
       let submit = {}
       submit = JSON.stringify(this.opendoorinfo)
+      console.log('打印一下开闸提交数据' + submit)
       this.$axios({
         method: 'post',
-        url: '/OpenDeviceHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+        url: '/OpenDeviceHandler.ashx?method=POST&lan=zh-CN&type=web&compress=00',
         headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
@@ -427,22 +440,25 @@ export default {
         .then(res => {
           let trb = JSON.stringify(res.data)
           console.log('手动开闸返回的数据' + trb)
-          this.tradeback = JSON.parse(JSON.parse(trb).datas)
+          if (res.data.statusCode != 200) {
+            this.open1(res.data.message)
+          }
+          // this.tradeback = JSON.parse(JSON.parse(trb).datas)
           console.log('手动开闸模块需要显示的数据' + this.tradeback)
         })
         .catch(err => {
           console.log('出现了错误' + err)
         })
     },
-    // 提示信息
-    open1() {
+    // 提示信息(右上角那种)
+    open1(a) {
       let time = new Date()
       let now = time.toLocaleTimeString()
-      let message = '有电话呼入'
-      let msg = message + now
+      let message = a
+      let msg = message + ' ' + now
       this.$notify({
         group: 'foo',
-        timeout: 1000000,
+        duration: 8000,
         type: 'success',
         title: '注意',
         text: msg
@@ -450,6 +466,10 @@ export default {
     },
     //通过车牌号搜索信息
     searchinfo0() {
+      if (!this.searchinfo.datas.devConnId) {
+        this.open1('请输入要搜索的车牌号')
+        return
+      }
       // 将获取通话信息传过来的停车场ID,设备地址,设备类型&&&&&是否产生0元订单等传到gettrade方法的request数据中
       this.searchinfo.datas.parkId = this.callback.parkId
       // this.searchinfo.datas.devConnId = this.plate
@@ -470,7 +490,8 @@ export default {
           let partrb = JSON.parse(trb)
           console.log('收到的信息' + trb)
           console.log('搜索车牌号返回的数据' + partrb.message)
-          this.msgbox(partrb.message, '提示')
+
+          this.msgbox3(partrb.message, '提示')
           if (partrb.status == 200) {
             this.tradeback = JSON.parse(JSON.parse(trb).datas)
             console.log(this.tradeback)
@@ -483,21 +504,25 @@ export default {
     },
     // 完成本次服务调用接口
     comService() {
+      if (!this.reasonId) {
+        this.open1('请输入原因')
+        return
+      }
       this.cominfo.datas.userId = localStorage.user
       //交易类型
       if (this.tradeback.ComboMeal == '临停缴费') {
-        this.opendoorinfo.datas.dealtype = '1'
+        this.cominfo.datas.dealtype = '1'
       } else if (this.tradeback.ComboMeal == '月租') {
-        this.opendoorinfo.datas.dealtype = '2'
+        this.cominfo.datas.dealtype = '2'
       } else if (this.tradeback.ComboMeal == '群租') {
-        this.opendoorinfo.datas.dealtype = '3'
+        this.cominfo.datas.dealtype = '3'
       } else {
-        alert('不存在相关完成服务交易类型')
+        this.open1('不存在相关完成服务交易类型')
       }
       this.cominfo.datas.serialNum = this.tradeback.TradingInfoID
-      this.cominfo.datas.callId = this.ombackrecord.callid
+      this.cominfo.datas.callId = this.callback.callId
       //获取到原因后需要更改
-      this.cominfo.datas.reasonId = '1'
+      this.cominfo.datas.reasonId = this.reasonId
       let submit = {}
       submit = JSON.stringify(this.cominfo)
       console.log('结束服务模块发送的数据' + submit)
@@ -513,21 +538,26 @@ export default {
           let partrb = JSON.parse(trb)
           console.log('收到的信息' + trb)
           console.log('完成服务返回的信息:' + partrb.message)
-          if (partrb.status == 200) {
-            this.msgbox(partrb.message, '提示')
+          if (partrb.statusCode == 200) {
+            // this.msgbox(partrb.message, '提示')
+            this.msgbox2('您确定要完成本次服务吗？', '提示')
           }
         })
         .catch(err => {
           console.log('完成本次服务接口未联通')
         })
     },
+    imgsrcchange() {
+      this.callstatussrc = '@/assets/img/carbw.png'
+    },
     //搜索出现问题时返回的信息
-    msgbox(a, b) {
+    msgbox3(a, b) {
       this.$alert(a, b, {
         confirmButtonText: '确定',
         callback: action => {
           this.$message({
             type: 'info',
+            height: '800px',
             message: `已点击确定`
           })
         }
@@ -557,7 +587,8 @@ export default {
         cancelButtonText: '取消'
       })
         .then(() => {
-          this.comService()
+          this.open1('完成本次服务成功')
+          this.$router.go(0)
         })
         .catch(() => {
           this.$message({
@@ -610,9 +641,8 @@ export default {
         .then(res => {
           let token = JSON.stringify(res.data)
           console.log('获取视频令牌模块返回的数据' + token)
-          this.tokenback = JSON.parse(token)
-
-          console.log('接到了token' + this.tokenback)
+          this.tokenback = JSON.parse(token).data.accessToken
+          console.log('接到了token:' + this.tokenback)
         })
         .catch(err => {
           console.log('出现了错误' + err)
@@ -623,8 +653,13 @@ export default {
       this.player.play()
     },
     initvideo02() {
-      this.livesrc02 =
-        'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/C71948995/2.live&autoplay=1&accessToken=at.9wiz6ml83s7oy1cy50se9wc6aerts23b-6t53ia6nke-152k8ob-m9i35gmdm'
+      this.getvideotoken()
+      console.log('我要打印看下' + this.tokenback)
+      let token = this.tokenback
+      let head = 'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/C71948995/1.live&autoplay=1&accessToken='
+      this.livesrc02 = head + token
+      let tk2 = 'at.9wiz6ml83s7oy1cy50se9wc6aerts23b-6t53ia6nke-152k8ob-m9i35gmdm'
+      console.log('视屏播放地址' + this.livesrc02)
     },
     // 从token中获取账号绑定的话机号，用来绑定socket的shopid
     getlocalTel() {
@@ -635,6 +670,8 @@ export default {
       console.log('从localStorage中获取到token中保存的与账号绑定的话机一号' + telep[0])
       this.telephone = telep[0]
     },
+    //清空的方法
+
     // 初始化websocket
     initWebSocket() {
       let telnum = this.telephone
@@ -665,7 +702,7 @@ export default {
       // 判断address中是不是有ext.id
       if (this.address.ext) {
         this.ombackansered = this.address
-        this.open1()
+        this.open1('有电话呼入')
       } else {
         this.ombackansered.attribute = ''
         this.ombackrecord = this.address
@@ -689,6 +726,8 @@ export default {
   beforeMount() {
     this.initWebSocket()
     // this.gettrade()
+    this.getvideotoken()
+    // this.initvideo02()
   }
 }
 </script>
@@ -723,15 +762,21 @@ export default {
   /* overflow: auto; */
   vertical-align: middle;
   padding-left: 40px;
-  height: 41%;
+  height: 42%;
 }
 .grid-l3-2 {
-  height: 22%;
+  height: 21%;
   margin-bottom: 2%;
   background-color: rgb(216, 228, 246);
   padding-left: 20px;
   line-height: 20px;
   overflow: auto;
+  text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
 }
 .grid-l3-3 {
   background-color: rgb(216, 228, 246);
