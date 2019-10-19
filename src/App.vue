@@ -24,6 +24,10 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  mounted() {
+    // const root = process.env.API_ROOT;
+    console.log(this.$axios.baseURL)
+  }
 }
 </script>

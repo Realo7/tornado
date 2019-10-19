@@ -64,12 +64,11 @@
         </div>
       </el-col>
       <el-col :span="8">
-        <div class="grid-l2" v-cloak>
+        <div class="grid-l3" v-cloak>
           <h3>操作记录</h3>
-        </div>
-
-        <div class="grid-l2-2">
-          <img src="@/assets/img/科尼赛克AgeraRS.png" style="width:100%" />
+          <div style="padding-left:10px;">
+            <el-button @click="back01">返回</el-button>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -77,6 +76,7 @@
 </template>
 
 <script>
+import kefuVue from './kefu.vue'
 export default {
   data() {
     return {
@@ -96,8 +96,12 @@ export default {
       this.detail = list
       this.dealinfo = JSON.parse(list.dealInfo)
       this.operateLogList = JSON.parse(list.operateLogList)
+    },
+    back01() {
+      this.$router.push({ name: 'kefu' })
     }
   },
+
   mounted() {
     this.getdetail()
   }
@@ -113,7 +117,7 @@ export default {
 }
 
 .grid-l2-2 {
-  background-color: rgb(99, 75, 206);
+  /* background-color: rgb(99, 75, 206); */
   border-radius: 4px;
   min-height: 30%;
   margin-top: 0.1%;
@@ -121,6 +125,13 @@ export default {
 
 .row-bg {
   min-height: 800px;
+}
+.grid-l3 {
+  background-color: white;
+  border-radius: 4px;
+  height: 99%;
+  padding: 20px;
+  line-height: 35px;
 }
 
 [v-cloak] {

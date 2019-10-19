@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <div>{{time}}</div> -->
     <el-form label-width="110px">
       <el-row>
         <el-col :span="4">
@@ -57,15 +56,15 @@
     <!-- <span contenteditable="true">这是一段可以编辑的文字</span> -->
     <br />
     <hr />
-    <el-table :data="list" style="width: 100%" max-height="700">
+    <el-table :data="showlist" style="width: 100%" max-height="700">
       <el-table-column type="index" :index="indexMethod" width="100" label="序号" fixed></el-table-column>
-      <el-table-column prop="dealInfo.plate" label="车牌号" width="150"></el-table-column>
-      <el-table-column prop="parkName" label="停车场名称" width="120"></el-table-column>
-      <el-table-column prop="dealMode" label="停车类型" width="120"></el-table-column>
-      <el-table-column prop="ticketCode" label="票号" width="120"></el-table-column>
-      <el-table-column prop="startTm" label="入场时间" width="120"></el-table-column>
-      <el-table-column prop="endTm" label="出场时间" width="120"></el-table-column>
-      <el-table-column prop="callTm" label="呼叫时间" width="240"></el-table-column>
+      <el-table-column prop="plate" label="车牌号" width="150"></el-table-column>
+      <el-table-column prop="parkName" label="停车场名称" width="150"></el-table-column>
+      <el-table-column prop="dealMode" label="停车类型" width="150"></el-table-column>
+      <el-table-column prop="ticketCode" label="票号" width="150"></el-table-column>
+      <el-table-column prop="answerTm" label="呼叫开始时间" width="180"></el-table-column>
+      <el-table-column prop="hangUpTm" label="挂断时间" width="180"></el-table-column>
+      <el-table-column prop="duration" label="通话时长" width="80"></el-table-column>
       <el-table-column prop="opUserId" label="客服名称" width="120"></el-table-column>
 
       <el-table-column fixed="right" label="操作" width="120">
@@ -110,7 +109,7 @@ export default {
       dealInfo: {},
       operateLogList: [],
       time: '',
-      showlist: [{}]
+      showlist: []
     }
   },
   methods: {
@@ -132,13 +131,30 @@ export default {
           let back = JSON.stringify(res.data)
           console.log('报表返回的数据' + back)
           this.open1(JSON.parse(back).message)
-          let rrr = JSON.parse(JSON.parse(back).datas)
-          this.dataCount = parseInt(rrr.totalCount)
-          this.list = JSON.parse(rrr.list)
+          let first = JSON.parse(JSON.parse(back).datas)
+          // 获取总数
+          this.dataCount = parseInt(first.totalCount)
+          // 第二个parse
+          let second = JSON.parse(first.list)
+          this.list = second
 
-          // this.dealInfo = JSON.stringify(this.list.dealInfo)
-          console.log('分页后需要显示的数据' + this.list)
-          //处理数据
+          for (var i = 0; i < second.length; i++) {
+            let t = JSON.parse(second[i].dealInfo)
+            let show = {}
+            show.plate = t.plate
+            show.parkName = t.parkName
+            show.dealMode = t.dealMode
+            show.ticketCode = t.ticketCode
+            show.answerTm = second[i].answerTm
+            show.hangUpTm = second[i].hangUpTm
+            show.duration = second[i].duration
+            show.useName = t.useName
+            this.showlist[i] = show
+          }
+          let third = JSON.stringify(this.showlist)
+          this.showlist = JSON.parse(third)
+
+          console.log('分页后需要显示的数据' + JSON.stringify(this.showlist)) //处理数据
           //
         })
         .catch(err => {
@@ -212,6 +228,7 @@ export default {
     getdetail(index) {
       console.log('当前是第' + index + '行')
       // console.log(this.list[index])
+      // this.dealInfo = this.list
       this.$router.push({
         name: 'kefubb',
         params: {
@@ -227,4 +244,9 @@ export default {
   }
 }
 </script>
+<style lang="css">
+.big .el-form-item__label {
+  font-size: 20px;
+}
+</style>
       

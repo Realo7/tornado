@@ -49,7 +49,7 @@
           </el-col>
           <el-col :span="18">
             <div class="middle">
-              <span>云坐席服务平台</span>
+              <span>云座席服务平台</span>
             </div>
           </el-col>
           <el-col :span="2">

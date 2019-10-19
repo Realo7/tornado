@@ -19,6 +19,7 @@ import url from '../static/config'
 import axios from 'axios'
 
 axios.defaults.baseURL = "/api";
+// axios.defaults.baseURL = "http://192.168.1.99:3830/Handlers"
 import VueAxios from 'vue-axios'
 
 Vue.prototype.$axios = axios;

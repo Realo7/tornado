@@ -6,7 +6,7 @@
         <el-input v-model="formdata.datas.userCode"></el-input>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input v-model="formdata.datas.pwd"></el-input>
+        <el-input v-model="formdata.datas.pwd" type="password"></el-input>
       </el-form-item>
       <el-button class="login-btn" type="primary" @click.prevent="handleLogin()" round>登录</el-button>
     </el-form>
@@ -38,7 +38,7 @@ export default {
       //console.log(submit)
       this.$axios({
         method: 'post',
-        // baseURL: 'api', //重写baseURL
+        // baseURL: process.env.API, //重写baseURL
         url: '/LoginBISHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
         headers: { 'Content-Type': 'application/json' },
         data: submit
