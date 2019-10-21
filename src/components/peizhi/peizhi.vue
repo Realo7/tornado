@@ -16,9 +16,6 @@
             <td class="backg">
               <div>20秒接通率</div>
             </td>
-            <td class="backg">
-              <div>运行状态</div>
-            </td>
           </tr>
         </table>
       </div>
@@ -75,7 +72,7 @@ export default {
       this.$axios({
         method: 'post',
         url: '/GetRunningInfoHandler.ashx?method=GET&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })

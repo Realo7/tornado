@@ -1,15 +1,15 @@
 <template>
   <div>
-    <el-form label-width="110px">
+    <el-form label-width="180px">
       <el-row>
         <el-col :span="4">
-          <el-form-item label="车牌号">
+          <el-form-item label="车牌号" class="big">
             <el-input v-model="userinfo.datas.plate" style="width:80%;"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="4">
           <!-- v-model绑定的是选中的value -->
-          <el-form-item label="客服姓名">
+          <el-form-item label="客服姓名" class="big">
             <el-select v-model="userinfo.datas.opUserId" placeholder="请选择是哪个客服" style="width: 80%;">
               <el-option label="客服01" value="客服01"></el-option>
               <el-option label="客服02" value="客服02"></el-option>
@@ -19,7 +19,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-form-item label="停车场名称">
+          <el-form-item label="停车场名称" class="big">
             <el-select v-model="userinfo.datas.parkId" placeholder="请选择是哪个停车场" style="width: 80%;">
               <el-option label="停车场01" value="停车场01"></el-option>
               <el-option label="停车场02" value="停车场02"></el-option>
@@ -29,28 +29,20 @@
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-form-item label="呼叫开始时间">
+          <el-form-item label="呼叫开始时间" class="big">
             <el-date-picker type="datetime" placeholder="选择日期时间" v-model="userinfo.datas.startTm" default-value="2019-01-01 00:00:00" style="width:90%;"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-form-item label="呼叫结束时间">
+          <el-form-item label="呼叫结束时间" class="big">
             <el-date-picker type="datetime" placeholder="选择日期时间" v-model="userinfo.datas.endTm" default-value="2019-01-01 00:00:00" style="width:90%;"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="4">
           <el-form-item>
-            <el-button type="primary" @click="searchcallinfo()" style="margin-left:-100px;">立即检索</el-button>
+            <el-button type="primary" @click="searchcallinfo()">立即检索</el-button>
           </el-form-item>
         </el-col>
-
-        <!-- <el-col :span="6">
-          <el-form-item label="结束时间检索">
-            <el-col :span="11">
-              <el-date-picker type="date" placeholder="选择日期" v-model="form.date2" style="width: 55%;"></el-date-picker>
-            </el-col>
-          </el-form-item>
-        </el-col>-->
       </el-row>
     </el-form>
     <!-- <span contenteditable="true">这是一段可以编辑的文字</span> -->
@@ -65,7 +57,7 @@
       <el-table-column prop="answerTm" label="呼叫开始时间" width="180"></el-table-column>
       <el-table-column prop="hangUpTm" label="挂断时间" width="180"></el-table-column>
       <el-table-column prop="duration" label="通话时长" width="80"></el-table-column>
-      <el-table-column prop="opUserId" label="客服名称" width="120"></el-table-column>
+      <el-table-column prop="useName" label="客服名称" width="120"></el-table-column>
 
       <el-table-column fixed="right" label="操作" width="120">
         <template slot-scope="scope">
@@ -78,7 +70,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[9, 15, 20]"
+        :page-sizes="[11, 15 , 20]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="dataCount"
@@ -96,7 +88,7 @@ export default {
       // 总数
       dataCount: 0,
       // 每页显示条数
-      pageSize: 9,
+      pageSize: 11,
       //第几页
       page: 1,
       userinfo: {
@@ -123,7 +115,7 @@ export default {
       this.$axios({
         method: 'post',
         url: '/GetCallRecordInfoHandler.ashx?method=GET&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })
@@ -244,9 +236,10 @@ export default {
   }
 }
 </script>
-<style lang="css">
-.big .el-form-item__label {
-  font-size: 20px;
+<style scoped>
+.big >>> .el-form-item__label {
+  font-size: 25px;
+  /* color: aqua; */
 }
 </style>
       

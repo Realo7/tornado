@@ -350,7 +350,7 @@ export default {
       this.$axios({
         method: 'post',
         url: '/GetInterphoneDetailHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })
@@ -386,7 +386,7 @@ export default {
       this.$axios({
         method: 'post',
         url: '/GetInOutInfoByDevAdrHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })
@@ -433,7 +433,7 @@ export default {
       this.$axios({
         method: 'post',
         url: '/OpenDeviceHandler.ashx?method=POST&lan=zh-CN&type=web&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })
@@ -481,7 +481,7 @@ export default {
       this.$axios({
         method: 'post',
         url: '/GetInOutInfoByDevAdrHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })
@@ -529,7 +529,7 @@ export default {
       this.$axios({
         method: 'post',
         url: '/EndServiceHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })
@@ -607,7 +607,7 @@ export default {
       this.$axios({
         method: 'post',
         url: '/GetCallReasonListHandler.ashx?method=GET&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })
@@ -675,7 +675,7 @@ export default {
     // 初始化websocket
     initWebSocket() {
       let telnum = this.telephone
-      let dizhi = 'ws://localhost:8080/websocket/'
+      let dizhi = 'ws://192.168.1.3:8080/websocket/'
       // 拼接地址
       const wsuri = dizhi + telnum //这个地址由后端童鞋提供
       this.websock = new WebSocket(wsuri)

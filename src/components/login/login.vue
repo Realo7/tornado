@@ -35,12 +35,13 @@ export default {
     handleLogin() {
       let submit = {}
       submit = JSON.stringify(this.formdata)
+      console.log('ru' + submit)
       //console.log(submit)
       this.$axios({
         method: 'post',
-        // baseURL: process.env.API, //重写baseURL
+        baseURL: 'http://192.168.1.99:3830/Handlers', //重写baseURL
         url: '/LoginBISHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit
       })
         .then(res => {
