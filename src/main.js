@@ -9,6 +9,7 @@ import EZUIKIT from "ezuikit"
 
 import 'element-ui/lib/theme-chalk/index.css';
 import '@/assets/css/reset.css'
+import 'lib-flexible'
 import echarts from 'echarts'
 import qs from 'qs'
 import Notifications from 'vue-notification'

@@ -192,7 +192,7 @@ export default {
   width: 125px;
   background-color: rgb(92, 167, 231);
   border-radius: 12px 0px 0px 12px;
-  margin-left: 35px;
+  margin-left: 40px;
   line-height: 27px;
   margin-top: 60px;
   margin-bottom: 50px;

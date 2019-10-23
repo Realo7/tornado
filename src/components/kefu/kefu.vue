@@ -1,49 +1,51 @@
 <template>
   <div>
-    <el-form label-width="180px">
-      <el-row>
-        <el-col :span="4">
-          <el-form-item label="车牌号" class="big">
-            <el-input v-model="userinfo.datas.plate" style="width:80%;"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <!-- v-model绑定的是选中的value -->
-          <el-form-item label="客服姓名" class="big">
-            <el-select v-model="userinfo.datas.opUserId" placeholder="请选择是哪个客服" style="width: 80%;">
-              <el-option label="客服01" value="客服01"></el-option>
-              <el-option label="客服02" value="客服02"></el-option>
-              <el-option label="客服03" value="客服03"></el-option>
-              <el-option label="客服04" value="客服04"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item label="停车场名称" class="big">
-            <el-select v-model="userinfo.datas.parkId" placeholder="请选择是哪个停车场" style="width: 80%;">
-              <el-option label="停车场01" value="停车场01"></el-option>
-              <el-option label="停车场02" value="停车场02"></el-option>
-              <el-option label="停车场03" value="停车场03"></el-option>
-              <el-option label="停车场04" value="停车场04"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item label="呼叫开始时间" class="big">
-            <el-date-picker type="datetime" placeholder="选择日期时间" v-model="userinfo.datas.startTm" default-value="2019-01-01 00:00:00" style="width:90%;"></el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item label="呼叫结束时间" class="big">
-            <el-date-picker type="datetime" placeholder="选择日期时间" v-model="userinfo.datas.endTm" default-value="2019-01-01 00:00:00" style="width:90%;"></el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item>
-            <el-button type="primary" @click="searchcallinfo()">立即检索</el-button>
-          </el-form-item>
-        </el-col>
-      </el-row>
+    <el-form>
+      <table style="width:100%;">
+        <tr>
+          <td style="width:12%;">
+            <el-form-item label="车牌号" class="big">
+              <el-input v-model="userinfo.datas.plate" style="width:90%;"></el-input>
+            </el-form-item>
+          </td>
+          <td style="width:14%;">
+            <!-- v-model绑定的是选中的value -->
+            <el-form-item label="客服姓名" class="big">
+              <el-select v-model="userinfo.datas.opUserId" placeholder="请选择是哪个客服" style="width: 80%;">
+                <el-option label="客服01" value="客服01"></el-option>
+                <el-option label="客服02" value="客服02"></el-option>
+                <el-option label="客服03" value="客服03"></el-option>
+                <el-option label="客服04" value="客服04"></el-option>
+              </el-select>
+            </el-form-item>
+          </td>
+          <td style="width:18%;">
+            <el-form-item label="停车场名称" class="big">
+              <el-select v-model="userinfo.datas.parkId" placeholder="请选择是哪个停车场" style="width: 80%;">
+                <el-option label="停车场01" value="停车场01"></el-option>
+                <el-option label="停车场02" value="停车场02"></el-option>
+                <el-option label="停车场03" value="停车场03"></el-option>
+                <el-option label="停车场04" value="停车场04"></el-option>
+              </el-select>
+            </el-form-item>
+          </td>
+          <td style="width:20%;">
+            <el-form-item label="呼叫开始时间" class="big">
+              <el-date-picker type="datetime" placeholder="选择日期时间" v-model="userinfo.datas.startTm" default-value="2019-01-01 00:00:00" style="width:90%;"></el-date-picker>
+            </el-form-item>
+          </td>
+          <td style="width:20%;">
+            <el-form-item label="呼叫结束时间" class="big">
+              <el-date-picker type="datetime" placeholder="选择日期时间" v-model="userinfo.datas.endTm" default-value="2019-01-01 00:00:00" style="width:90%;"></el-date-picker>
+            </el-form-item>
+          </td>
+          <td style="width:12%;">
+            <el-form-item>
+              <el-button type="primary" @click="searchcallinfo()">立即检索</el-button>
+            </el-form-item>
+          </td>
+        </tr>
+      </table>
     </el-form>
     <!-- <span contenteditable="true">这是一段可以编辑的文字</span> -->
     <br />
@@ -175,7 +177,7 @@ export default {
       let message = a
       let msg = message + ' ' + now
       this.$notify({
-        group: 'foo',
+        group: 'goo',
         duration: 3000,
         type: 'success',
         title: '注意',
@@ -239,6 +241,7 @@ export default {
 <style scoped>
 .big >>> .el-form-item__label {
   font-size: 25px;
+  margin: auto;
   /* color: aqua; */
 }
 </style>

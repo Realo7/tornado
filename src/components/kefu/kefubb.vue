@@ -60,7 +60,7 @@
         </div>
         <!-- 出厂图片 -->
         <div class="grid-l2-2">
-          <img :src="dealinfo.picout" style="width:100%" />
+          <img :src="dealinfo.picout" style="width:100%" :onerror="defaultImg" />
         </div>
       </el-col>
       <el-col :span="8">
@@ -80,6 +80,7 @@ import kefuVue from './kefu.vue'
 export default {
   data() {
     return {
+      defaultImg: '',
       detail: '',
       dealinfo: [],
       operateLogList: '',
