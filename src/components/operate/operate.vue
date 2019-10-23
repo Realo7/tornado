@@ -32,9 +32,9 @@
           <br />
           <span class="tit02">
             <!-- <br /> -->
-            <span class="spading" v-if="!callback.devTag">入口/出口：</span>
-            <span class="spading" v-if="callback.devTag=='1'">入口/出口：入口</span>
-            <span class="spading" v-if="callback.devTag=='2'">入口/出口：出口</span>
+            <span class="spading1" v-if="!callback.devTag">出入类型：</span>
+            <span class="spading1" v-if="callback.devTag=='1'">出入类型：入口</span>
+            <span class="spading1" v-if="callback.devTag=='2'">出入类型：出口</span>
             <br />
             <span class="spading">票号：{{tradeback.TicketCode}}</span>
             <br />
@@ -156,14 +156,14 @@
         </div>
         <!-- 第三列中间 -->
         <div class="grid-l3-2">
-          <span class="tit05" style="padding-top:20px;">收费标准 :{callback.parkRulesTittle}</span>
+          <span class="tit05" style="padding-top:20px;">收费标准 :</span>
           <span class="tit06">{{callback.parkRules}}</span>
           <!-- <span class="tit06">22:00-07:00</span>
           <span class="tit06">2元/小时</span>-->
         </div>
         <!-- 第三列下方 -->
         <div class="grid-l3-3">
-          <span class="tit00">车场业务信息{callback.freeCarsTittle}</span>
+          <span class="tit00">车场业务信息</span>
           <span class="tit03">免费车辆:{{callback.freeCars}}</span>
           <!-- <span class="tit03" style="padding-left:119px;">客车</span> -->
         </div>
@@ -498,7 +498,7 @@ export default {
       // 将获取通话信息传过来的停车场ID,设备地址,设备类型&&&&&是否产生0元订单等传到gettrade方法的request数据中
       this.searchinfo.datas.parkId = this.callback.parkId
       if (!this.searchinfo.datas.parkId) {
-        this.open3('请先通过通话获取停车场ID')
+        this.open3('无呼叫信息')
         return
       }
       // this.searchinfo.datas.devConnId = this.plate
@@ -837,6 +837,12 @@ export default {
 .spading {
   padding: 30px;
   line-height: 35px;
+}
+.spading1 {
+  padding: 30px;
+  line-height: 35px;
+  font-size: 26px;
+  padding-left: 110px;
 }
 .spadingl2 {
   margin-top: 30px;

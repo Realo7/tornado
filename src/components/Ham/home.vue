@@ -169,12 +169,16 @@ export default {
 <style scoped>
 .container {
   height: 100%;
+  margin-top: -8px;
+  margin-left: -8px;
 }
 .header {
   background-color: white;
+  padding-top: 15px;
 }
 .aside {
-  background-color: rgb(92, 167, 231);
+  /* background-color: rgb(92, 167, 231); */
+  background-color: rgb(0, 174, 255);
   border: none;
   overflow: hidden;
 }
@@ -186,12 +190,14 @@ export default {
   text-align: center;
   font-family: Microsoft Yahei;
   font-size: 36px;
+  /* padding-top: 10px; */
   /* margin: auto; */
 }
 .emi {
   height: 150px;
   width: 125px;
-  background-color: rgb(92, 167, 231);
+  /* background-color: rgb(92, 167, 231); */
+  background-color: rgb(0, 174, 255);
   border-radius: 12px 0px 0px 12px;
   margin-left: 40px;
   line-height: 27px;
@@ -218,7 +224,8 @@ export default {
   line-height: 70px;
 }
 .el-menu-vertical-demo {
-  background-color: rgb(92, 167, 231);
+  /* background-color: rgb(92, 167, 231); */
+  background-color: rgb(0, 174, 255);
   font-size: 20px;
   border: none;
 }

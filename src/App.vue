@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view />
-    <notifications group="foo" classes="my-style1"></notifications>
+    <notifications group="foo" classes="my-style1" style="background-color:rgb(243,174,44)"></notifications>
     <notifications group="goo" classes="my-style2"></notifications>
     <notifications group="coo" classes="my-style3"></notifications>
   </div>
