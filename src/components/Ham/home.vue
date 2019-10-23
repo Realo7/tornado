@@ -176,6 +176,7 @@ export default {
 .aside {
   background-color: rgb(92, 167, 231);
   border: none;
+  overflow: hidden;
 }
 .main {
   background-color: white;
