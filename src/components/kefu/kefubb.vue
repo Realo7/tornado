@@ -60,15 +60,15 @@
         </div>
         <!-- 出厂图片 -->
         <div class="grid-l2-2">
-          <img :src="dealinfo.picout" style="width:100%" />
+          <img :src="dealinfo.picout" style="width:100%" :onerror="defaultImg" />
         </div>
       </el-col>
       <el-col :span="8">
         <div class="grid-l3" v-cloak>
-          <h3>操作记录</h3>
-          <div style="padding-left:10px;">
+          <div class="btn">
             <el-button @click="back01">返回</el-button>
           </div>
+          <h3>操作记录</h3>
         </div>
       </el-col>
     </el-row>
@@ -80,6 +80,7 @@ import kefuVue from './kefu.vue'
 export default {
   data() {
     return {
+      defaultImg: '',
       detail: '',
       dealinfo: [],
       operateLogList: '',
@@ -109,7 +110,7 @@ export default {
 </script>
 <style scoped>
 .grid-l2 {
-  background-color: white;
+  background-color: rgb(248, 248, 252);
   border-radius: 4px;
   min-height: 69%;
   padding: 20px;
@@ -121,17 +122,25 @@ export default {
   border-radius: 4px;
   min-height: 30%;
   margin-top: 0.1%;
+  /* background-color: rgb(248, 248, 252); */
 }
 
 .row-bg {
   min-height: 800px;
 }
 .grid-l3 {
-  background-color: white;
+  background-color: rgb(248, 248, 252);
   border-radius: 4px;
   height: 99%;
   padding: 20px;
   line-height: 35px;
+}
+.btn {
+  float: right;
+}
+.h3 {
+  width: 50%;
+  /* display: inline-block; */
 }
 
 [v-cloak] {

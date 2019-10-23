@@ -26,14 +26,15 @@
       <el-col :span="8">
         <div class="grid-l2-1">
           <span class="tit01" v-if="!tradeback.ComboMeal">类型：</span>
-          <span class="tit01" v-if="tradeback.ComboMeal">
-            {{tradeback.ComboMeal}}
-            <br />
-            {{tradeback.Plate}}
-          </span>
+          <span class="tit01" v-if="tradeback.ComboMeal">{{tradeback.ComboMeal}}</span>
+          <span class="tit01" v-if="statusCode=='200'">{{tradeback.Plate}}</span>
+          <span class="tit01" v-if="statusCode!='200'">{{showmsg}}</span>
+          <br />
           <span class="tit02">
-            <br />
-            <span class="spading">通道：{{callback.devConnName}}</span>
+            <!-- <br /> -->
+            <span class="spading" v-if="!callback.devTag">入口/出口：</span>
+            <span class="spading" v-if="callback.devTag=='1'">入口/出口：入口</span>
+            <span class="spading" v-if="callback.devTag=='2'">入口/出口：出口</span>
             <br />
             <span class="spading">票号：{{tradeback.TicketCode}}</span>
             <br />
@@ -108,23 +109,27 @@
             <tr>
               <td>
                 <el-button
-                  style="height:90%;width:45%;background-color:rgb(0,174,255);font-size:24px;"
+                  style="height:90%;width:45%;font-size:24px;"
                   type="primary"
                   icon="el-icon-check"
                   round
                   @click="comService()"
+                  :disabled="zhuangtai"
+                  :class="{common: !zhuangtai,gray: zhuangtai}"
                 >完成本次服务</el-button>
                 <el-button
-                  style="height:90%;width:45%;background-color:rgb(255, 84, 0);font-size:24px;"
-                  type="primary"
+                  style="height:90%;width:45%;font-size:24px;"
+                  type="info"
                   icon="el-icon-unlock"
                   round
                   @click="msgbox1('您确定要抬杆吗？','提示')"
+                  :disabled="zhuangtai"
+                  :class="{orange: !zhuangtai,gray: zhuangtai}"
                 >抬杆</el-button>
               </td>
             </tr>
           </table>
-        </div>
+        </div>、
       </el-col>
 
       <el-col :span="8">
@@ -151,14 +156,14 @@
         </div>
         <!-- 第三列中间 -->
         <div class="grid-l3-2">
-          <span class="tit05" style="padding-top:20px;">收费标准 :</span>
+          <span class="tit05" style="padding-top:20px;">收费标准 :{callback.parkRulesTittle}</span>
           <span class="tit06">{{callback.parkRules}}</span>
           <!-- <span class="tit06">22:00-07:00</span>
           <span class="tit06">2元/小时</span>-->
         </div>
         <!-- 第三列下方 -->
         <div class="grid-l3-3">
-          <span class="tit00">车场业务信息</span>
+          <span class="tit00">车场业务信息{callback.freeCarsTittle}</span>
           <span class="tit03">免费车辆:{{callback.freeCars}}</span>
           <!-- <span class="tit03" style="padding-left:119px;">客车</span> -->
         </div>
@@ -177,6 +182,7 @@ import { stringify } from 'querystring'
 export default {
   data() {
     return {
+      zhuangtai: 'false',
       kind: '',
       options1: [
         {
@@ -243,6 +249,8 @@ export default {
       getcall: '',
       // 用来接收设备的回复信息
       callback: {},
+      statusCode: '',
+      showmsg: '',
       // 用来接收详细的交易信息
       tradeback: {},
       //搜索模块返回的信息
@@ -350,7 +358,7 @@ export default {
       this.$axios({
         method: 'post',
         url: '/GetInterphoneDetailHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })
@@ -362,8 +370,11 @@ export default {
           // let acmm = acm.replace(/\\r\n/g, '\\r\\n')
           // console.log('去掉换行符的json字符串' + acmm)
           this.initvideo02()
-          this.callstatussrc = 'src/assets/img/itncalling.png'
+          this.callstatussrc = 'src/assets/img/incalling.png'
+          this.showmsg = JSON.parse(acm).message
+          this.statusCode = JSON.parse(acm).statusCode
           this.callback = JSON.parse(JSON.parse(acm).datas)
+          this.zhuangtai = !this.zhuangtai
           console.log(this.callback)
           if (this.callback != '') {
             this.gettrade()
@@ -386,7 +397,7 @@ export default {
       this.$axios({
         method: 'post',
         url: '/GetInOutInfoByDevAdrHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })
@@ -433,7 +444,7 @@ export default {
       this.$axios({
         method: 'post',
         url: '/OpenDeviceHandler.ashx?method=POST&lan=zh-CN&type=web&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })
@@ -459,8 +470,22 @@ export default {
       this.$notify({
         group: 'foo',
         duration: 8000,
-        type: 'success',
+        type: 'info',
         title: '注意',
+        text: msg
+      })
+    },
+    open3(a) {
+      let time = new Date()
+      let now = time.toLocaleTimeString()
+      let message = a
+      let msg = message + ' ' + now
+      this.$notify({
+        group: 'coo',
+        duration: 5000,
+        position: 'top-full',
+        type: 'error',
+        title: '提示',
         text: msg
       })
     },
@@ -472,6 +497,10 @@ export default {
       }
       // 将获取通话信息传过来的停车场ID,设备地址,设备类型&&&&&是否产生0元订单等传到gettrade方法的request数据中
       this.searchinfo.datas.parkId = this.callback.parkId
+      if (!this.searchinfo.datas.parkId) {
+        this.open3('请先通过通话获取停车场ID')
+        return
+      }
       // this.searchinfo.datas.devConnId = this.plate
       this.searchinfo.datas.devTag = '3'
       this.searchinfo.datas.IsZeroOrder = '1'
@@ -481,17 +510,19 @@ export default {
       this.$axios({
         method: 'post',
         url: '/GetInOutInfoByDevAdrHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })
         .then(res => {
           let trb = JSON.stringify(res.data)
           let partrb = JSON.parse(trb)
-          console.log('收到的信息' + trb)
-          console.log('搜索车牌号返回的数据' + partrb.message)
 
-          this.msgbox3(partrb.message, '提示')
+          console.log('收到的信息' + trb)
+
+          console.log('搜索车牌号返回的数据' + partrb)
+
+          this.open3(partrb.message)
           if (partrb.status == 200) {
             this.tradeback = JSON.parse(JSON.parse(trb).datas)
             console.log(this.tradeback)
@@ -529,7 +560,7 @@ export default {
       this.$axios({
         method: 'post',
         url: '/EndServiceHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })
@@ -607,7 +638,7 @@ export default {
       this.$axios({
         method: 'post',
         url: '/GetCallReasonListHandler.ashx?method=GET&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
       })
@@ -675,7 +706,7 @@ export default {
     // 初始化websocket
     initWebSocket() {
       let telnum = this.telephone
-      let dizhi = 'ws://localhost:8080/websocket/'
+      let dizhi = 'ws://192.168.1.3:8080/websocket/'
       // 拼接地址
       const wsuri = dizhi + telnum //这个地址由后端童鞋提供
       this.websock = new WebSocket(wsuri)
@@ -733,6 +764,15 @@ export default {
 </script>
 
 <style scoped>
+.common {
+  background-color: rgb(0, 174, 255);
+}
+.gray {
+  background-color: rgb(133, 133, 133);
+}
+.orange {
+  background-color: rgb(255, 84, 0);
+}
 .grid-l1 {
   height: 29%;
   margin-bottom: 1%;
@@ -829,7 +869,7 @@ export default {
 }
 .tit02 {
   line-height: 45px;
-  padding-top: 10px;
+  /* padding-top: 10px; */
   font-size: 20px;
 }
 .tit03 {

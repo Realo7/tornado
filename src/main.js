@@ -9,6 +9,7 @@ import EZUIKIT from "ezuikit"
 
 import 'element-ui/lib/theme-chalk/index.css';
 import '@/assets/css/reset.css'
+import 'lib-flexible'
 import echarts from 'echarts'
 import qs from 'qs'
 import Notifications from 'vue-notification'
@@ -18,8 +19,7 @@ import url from '../static/config'
 
 import axios from 'axios'
 
-axios.defaults.baseURL = "/api";
-// axios.defaults.baseURL = "http://192.168.1.99:3830/Handlers"
+axios.defaults.baseURL = url.BaseUrl
 import VueAxios from 'vue-axios'
 
 Vue.prototype.$axios = axios;
