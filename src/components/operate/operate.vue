@@ -110,12 +110,12 @@
               <td>
                 <el-button
                   style="height:90%;width:45%;font-size:24px;"
-                  type="primary"
+                  type="info"
                   icon="el-icon-check"
                   round
                   @click="comService()"
-                  :disabled="zhuangtai"
-                  :class="{common: !zhuangtai,gray: zhuangtai}"
+                  :disabled="!zhuangtai"
+                  :class="{common: zhuangtai,gray: !zhuangtai}"
                 >完成本次服务</el-button>
                 <el-button
                   style="height:90%;width:45%;font-size:24px;"
@@ -123,8 +123,8 @@
                   icon="el-icon-unlock"
                   round
                   @click="msgbox1('您确定要抬杆吗？','提示')"
-                  :disabled="zhuangtai"
-                  :class="{orange: !zhuangtai,gray: zhuangtai}"
+                  :disabled="!zhuangtai"
+                  :class="{orange: zhuangtai,gray: !zhuangtai}"
                 >抬杆</el-button>
               </td>
             </tr>
@@ -182,7 +182,7 @@ import { stringify } from 'querystring'
 export default {
   data() {
     return {
-      zhuangtai: 'false',
+      zhuangtai: false,
       kind: '',
       options1: [
         {
