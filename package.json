@@ -17,7 +17,6 @@
     "echarts": "^4.2.1",
     "element-ui": "^2.11.1",
     "ezuikit": "^1.0.0",
-    "lib-flexible": "^0.3.2",
     "qs": "^6.8.0",
     "socket.io-client": "^2.2.0",
     "sockjs-client": "^1.4.0",
