@@ -167,6 +167,18 @@ export default {
 
 
 <style scoped>
+.el-icon-menu {
+  color: aliceblue;
+}
+.el-icon-document {
+  color: aliceblue;
+}
+.el-icon-user {
+  color: aliceblue;
+}
+.el-icon-s-marketing {
+  color: aliceblue;
+}
 .container {
   height: 100%;
   margin-top: -8px;

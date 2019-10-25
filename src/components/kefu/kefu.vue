@@ -3,23 +3,12 @@
     <el-form>
       <table style="width:100%;">
         <tr>
-          <td style="width:12%;">
+          <td style="width:14%;">
             <el-form-item label="车牌号" class="big">
               <el-input v-model="userinfo.datas.plate" style="width:90%;"></el-input>
             </el-form-item>
           </td>
-          <td style="width:14%;">
-            <!-- v-model绑定的是选中的value -->
-            <el-form-item label="客服姓名" class="big">
-              <el-select v-model="userinfo.datas.opUserId" placeholder="请选择是哪个客服" style="width: 80%;">
-                <el-option label="客服01" value="客服01"></el-option>
-                <el-option label="客服02" value="客服02"></el-option>
-                <el-option label="客服03" value="客服03"></el-option>
-                <el-option label="客服04" value="客服04"></el-option>
-              </el-select>
-            </el-form-item>
-          </td>
-          <td style="width:18%;">
+          <td style="width:20%;">
             <el-form-item label="停车场名称" class="big">
               <el-select v-model="userinfo.datas.parkId" placeholder="请选择是哪个停车场" style="width: 80%;">
                 <el-option label="停车场01" value="停车场01"></el-option>
