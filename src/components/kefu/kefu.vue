@@ -53,14 +53,13 @@
     <el-table :data="showlist" style="width: 100%" max-height="700">
       <el-table-column type="index" :index="indexMethod" width="100" label="序号" fixed></el-table-column>
       <el-table-column prop="plate" label="车牌号" width="150"></el-table-column>
-      <el-table-column prop="parkName" label="停车场名称" width="150"></el-table-column>
-      <el-table-column prop="dealMode" label="停车类型" width="150"></el-table-column>
-      <el-table-column prop="ticketCode" label="票号" width="150"></el-table-column>
-      <el-table-column prop="answerTm" label="呼叫开始时间" width="180"></el-table-column>
-      <el-table-column prop="hangUpTm" label="挂断时间" width="180"></el-table-column>
-      <el-table-column prop="duration" label="通话时长" width="80"></el-table-column>
+      <el-table-column prop="parkName" label="停车场名称" width="180"></el-table-column>
+      <el-table-column prop="dealMode" label="停车类型" width="180"></el-table-column>
+      <el-table-column prop="ticketCode" label="票号" width="180"></el-table-column>
+      <el-table-column prop="answerTm" label="呼叫开始时间" width="220"></el-table-column>
+      <el-table-column prop="hangUpTm" label="挂断时间" width="220"></el-table-column>
+      <el-table-column prop="duration" label="通话时长" width="120"></el-table-column>
       <el-table-column prop="useName" label="客服名称" width="120"></el-table-column>
-
       <el-table-column fixed="right" label="操作" width="120">
         <template slot-scope="scope">
           <el-button @click="getdetail(scope.$index)" type="text" size="small">查看详细</el-button>

@@ -31,7 +31,11 @@
         </div>
         <!-- 入场图片 -->
         <div class="grid-l2-2">
-          <img :src="dealinfo.picin" style="width:100%" />
+          <el-image :src="dealinfo.picin" fit="fill">
+            <div slot="error" class="image-slot">
+              <img src="@/assets/img/defaultshow.png" width="100%" />
+            </div>
+          </el-image>
         </div>
       </el-col>
       <el-col :span="8">
@@ -60,7 +64,11 @@
         </div>
         <!-- 出厂图片 -->
         <div class="grid-l2-2">
-          <img :src="dealinfo.picout" style="width:100%" :onerror="defaultImg" />
+          <el-image :src="dealinfo.picout" fit="fill">
+            <div slot="error" class="image-slot">
+              <img src="@/assets/img/defaultshow.png" width="100%" />
+            </div>
+          </el-image>
         </div>
       </el-col>
       <el-col :span="8">

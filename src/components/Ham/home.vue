@@ -185,6 +185,7 @@ export default {
 .main {
   background-color: white;
   font-family: Microsoft YaHei;
+  /* overflow: hidden; */
 }
 .middle {
   text-align: center;

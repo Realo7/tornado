@@ -7,8 +7,12 @@
           <div v-if="!callstatussrc" style="width:100%;height:100%">
             <img src="@/assets/img/carbw.png" width="100%" height="100%" />
           </div>
-          <div v-if="callstatussrc">
-            <img :src="callstatussrc" alt="未搜索到照片" οnerrοr="javascript:this.src='..assets/images/carbw.png';" />
+          <div v-if="callstatussrc" style="width:100%;height:100%">
+            <el-image :src="callstatussrc" style="width:100%;height:100%">
+              <div slot="error" style="width:100%;height:100%">
+                <img src="@/assets/img/defaultshow.png" width="100%" height="100%" />
+              </div>
+            </el-image>
           </div>
         </div>
         <!-- 出口图片 -->
@@ -16,8 +20,12 @@
           <div v-if="!callstatussrc" style="width:100%;height:100%">
             <img src="@/assets/img/carbw.png" width="100%" height="100%" />
           </div>
-          <div v-if="callstatussrc">
-            <img :src="callstatussrc" alt="未搜索到照片" οnerrοr="javascript:this.callstatussrc='@/assets/img/carbw.png';this.onerror = null" />
+          <div v-if="callstatussrc" style="width:100%;height:100%">
+            <el-image :src="callstatussrc" style="width:100%;height:100%">
+              <div slot="error" style="width:100%;height:100%">
+                <img src="@/assets/img/defaultshow.png" width="100%" height="100%" />
+              </div>
+            </el-image>
           </div>
         </div>
         <!-- 呼叫口的监控视频 -->
@@ -114,8 +122,8 @@
                   icon="el-icon-check"
                   round
                   @click="comService()"
-                  :disabled="!zhuangtai"
-                  :class="{common: zhuangtai,gray: !zhuangtai}"
+                  :disabled="!wczhuangtai"
+                  :class="{common: wczhuangtai,gray: !wczhuangtai}"
                 >完成本次服务</el-button>
                 <el-button
                   style="height:90%;width:45%;font-size:24px;"
@@ -183,6 +191,7 @@ export default {
   data() {
     return {
       zhuangtai: false,
+      wczhuangtai: false,
       kind: '',
       options1: [
         {
@@ -338,8 +347,9 @@ export default {
         this.callerinfo.datas.status = 2
         this.callerinfo.datas.callsumtm = this.ombackrecord.Duration
         this.callerinfo.datas.om_callId = this.ombackrecord.callid
+        this.wczhuangtai = true
       } else {
-        this.callerinfo.attribute == 0
+        this.callerinfo.attribute = 0
       }
       //获取当前时间
       this.callerinfo.datas.callTm = this.getNow()
@@ -354,7 +364,7 @@ export default {
 
       let submit = {}
       submit = JSON.stringify(this.callerinfo)
-      console.log(submit)
+      console.log('获取保存模块提交的数据' + submit)
       this.$axios({
         method: 'post',
         url: '/GetInterphoneDetailHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
@@ -372,9 +382,10 @@ export default {
           this.initvideo02()
           this.callstatussrc = 'src/assets/img/incalling.png'
           this.showmsg = JSON.parse(acm).message
+          // console.log('getcaller的状态信息' + showmsg)
           this.statusCode = JSON.parse(acm).statusCode
           this.callback = JSON.parse(JSON.parse(acm).datas)
-          this.zhuangtai = !this.zhuangtai
+          this.zhuangtai = true
           console.log(this.callback)
           if (this.callback != '') {
             this.gettrade()
@@ -706,7 +717,7 @@ export default {
     // 初始化websocket
     initWebSocket() {
       let telnum = this.telephone
-      let dizhi = 'ws://192.168.1.3:8080/websocket/'
+      let dizhi = 'ws://192.168.1.167:8080/websocket/'
       // 拼接地址
       const wsuri = dizhi + telnum //这个地址由后端童鞋提供
       this.websock = new WebSocket(wsuri)
