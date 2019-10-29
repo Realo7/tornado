@@ -1,9 +1,10 @@
 <template>
   <div id="app">
     <router-view />
-    <notifications group="foo" classes="my-style1" style="background-color:rgb(243,174,44)"></notifications>
-    <notifications group="goo" classes="my-style2"></notifications>
-    <notifications group="coo" classes="my-style3"></notifications>
+    <notifications group="foo" classes="my-style1" position="top right"></notifications>
+    <notifications group="fo2" classes="my-style101" position="top center"></notifications>
+    <notifications group="goo" classes="my-style2" position="top right"></notifications>
+    <notifications group="coo" classes="my-style3" position="top center"></notifications>
   </div>
 </template>
 
@@ -18,9 +19,22 @@
   width: 400px;
   height: 160px;
   background-color: rgb(243, 174, 44);
-  font-size: 20px;
+  font-size: 24px;
   padding-top: 30px;
   padding-left: 20px;
+  line-height: 40px;
+}
+.my-style101 {
+  border-radius: 10px 10px 10px 10px;
+  opacity: 0.8;
+  max-width: 600px;
+  height: 240px;
+  background-color: rgb(240, 243, 44);
+  font-size: 24px;
+  padding-top: 30px;
+  padding-left: 20px;
+
+  line-height: 40px;
 }
 .my-style2 {
   border-radius: 10px;
@@ -28,7 +42,7 @@
   width: 400px;
   height: 160px;
   background-color: rgb(44, 243, 127);
-  font-size: 20px;
+  font-size: 24px;
   padding-top: 30px;
   padding-left: 20px;
 }
@@ -38,7 +52,7 @@
   width: 400px;
   height: 160px;
   background-color: rgb(252, 47, 47);
-  font-size: 20px;
+  font-size: 24px;
   padding-top: 30px;
   padding-left: 20px;
 }

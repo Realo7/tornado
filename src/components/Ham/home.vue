@@ -203,6 +203,7 @@ export default {
   text-align: center;
   font-family: Microsoft Yahei;
   font-size: 36px;
+  padding-right: 22%;
   /* padding-top: 10px; */
   /* margin: auto; */
 }
@@ -217,6 +218,7 @@ export default {
   margin-top: 60px;
   margin-bottom: 50px;
   border: none;
+  padding-top: 15px;
 }
 .el-menu-item.is-active {
   background-color: white;

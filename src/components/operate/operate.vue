@@ -75,6 +75,7 @@
                   v-model="searchinfo.datas.devConnId"
                   onkeyup="value=value.replace(/[\W]/g,'') "
                   onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
+                  placeholder="请输入车牌号"
                 ></el-input>
               </td>
             </tr>
@@ -164,6 +165,7 @@
         </div>
         <!-- 第三列中间 -->
         <div class="grid-l3-2">
+          <el-button @click="hangup()">挂断</el-button>
           <span class="tit05" style="padding-top:20px;">收费标准 :</span>
           <span class="tit06">{{callback.parkRules}}</span>
           <!-- <span class="tit06">22:00-07:00</span>
@@ -441,7 +443,7 @@ export default {
       } else if (this.tradeback.ComboMeal == '群租') {
         this.opendoorinfo.datas.dealtype = '3'
       } else {
-        this.open1('请输入开闸原因或类型')
+        this.open2('请输入开闸原因或类型')
       }
 
       this.opendoorinfo.datas.serialNum = this.tradeback.TradingInfoID
@@ -463,7 +465,9 @@ export default {
           let trb = JSON.stringify(res.data)
           console.log('手动开闸返回的数据' + trb)
           if (res.data.statusCode != 200) {
-            this.open1(res.data.message)
+            this.open2(res.data.message)
+            //开闸之后自动调用完成本次服务
+            this.comService()
           }
           // this.tradeback = JSON.parse(JSON.parse(trb).datas)
           console.log('手动开闸模块需要显示的数据' + this.tradeback)
@@ -486,6 +490,19 @@ export default {
         text: msg
       })
     },
+    open2(a) {
+      let time = new Date()
+      let now = time.toLocaleTimeString()
+      let message = a
+      let msg = message + ' ' + now
+      this.$notify({
+        group: 'fo2',
+        duration: 8000,
+        type: 'warning',
+        title: '注意',
+        text: msg
+      })
+    },
     open3(a) {
       let time = new Date()
       let now = time.toLocaleTimeString()
@@ -503,7 +520,7 @@ export default {
     //通过车牌号搜索信息
     searchinfo0() {
       if (!this.searchinfo.datas.devConnId) {
-        this.open1('请输入要搜索的车牌号')
+        this.open2('请输入要搜索的车牌号</br>')
         return
       }
       // 将获取通话信息传过来的停车场ID,设备地址,设备类型&&&&&是否产生0元订单等传到gettrade方法的request数据中
@@ -547,7 +564,7 @@ export default {
     // 完成本次服务调用接口
     comService() {
       if (!this.reasonId) {
-        this.open1('请输入原因')
+        this.open2('请输入原因')
         return
       }
       this.cominfo.datas.userId = localStorage.user
@@ -559,7 +576,7 @@ export default {
       } else if (this.tradeback.ComboMeal == '群租') {
         this.cominfo.datas.dealtype = '3'
       } else {
-        this.open1('不存在相关完成服务交易类型')
+        this.open2('不存在相关完成服务交易类型')
       }
       this.cominfo.datas.serialNum = this.tradeback.TradingInfoID
       this.cominfo.datas.callId = this.callback.callId
@@ -584,6 +601,7 @@ export default {
             // this.msgbox(partrb.message, '提示')
             this.msgbox2('您确定要完成本次服务吗？', '提示')
           }
+          this.hangup()
         })
         .catch(err => {
           console.log('完成本次服务接口未联通')
@@ -609,8 +627,10 @@ export default {
     msgbox1(a, b) {
       this.$confirm(a, b, {
         // showCancelButton: true,
+        // customClass: 'el-message-box",
         confirmButtonText: '确定',
-        cancelButtonText: '取消'
+        cancelButtonText: '取消',
+        center: true
       })
         .then(() => {
           this.openbyhands()
@@ -629,7 +649,7 @@ export default {
         cancelButtonText: '取消'
       })
         .then(() => {
-          this.open1('完成本次服务成功')
+          this.open2('完成本次服务成功')
           this.$router.go(0)
         })
         .catch(() => {
@@ -712,7 +732,23 @@ export default {
       console.log('从localStorage中获取到token中保存的与账号绑定的话机一号' + telep[0])
       this.telephone = telep[0]
     },
-    //清空的方法
+    //从界面挂断电话
+    hangup() {
+      // console.log(this.telephone)
+      let id = this.telephone
+      this.$axios({
+        method: 'post',
+        url: 'http://192.168.1.167:8080/sendxml/clearOne',
+        data: id
+        // emulateJSON: true
+      })
+        .then(res => {
+          console.log('挂断成功')
+        })
+        .catch(err => {
+          console.log('挂断出现了错误' + err)
+        })
+    },
 
     // 初始化websocket
     initWebSocket() {
@@ -852,8 +888,8 @@ export default {
 .spading1 {
   padding: 30px;
   line-height: 35px;
-  font-size: 26px;
-  padding-left: 110px;
+  font-size: 28px;
+  /* padding-left: 110px; */
 }
 .spadingl2 {
   margin-top: 30px;
@@ -945,10 +981,25 @@ export default {
   /* align-items: flex-start; */
   justify-content: center;
 }
+
 /* .grid-l2-2 table tr td {
   border: 1px solid #f00;
 }
 .grid-l2-2 table tr {
   border: 1px solid blue;
+} */
+</style>
+<style>
+.el-message-box {
+  height: 250px;
+  width: 600px;
+}
+.el-message-box__content {
+  height: 130px;
+  font-size: 24px;
+  padding-top: 30px;
+}
+/* .el-message-box__btns {
+  height: 15%;
 } */
 </style>
