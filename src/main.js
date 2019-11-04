@@ -21,6 +21,15 @@ import axios from 'axios'
 axios.defaults.baseURL = url.BaseUrl
 import VueAxios from 'vue-axios'
 
+import 'viewerjs/dist/viewer.css'
+import Viewer from 'v-viewer'
+Vue.use(Viewer)
+Viewer.setDefaults({
+  Options: {
+    toggleOnDblclick: true,
+    movable: false
+  }
+})
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
 Vue.prototype.$qs = qs;

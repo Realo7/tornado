@@ -5,10 +5,12 @@
         <!-- 入口图片 -->
         <div class="grid-l1">
           <div v-if="!callstatussrc" style="width:100%;height:100%">
-            <img src="@/assets/img/carbw.png" width="100%" height="100%" />
+            <viewer style="width:100%;height:100%">
+              <img src="@/assets/img/carbw.png" width="100%" height="100%" />
+            </viewer>
           </div>
           <div v-if="callstatussrc" style="width:100%;height:100%">
-            <el-image :src="callstatussrc" style="width:100%;height:100%">
+            <el-image :src="callstatussrc" style="width:100%;height:100%" :preview-src-list="srcList">
               <div slot="error" style="width:100%;height:100%">
                 <img src="@/assets/img/defaultshow.png" width="100%" height="100%" />
               </div>
@@ -21,7 +23,7 @@
             <img src="@/assets/img/carbw.png" width="100%" height="100%" />
           </div>
           <div v-if="callstatussrc" style="width:100%;height:100%">
-            <el-image :src="callstatussrc" style="width:100%;height:100%">
+            <el-image :src="callstatussrc" style="width:100%;height:100%" :preview-src-list="srcList">
               <div slot="error" style="width:100%;height:100%">
                 <img src="@/assets/img/defaultshow.png" width="100%" height="100%" />
               </div>
@@ -31,6 +33,67 @@
         <!-- 呼叫口的监控视频 -->
         <iframe :src="livesrc02" width="100%" height="40%" id="ysOpenDevice" controls allowfullscreen></iframe>
       </el-col>
+      <el-dialog title="提示" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+        <div>
+          <el-input></el-input>
+        </div>
+        <div>
+          <el-table :data="tableData" style="width: 100%" max-height="250">
+            <el-table-column prop="date" label="ID" width="150"></el-table-column>
+            <el-table-column prop="name" label="停车场名" width="150"></el-table-column>
+            <el-table-column prop="date" label="商户名称"></el-table-column>
+            <el-table-column prop="date" label="绑定时间"></el-table-column>
+            <el-table-column prop="date" label="票号"></el-table-column>
+            <el-table-column prop="date" label="车牌号"></el-table-column>
+            <el-table-column prop="date" label="优惠类型"></el-table-column>
+            <el-table-column prop="date" label="优惠内容"></el-table-column>
+            <el-table-column prop="address" label="使用状态"></el-table-column>
+            <el-table-column prop="address" label="使用时间"></el-table-column>
+          </el-table>
+          <br />
+          <el-table :data="tableData" style="width: 100%" max-height="250">
+            <el-table-column prop="date" label="ID" width="150"></el-table-column>
+            <el-table-column prop="name" label="停车场名" width="150"></el-table-column>
+            <el-table-column prop="address" label="交易类型"></el-table-column>
+            <el-table-column prop="date" label="票号/车牌" width="150"></el-table-column>
+            <el-table-column prop="date" label="车牌号/用户名" width="150"></el-table-column>
+            <el-table-column prop="date" label="车牌颜色" width="150"></el-table-column>
+            <el-table-column prop="date" label="车牌信用" width="150"></el-table-column>
+            <el-table-column prop="date" label="入场时间" width="150"></el-table-column>
+            <el-table-column prop="date" label="入场设备" width="150"></el-table-column>
+            <el-table-column prop="date" label="出场时间" width="150"></el-table-column>
+            <el-table-column prop="date" label="出场设备" width="150"></el-table-column>
+            <el-table-column prop="date" label="出场类型" width="150"></el-table-column>
+            <el-table-column prop="date" label="应收金额" width="150"></el-table-column>
+            <el-table-column prop="date" label="实收金额" width="150"></el-table-column>
+            <el-table-column prop="date" label="商户优惠金额" width="150"></el-table-column>
+            <el-table-column prop="date" label="任泊优惠金额" width="150"></el-table-column>
+            <el-table-column prop="date" label="查看照片" width="150"></el-table-column>
+          </el-table>
+          <br />
+          <el-table :data="tableData" style="width: 100%" max-height="250">
+            <el-table-column prop="date" label="ID" width="150"></el-table-column>
+            <el-table-column prop="name" label="停车场名" width="150"></el-table-column>
+            <el-table-column prop="address" label="票号/车牌" width="150"></el-table-column>
+            <el-table-column prop="date" label="入场时间" width="150"></el-table-column>
+            <el-table-column prop="date" label="付费时间" width="150"></el-table-column>
+            <el-table-column prop="date" label="设备名称" width="150"></el-table-column>
+            <el-table-column prop="date" label="应收金额" width="150"></el-table-column>
+            <el-table-column prop="date" label="实收金额" width="150"></el-table-column>
+            <el-table-column prop="date" label="找零金额" width="150"></el-table-column>
+            <el-table-column prop="date" label="商户优惠金额" width="150"></el-table-column>
+            <el-table-column prop="date" label="任泊优惠金额" width="150"></el-table-column>
+            <el-table-column prop="date" label="支付方式" width="150"></el-table-column>
+            <el-table-column prop="date" label="支付状态" width="150"></el-table-column>
+            <el-table-column prop="date" label="交易类型" width="150"></el-table-column>
+            <el-table-column prop="date" label="出场状态" width="150"></el-table-column>
+          </el-table>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
       <el-col :span="8">
         <div class="grid-l2-1">
           <span class="tit01" v-if="!tradeback.ComboMeal">类型：</span>
@@ -40,10 +103,16 @@
           <br />
           <span class="tit02">
             <!-- <br /> -->
-            <span class="spading1" v-if="!callback.devTag">出入类型：</span>
-            <span class="spading1" v-if="callback.devTag=='1'">出入类型：入口</span>
-            <span class="spading1" v-if="callback.devTag=='2'">出入类型：出口</span>
-            <br />
+            <table width="100%">
+              <tr>
+                <td width="70%">
+                  <span class="spading1" v-if="!callback.devTag">出入类型：</span>
+                  <span class="spading1" v-if="callback.devTag=='1'">出入类型：入口</span>
+                  <span class="spading1" v-if="callback.devTag=='2'">出入类型：出口</span>
+                </td>
+                <td width="30%"></td>
+              </tr>
+            </table>
             <span class="spading">票号：{{tradeback.TicketCode}}</span>
             <br />
             <span class="spading">入场时间：{{tradeback.InTm}}</span>
@@ -161,21 +230,69 @@
             </div>
             <span v-if="ombackrecord.attribute && ombackansered.attribute=='' " class="tit04">{{ombackrecord.attribute}}</span>
           </div>
-          <div style="text-align:center; vertical-align:middel;padding:30px;"></div>
+          <div style="text-align:center; vertical-align:middel;padding:30
+          px;"></div>
         </div>
+
         <!-- 第三列中间 -->
         <div class="grid-l3-2">
-          <el-button @click="hangup()">挂断</el-button>
           <span class="tit05" style="padding-top:20px;">收费标准 :</span>
           <span class="tit06">{{callback.parkRules}}</span>
-          <!-- <span class="tit06">22:00-07:00</span>
-          <span class="tit06">2元/小时</span>-->
-        </div>
-        <!-- 第三列下方 -->
-        <div class="grid-l3-3">
           <span class="tit00">车场业务信息</span>
           <span class="tit03">免费车辆:{{callback.freeCars}}</span>
-          <!-- <span class="tit03" style="padding-left:119px;">客车</span> -->
+        </div>
+        <!-- 远程推送金额1 -->
+        <el-dialog title="远程推送金额" :visible.sync="dialog2">
+          <el-form :model="formdia">
+            <el-form-item label="活动名称" label-width="150">
+              <el-input v-model="formdia.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="活动区域" label-width="150">
+              <el-select v-model="formdia.region" placeholder="请选择活动区域">
+                <el-option label="区域一" value="shanghai"></el-option>
+                <el-option label="区域二" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialog2 = false">取 消</el-button>
+            <el-button type="primary" @click="dialog2 = false">确 定</el-button>
+          </div>
+        </el-dialog>
+        <!-- 远程推送金额2 -->
+        <el-dialog title="远程推送金额" :visible.sync="dialog3">
+          <el-form :model="formdia">
+            <el-form-item label="活动名称" label-width="150">
+              <el-input v-model="formdia.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="活动区域" label-width="150">
+              <el-select v-model="formdia.region" placeholder="请选择活动区域">
+                <el-option label="区域一" value="shanghai"></el-option>
+                <el-option label="区域二" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialog3 = false">取 消</el-button>
+            <el-button type="primary" @click="dialog3 = false">确 定</el-button>
+          </div>
+        </el-dialog>
+        <!-- 第三列下方 -->
+        <div class="grid-l3-3">
+          <el-row>
+            <el-col :span="12">
+              <el-button icon="el-icon-view el-icon--right" class="el-button-grid-l3-3" @click="dialogVisible = true">车辆历史轨迹</el-button>
+            </el-col>
+            <el-col :span="12">
+              <el-button @click="hangup()" class="el-button-grid-l3-3" style="background-color:rgb(158,234,106)">挂断</el-button>
+            </el-col>
+            <el-col :span="12">
+              <el-button type="primary" @click="dialog2 = true" class="el-button-grid-l3-3">远程推送金额1</el-button>
+            </el-col>
+            <el-col :span="12">
+              <el-button type="primary" @click="dialog3 = true" class="el-button-grid-l3-3">远程推送金额2</el-button>
+            </el-col>
+          </el-row>
         </div>
         <div class="orangepart">剩余车位数：{{callback.remainSpace}}</div>
       </el-col>
@@ -219,6 +336,7 @@ export default {
       imgsrc01: '',
       //通话状态的图片地址
       callstatussrc: '',
+      srcList: ['@/assets/img/defaultshow.png'],
       // 直播的地址
       videosrc01: 'rtmp://rtmp01open.ys7.com/openlive/caf2867d020c481482ed1ebf9b423649.hd',
       // 用于存监控地址
@@ -290,7 +408,42 @@ export default {
       //用来保存监控所需的令牌
       videoback: {},
       //保存登录时获取到绑定的设备编号
-      telephone: {}
+      telephone: {},
+      dialogVisible: false,
+      dialog2: false,
+      dialog3: false,
+      tableData: [
+        {
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        },
+        {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        },
+        {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }
+      ],
+      formdia: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      }
     }
   },
   methods: {
@@ -659,6 +812,7 @@ export default {
           })
         })
     },
+
     //获取呼入原因信息
     getreasoninfo() {
       this.reasoninfo.datas.userId = localStorage.user
@@ -749,7 +903,12 @@ export default {
           console.log('挂断出现了错误' + err)
         })
     },
-
+    // dialog的关闭
+    handleClose(done) {
+      console.log('关闭dialog')
+      //done来控制窗口的关闭
+      done()
+    },
     // 初始化websocket
     initWebSocket() {
       let telnum = this.telephone
@@ -852,7 +1011,7 @@ export default {
   height: 42%;
 }
 .grid-l3-2 {
-  height: 21%;
+  height: 29%;
   margin-bottom: 2%;
   background-color: rgb(216, 228, 246);
   padding-left: 20px;
@@ -868,8 +1027,15 @@ export default {
 .grid-l3-3 {
   background-color: rgb(216, 228, 246);
   border-radius: 0 0 0px 0px;
-  height: 28%;
+  height: 20%;
   padding-left: 30px;
+  padding-top: 20px;
+  line-height: 90px;
+  text-align: center;
+}
+.el-button-grid-l3-3 {
+  height: 70px;
+  width: 90%;
 }
 .orangepart {
   border-radius: 0 0 20px 20px;
@@ -921,8 +1087,7 @@ export default {
   display: block;
 }
 .tit02 {
-  line-height: 45px;
-  /* padding-top: 10px; */
+  line-height: 40px;
   font-size: 20px;
 }
 .tit03 {
@@ -982,10 +1147,10 @@ export default {
   justify-content: center;
 }
 
-/* .grid-l2-2 table tr td {
+/* .grid-l2-1 table tr td {
   border: 1px solid #f00;
 }
-.grid-l2-2 table tr {
+.grid-l2-1 table tr {
   border: 1px solid blue;
 } */
 </style>
@@ -994,10 +1159,18 @@ export default {
   height: 250px;
   width: 600px;
 }
+.el-message-box__title {
+  font-size: 24px;
+}
 .el-message-box__content {
-  height: 130px;
+  height: 120px;
   font-size: 24px;
   padding-top: 30px;
+}
+.el-button--small {
+  font-size: 24px;
+  height: 50px;
+  width: 90px;
 }
 /* .el-message-box__btns {
   height: 15%;

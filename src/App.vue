@@ -2,7 +2,7 @@
   <div id="app">
     <router-view />
     <notifications group="foo" classes="my-style1" position="top right"></notifications>
-    <notifications group="fo2" classes="my-style101" position="top center"></notifications>
+    <notifications group="fo2" classes="my-style101" position="bottom right"></notifications>
     <notifications group="goo" classes="my-style2" position="top right"></notifications>
     <notifications group="coo" classes="my-style3" position="top center"></notifications>
   </div>
@@ -15,7 +15,7 @@
 }
 .my-style1 {
   border-radius: 10px;
-  opacity: 0.8;
+  opacity: 1;
   width: 400px;
   height: 160px;
   background-color: rgb(243, 174, 44);
@@ -26,7 +26,7 @@
 }
 .my-style101 {
   border-radius: 10px 10px 10px 10px;
-  opacity: 0.8;
+  opacity: 1;
   max-width: 600px;
   height: 240px;
   background-color: rgb(240, 243, 44);
