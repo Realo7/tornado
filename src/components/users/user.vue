@@ -3,23 +3,45 @@
     <div style="margin-bottom:20px;">
       <el-row>
         <el-col :span="12">
-          <el-input v-model="input" placeholder="请输入内容"></el-input>
+          <el-input
+            v-model="input"
+            placeholder="请输入内容"
+          ></el-input>
         </el-col>
         <el-col :span="12">
-          <el-button type="primary" class="btn2">搜索</el-button>
+          <el-button
+            type="primary"
+            class="btn2"
+          >搜索</el-button>
         </el-col>
       </el-row>
     </div>
-    <el-tabs tabPosition="left" type="border-card">
+    <el-tabs
+      tabPosition="left"
+      type="border-card"
+    >
       <el-tab-pane>
         <span slot="label">
           <i class="el-icon-date"></i> 一号停车场
         </span>
-        <el-button type="primary" icon="el-icon-phone-outline" @click="callother">0号分机</el-button>
-        <el-button type="primary" icon="el-icon-phone-outline">1号分机</el-button>
-        <el-button type="primary" icon="el-icon-phone-outline">2号分机</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-phone-outline"
+          @click="callother"
+        >0号分机</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-phone-outline"
+        >1号分机</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-phone-outline"
+        >2号分机</el-button>
       </el-tab-pane>
-      <el-tab-pane :key="item.parkname" v-for="item in parkback">
+      <el-tab-pane
+        :key="item.parkname"
+        v-for="item in parkback"
+      >
         <span slot="label">
           <i class="el-icon-coordinate" />
           {{item.parkname}}
@@ -41,7 +63,7 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
       input: '',
       callinfo: {
@@ -57,7 +79,7 @@ export default {
     }
   },
   methods: {
-    open2(a) {
+    open2 (a) {
       let time = new Date()
       let now = time.toLocaleTimeString()
       let message = a
@@ -70,12 +92,12 @@ export default {
         text: msg
       })
     },
-    callother() {
+    callother () {
       let submit = {}
       // submit = JSON.Stringify(this.callinfo)
       this.$axios({
         method: 'post',
-        url: 'http://localhost:8080/sendxml/callother',
+        url: 'http://47.111.76.83:8080/sendxml/callother',
         data: { id1: '001', id2: '002' }
         // headers: { 'Content-Type': 'application/json' }
         // emulateJSON: true

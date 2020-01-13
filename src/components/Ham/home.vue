@@ -1,21 +1,42 @@
 <template>
   <el-container class="container">
     <!-- 侧边栏 -->
-    <el-aside width="160px" class="aside">
+    <el-aside
+      width="160px"
+      class="aside"
+    >
       <!-- 侧边栏导航 -->
       <!-- default-active，默认激活菜单的index -->
       <!-- active-text-color,激活菜单字体的颜色 -->
-      <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :router="true" text-color="white" active-text-color="#5CA7E7">
-        <el-menu-item index="/operate" class="emi">
-          <i style="font-size:45px;font-weight: bold;" class="el-icon-menu"></i>
+      <el-menu
+        :default-active="$route.path"
+        class="el-menu-vertical-demo"
+        :router="true"
+        text-color="white"
+        active-text-color="#5CA7E7"
+      >
+        <el-menu-item
+          index="/operate"
+          class="emi"
+        >
+          <i
+            style="font-size:45px;font-weight: bold;"
+            class="el-icon-menu"
+          ></i>
           <br />
           <span style="font-size:22px;">操作</span>
           <br />
           <span style="font-size:22px;">界面</span>
         </el-menu-item>
 
-        <el-menu-item index="/kefu" class="emi">
-          <i style="font-size:45px;font-weight: bold;" class="el-icon-document"></i>
+        <el-menu-item
+          index="/kefu"
+          class="emi"
+        >
+          <i
+            style="font-size:45px;font-weight: bold;"
+            class="el-icon-document"
+          ></i>
 
           <br />
           <span style="font-size:22px;">客服</span>
@@ -23,16 +44,28 @@
           <span style="font-size:22px;">日志</span>
         </el-menu-item>
 
-        <el-menu-item index="/user" class="emi">
-          <i style="font-size:45px;font-weight: bold;" class="el-icon-user"></i>
+        <el-menu-item
+          index="/user"
+          class="emi"
+        >
+          <i
+            style="font-size:45px;font-weight: bold;"
+            class="el-icon-user"
+          ></i>
           <br />
           <span style="font-size:22px;">远程</span>
           <br />
           <span style="font-size:22px;">呼叫</span>
         </el-menu-item>
 
-        <el-menu-item index="/peizhi" class="emi">
-          <i style="font-size:45px;font-weight:bold;" class="el-icon-s-marketing"></i>
+        <el-menu-item
+          index="/peizhi"
+          class="emi"
+        >
+          <i
+            style="font-size:45px;font-weight:bold;"
+            class="el-icon-s-marketing"
+          ></i>
           <br />
           <span style="font-size:22px;">图表</span>
           <br />
@@ -45,7 +78,11 @@
       <el-header class="header">
         <el-row>
           <el-col :span="4">
-            <img src="@/assets/img/logo.png" alt="无法显示图片" />
+            <img
+              src="@/assets/img/logo.png"
+              width="15%"
+              alt="无法显示图片"
+            />
           </el-col>
           <el-col :span="18">
             <div class="middle">
@@ -53,7 +90,12 @@
             </div>
           </el-col>
           <el-col :span="2">
-            <a style="font-size:24px;font-family:Microsoft YaHei;" href="#" class="loginout" @click.prevent="handleSignout()">退出</a>
+            <a
+              style="font-size:24px;font-family:Microsoft YaHei;"
+              href="#"
+              class="loginout"
+              @click.prevent="handleSignout()"
+            >退出</a>
           </el-col>
         </el-row>
       </el-header>
@@ -69,7 +111,7 @@
 <script>
 // import bus from './bus';
 export default {
-  data() {
+  data () {
     return {
       state: false,
       formdata: {
@@ -99,7 +141,7 @@ export default {
     // changecolor() {
     //   this.state = true
     // },
-    handleSignout() {
+    handleSignout () {
       //清除token
       localStorage.clear()
       this.handleLoginout()
@@ -109,13 +151,13 @@ export default {
       //来到login组件
       this.$router.push({ name: 'login' })
     },
-    handleOpen(key, keyPath) {
+    handleOpen (key, keyPath) {
       console.log(key, keyPath)
     },
-    handleClose(key, keyPath) {
+    handleClose (key, keyPath) {
       console.log(key, keyPath)
     },
-    handleLoginout() {
+    handleLoginout () {
       let submit = {}
       submit = JSON.stringify(this.formdata)
       //console.log(submit)
@@ -133,7 +175,7 @@ export default {
           console.log('出现了错误' + err)
         })
     },
-    writeDe() {
+    writeDe () {
       let submit = {}
       submit = JSON.stringify(this.operateDetail)
       //console.log(submit)
@@ -153,7 +195,7 @@ export default {
     }
   },
   //newVue之前自动触发beforeCreate
-  beforeCreate() {
+  beforeCreate () {
     // 获取token
     const token = localStorage.getItem('token')
     //token 不存在 ->登录

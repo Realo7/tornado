@@ -1,14 +1,27 @@
 <template>
   <div class="login-wrap">
-    <el-form class="login-form" label-position="top" label-width="80px" :model="formdata">
+    <el-form
+      class="login-form"
+      label-position="top"
+      label-width="80px"
+      :model="formdata"
+    >
       <h2>用户登录</h2>
       <el-form-item label="用户名">
         <el-input v-model="formdata.datas.userCode"></el-input>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input v-model="formdata.datas.pwd" type="password"></el-input>
+        <el-input
+          v-model="formdata.datas.pwd"
+          type="password"
+        ></el-input>
       </el-form-item>
-      <el-button class="login-btn" type="primary" @click.prevent="handleLogin()" round>登录</el-button>
+      <el-button
+        class="login-btn"
+        type="primary"
+        @click.prevent="handleLogin()"
+        round
+      >登录</el-button>
     </el-form>
   </div>
 </template>
@@ -16,7 +29,7 @@
 <script>
 import homeVue from '../Ham/home.vue'
 export default {
-  data() {
+  data () {
     return {
       formdata: {
         appId: '',
@@ -32,14 +45,14 @@ export default {
     }
   },
   methods: {
-    handleLogin() {
+    handleLogin () {
       let submit = {}
       submit = JSON.stringify(this.formdata)
       console.log('ru' + submit)
       //console.log(submit)
       this.$axios({
         method: 'post',
-        baseURL: 'http://192.168.1.99:3830/Handlers', //重写baseURL
+        // baseURL: 'http://192.168.1.99:3830/Handlers', 重写baseURL
         url: '/LoginBISHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
         // headers: { 'Content-Type': 'application/json' },
         data: submit

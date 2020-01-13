@@ -1,114 +1,370 @@
 <template>
   <div>
-    <el-row :gutter="20" class="row-bg" type="flex">
+    <el-row
+      :gutter="20"
+      class="row-bg"
+      type="flex"
+    >
       <el-col :span="8">
         <!-- 入口图片 -->
         <div class="grid-l1">
-          <div v-if="!callstatussrc" style="width:100%;height:100%">
+          <div
+            v-if="!imgsrc01"
+            style="width:100%;height:100%"
+          >
             <viewer style="width:100%;height:100%">
-              <img src="@/assets/img/carbw.png" width="100%" height="100%" />
+              <img
+                src="@/assets/img/carbw.png"
+                width="100%"
+                height="100%"
+              />
             </viewer>
           </div>
-          <div v-if="callstatussrc" style="width:100%;height:100%">
-            <el-image :src="callstatussrc" style="width:100%;height:100%" :preview-src-list="srcList">
-              <div slot="error" style="width:100%;height:100%">
-                <img src="@/assets/img/defaultshow.png" width="100%" height="100%" />
+          <div
+            v-if="imgsrc01"
+            style="width:100%;height:100%"
+          >
+            <el-image
+              :src="imgsrc01"
+              style="width:100%;height:100%"
+              :preview-src-list="srcList"
+            >
+              <div
+                slot="error"
+                style="width:100%;height:100%"
+              >
+                <img
+                  src="@/assets/img/defaultshow.png"
+                  width="100%"
+                  height="100%"
+                />
               </div>
             </el-image>
           </div>
         </div>
         <!-- 出口图片 -->
         <div class="grid-l1">
-          <div v-if="!callstatussrc" style="width:100%;height:100%">
-            <img src="@/assets/img/carbw.png" width="100%" height="100%" />
+          <div
+            v-if="!imgsrc02"
+            style="width:100%;height:100%"
+          >
+            <img
+              src="@/assets/img/carbw.png"
+              width="100%"
+              height="100%"
+            />
           </div>
-          <div v-if="callstatussrc" style="width:100%;height:100%">
-            <el-image :src="callstatussrc" style="width:100%;height:100%" :preview-src-list="srcList">
-              <div slot="error" style="width:100%;height:100%">
-                <img src="@/assets/img/defaultshow.png" width="100%" height="100%" />
+          <div
+            v-if="imgsrc02"
+            style="width:100%;height:100%"
+          >
+            <el-image
+              :src="imgsrc02"
+              style="width:100%;height:100%"
+              :preview-src-list="srcList"
+            >
+              <div
+                slot="error"
+                style="width:100%;height:100%"
+              >
+                <img
+                  src="@/assets/img/defaultshow.png"
+                  width="100%"
+                  height="100%"
+                />
               </div>
             </el-image>
           </div>
         </div>
         <!-- 呼叫口的监控视频 -->
-        <iframe :src="livesrc02" width="100%" height="40%" id="ysOpenDevice" controls allowfullscreen></iframe>
+        <iframe
+          :src="livesrc02"
+          width="100%"
+          height="40%"
+          id="ysOpenDevice"
+          controls
+          allowfullscreen
+        ></iframe>
       </el-col>
-      <el-dialog title="提示" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+      <el-dialog
+        title="提示"
+        :visible.sync="dialogVisible"
+        width="80%"
+        :before-close="handleClose"
+      >
         <div>
           <el-input></el-input>
         </div>
         <div>
-          <el-table :data="tableData" style="width: 100%" max-height="250">
-            <el-table-column prop="date" label="ID" width="150"></el-table-column>
-            <el-table-column prop="name" label="停车场名" width="150"></el-table-column>
-            <el-table-column prop="date" label="商户名称"></el-table-column>
-            <el-table-column prop="date" label="绑定时间"></el-table-column>
-            <el-table-column prop="date" label="票号"></el-table-column>
-            <el-table-column prop="date" label="车牌号"></el-table-column>
-            <el-table-column prop="date" label="优惠类型"></el-table-column>
-            <el-table-column prop="date" label="优惠内容"></el-table-column>
-            <el-table-column prop="address" label="使用状态"></el-table-column>
-            <el-table-column prop="address" label="使用时间"></el-table-column>
+          <el-table
+            :data="tableData"
+            style="width: 100%"
+            max-height="250"
+          >
+            <el-table-column
+              prop="date"
+              label="ID"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="name"
+              label="停车场名"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="商户名称"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="绑定时间"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="票号"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="车牌号"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="优惠类型"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="优惠内容"
+            ></el-table-column>
+            <el-table-column
+              prop="address"
+              label="使用状态"
+            ></el-table-column>
+            <el-table-column
+              prop="address"
+              label="使用时间"
+            ></el-table-column>
           </el-table>
           <br />
-          <el-table :data="tableData" style="width: 100%" max-height="250">
-            <el-table-column prop="date" label="ID" width="150"></el-table-column>
-            <el-table-column prop="name" label="停车场名" width="150"></el-table-column>
-            <el-table-column prop="address" label="交易类型"></el-table-column>
-            <el-table-column prop="date" label="票号/车牌" width="150"></el-table-column>
-            <el-table-column prop="date" label="车牌号/用户名" width="150"></el-table-column>
-            <el-table-column prop="date" label="车牌颜色" width="150"></el-table-column>
-            <el-table-column prop="date" label="车牌信用" width="150"></el-table-column>
-            <el-table-column prop="date" label="入场时间" width="150"></el-table-column>
-            <el-table-column prop="date" label="入场设备" width="150"></el-table-column>
-            <el-table-column prop="date" label="出场时间" width="150"></el-table-column>
-            <el-table-column prop="date" label="出场设备" width="150"></el-table-column>
-            <el-table-column prop="date" label="出场类型" width="150"></el-table-column>
-            <el-table-column prop="date" label="应收金额" width="150"></el-table-column>
-            <el-table-column prop="date" label="实收金额" width="150"></el-table-column>
-            <el-table-column prop="date" label="商户优惠金额" width="150"></el-table-column>
-            <el-table-column prop="date" label="任泊优惠金额" width="150"></el-table-column>
-            <el-table-column prop="date" label="查看照片" width="150"></el-table-column>
+          <el-table
+            :data="tableData"
+            style="width: 100%"
+            max-height="250"
+          >
+            <el-table-column
+              prop="date"
+              label="ID"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="name"
+              label="停车场名"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="address"
+              label="交易类型"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="票号/车牌"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="车牌号/用户名"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="车牌颜色"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="车牌信用"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="入场时间"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="入场设备"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="出场时间"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="出场设备"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="出场类型"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="应收金额"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="实收金额"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="商户优惠金额"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="任泊优惠金额"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="查看照片"
+              width="150"
+            ></el-table-column>
           </el-table>
           <br />
-          <el-table :data="tableData" style="width: 100%" max-height="250">
-            <el-table-column prop="date" label="ID" width="150"></el-table-column>
-            <el-table-column prop="name" label="停车场名" width="150"></el-table-column>
-            <el-table-column prop="address" label="票号/车牌" width="150"></el-table-column>
-            <el-table-column prop="date" label="入场时间" width="150"></el-table-column>
-            <el-table-column prop="date" label="付费时间" width="150"></el-table-column>
-            <el-table-column prop="date" label="设备名称" width="150"></el-table-column>
-            <el-table-column prop="date" label="应收金额" width="150"></el-table-column>
-            <el-table-column prop="date" label="实收金额" width="150"></el-table-column>
-            <el-table-column prop="date" label="找零金额" width="150"></el-table-column>
-            <el-table-column prop="date" label="商户优惠金额" width="150"></el-table-column>
-            <el-table-column prop="date" label="任泊优惠金额" width="150"></el-table-column>
-            <el-table-column prop="date" label="支付方式" width="150"></el-table-column>
-            <el-table-column prop="date" label="支付状态" width="150"></el-table-column>
-            <el-table-column prop="date" label="交易类型" width="150"></el-table-column>
-            <el-table-column prop="date" label="出场状态" width="150"></el-table-column>
+          <el-table
+            :data="tableData"
+            style="width: 100%"
+            max-height="250"
+          >
+            <el-table-column
+              prop="date"
+              label="ID"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="name"
+              label="停车场名"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="address"
+              label="票号/车牌"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="入场时间"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="付费时间"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="设备名称"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="应收金额"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="实收金额"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="找零金额"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="商户优惠金额"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="任泊优惠金额"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="支付方式"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="支付状态"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="交易类型"
+              width="150"
+            ></el-table-column>
+            <el-table-column
+              prop="date"
+              label="出场状态"
+              width="150"
+            ></el-table-column>
           </el-table>
         </div>
-        <span slot="footer" class="dialog-footer">
+        <span
+          slot="footer"
+          class="dialog-footer"
+        >
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="dialogVisible = false"
+          >确 定</el-button>
         </span>
       </el-dialog>
       <el-col :span="8">
         <div class="grid-l2-1">
-          <span class="tit01" v-if="!tradeback.ComboMeal">类型：</span>
-          <span class="tit01" v-if="tradeback.ComboMeal">{{tradeback.ComboMeal}}</span>
-          <span class="tit01" v-if="statusCode=='200'">{{tradeback.Plate}}</span>
-          <span class="tit01" v-if="statusCode!='200'">{{showmsg}}</span>
+          <span
+            class="tit01"
+            v-if="!tradeback.ComboMeal"
+          >类型：</span>
+          <span
+            class="tit01"
+            v-if="tradeback.ComboMeal"
+          >{{tradeback.ComboMeal}}</span>
+          <span
+            class="tit01"
+            v-if="statusCode=='200'"
+          >{{tradeback.plate}}</span>
+          <span
+            class="tit01"
+            v-if="statusCode!='200'"
+          >{{showmsg}}</span>
           <br />
           <span class="tit02">
             <!-- <br /> -->
             <table width="100%">
               <tr>
                 <td width="70%">
-                  <span class="spading1" v-if="!callback.devTag">出入类型：</span>
-                  <span class="spading1" v-if="callback.devTag=='1'">出入类型：入口</span>
-                  <span class="spading1" v-if="callback.devTag=='2'">出入类型：出口</span>
+                  <span
+                    class="spading1"
+                    v-if="!callback.devTag"
+                  >出入类型：</span>
+                  <span
+                    class="spading1"
+                    v-if="callback.devTag=='1'"
+                  >出入类型：入口</span>
+                  <span
+                    class="spading1"
+                    v-if="callback.devTag=='2'"
+                  >出入类型：出口</span>
                 </td>
                 <td width="30%"></td>
               </tr>
@@ -135,9 +391,19 @@
         </div>
 
         <div class="grid-l2-2">
-          <table width="92%" height="30%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
+          <table
+            width="92%"
+            height="30%"
+            border="0"
+            cellpadding="0"
+            cellspacing="0"
+            style="table-layout:fixed"
+          >
             <tr height="30%">
-              <td width="40%" style="font-size:24px;padding-left:20px;">车辆信息查询:</td>
+              <td
+                width="40%"
+                style="font-size:24px;padding-left:20px;"
+              >车辆信息查询:</td>
               <td width="60%">
                 <el-input
                   type="text"
@@ -150,7 +416,10 @@
             </tr>
             <tr height="30%">
               <td width="40%"></td>
-              <td width="60%" style="padding-left:10px;">
+              <td
+                width="60%"
+                style="padding-left:10px;"
+              >
                 <el-button
                   style="height:90%;width:95%;background-color:rgb(11,186,19);font-size:24px;"
                   type="success"
@@ -163,27 +432,72 @@
             <tr height="40%"></tr>
           </table>
 
-          <table width="92%" height="40%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed;font-size:24px;">
+          <table
+            width="92%"
+            height="40%"
+            border="0"
+            cellpadding="0"
+            cellspacing="0"
+            style="table-layout:fixed;font-size:24px;"
+          >
             <tr>
-              <td width="35%" style="padding-left:20px;text-align:center;">抬杆原因:</td>
-              <td width="65%" style="padding-left:20px;">
+              <td
+                width="35%"
+                style="padding-left:20px;text-align:center;"
+              >抬杆原因:</td>
+              <td
+                width="65%"
+                style="padding-left:20px;"
+              >
                 <!-- 获取选取的值只需要取this.kind即可 -->
-                <el-select v-model="kind" clearable placeholder="请选择">
-                  <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-select
+                  v-model="kind"
+                  clearable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in options1"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
                 </el-select>
               </td>
             </tr>
             <tr>
-              <td width="35%" style="padding-left:20px;text-align:center;">呼入原因:</td>
-              <td width="65%" style="padding-left:20px;">
-                <el-select v-model="reasonId" clearable placeholder="请选择" style="font-size:24px;" @click.native="getreasoninfo()">
-                  <el-option v-for="item in options2" :key="item.reasonId" :label="item.reason" :value="item.reasonId"></el-option>
+              <td
+                width="35%"
+                style="padding-left:20px;text-align:center;"
+              >呼入原因:</td>
+              <td
+                width="65%"
+                style="padding-left:20px;"
+              >
+                <el-select
+                  v-model="reasonId"
+                  clearable
+                  placeholder="请选择"
+                  style="font-size:24px;"
+                  @click.native="getreasoninfo()"
+                >
+                  <el-option
+                    v-for="item in options2"
+                    :key="item.reasonId"
+                    :label="item.reason"
+                    :value="item.reasonId"
+                  ></el-option>
                 </el-select>
               </td>
             </tr>
             <tr></tr>
           </table>
-          <table width="100%" height="20%" cellpadding="0" cellspacing="0" style="table-layout:fixed;font-size:24px;padding-left:10px;">
+          <table
+            width="100%"
+            height="20%"
+            cellpadding="0"
+            cellspacing="0"
+            style="table-layout:fixed;font-size:24px;padding-left:10px;"
+          >
             <tr>
               <td>
                 <el-button
@@ -212,23 +526,53 @@
 
       <el-col :span="8">
         <div class="grid-l3-1">
-          <span class="tit00" v-if="!callback.parkName">停车场名称</span>
+          <span
+            class="tit00"
+            v-if="!callback.parkName"
+          >停车场名称</span>
           <span class="tit00">{{callback.parkName}}</span>
           <span class="tit03">通道：{{callback.devConnName}}</span>
-          <span class="tit03" style="padding-bottom:20px;">呼叫编号：{{ombackrecord.callid}}</span>
+          <span
+            class="tit03"
+            style="padding-bottom:20px;"
+          >呼叫编号：{{ombackrecord.callid}}</span>
           <div class="tit04">
             <div v-if="!ombackansered.attribute&&!ombackrecord.attribute">
-              <img src="@/assets/img/comm.png" alt="显示不能" height="30%" width="30%" />
+              <img
+                src="@/assets/img/comm.png"
+                alt="显示不能"
+                height="30%"
+                width="30%"
+              />
             </div>
-            <span v-if="!ombackansered.attribute&&!ombackrecord.attribute" class="tit04">通话状态</span>
+            <span
+              v-if="!ombackansered.attribute&&!ombackrecord.attribute"
+              class="tit04"
+            >通话状态</span>
             <div v-if="ombackansered.attribute">
-              <img src="@/assets/img/incalling.png" alt="显示不能" height="30%" width="30%" />
+              <img
+                src="@/assets/img/incalling.png"
+                alt="显示不能"
+                height="30%"
+                width="30%"
+              />
             </div>
-            <span v-if="ombackansered.attribute" class="tit04">{{ombackansered.attribute}}</span>
+            <span
+              v-if="ombackansered.attribute"
+              class="tit04"
+            >{{ombackansered.attribute}}</span>
             <div v-if="ombackrecord.attribute && ombackansered.attribute=='' ">
-              <img src="@/assets/img/hangup.png" alt="显示不能" height="30%" width="30%" />
+              <img
+                src="@/assets/img/hangup.png"
+                alt="显示不能"
+                height="30%"
+                width="30%"
+              />
             </div>
-            <span v-if="ombackrecord.attribute && ombackansered.attribute=='' " class="tit04">{{ombackrecord.attribute}}</span>
+            <span
+              v-if="ombackrecord.attribute && ombackansered.attribute=='' "
+              class="tit04"
+            >{{ombackrecord.attribute}}</span>
           </div>
           <div style="text-align:center; vertical-align:middel;padding:30
           px;"></div>
@@ -236,61 +580,134 @@
 
         <!-- 第三列中间 -->
         <div class="grid-l3-2">
-          <span class="tit05" style="padding-top:20px;">收费标准 :</span>
+          <span
+            class="tit05"
+            style="padding-top:20px;"
+          >收费标准 :</span>
           <span class="tit06">{{callback.parkRules}}</span>
           <span class="tit00">车场业务信息</span>
           <span class="tit03">免费车辆:{{callback.freeCars}}</span>
         </div>
         <!-- 远程推送金额1 -->
-        <el-dialog title="远程推送金额" :visible.sync="dialog2">
+        <el-dialog
+          title="远程推送金额"
+          :visible.sync="dialog2"
+        >
           <el-form :model="formdia">
-            <el-form-item label="活动名称" label-width="150">
-              <el-input v-model="formdia.name" autocomplete="off"></el-input>
+            <el-form-item
+              label="活动名称"
+              label-width="150"
+            >
+              <el-input
+                v-model="formdia.name"
+                autocomplete="off"
+              ></el-input>
             </el-form-item>
-            <el-form-item label="活动区域" label-width="150">
-              <el-select v-model="formdia.region" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+            <el-form-item
+              label="活动区域"
+              label-width="150"
+            >
+              <el-select
+                v-model="formdia.region"
+                placeholder="请选择活动区域"
+              >
+                <el-option
+                  label="区域一"
+                  value="shanghai"
+                ></el-option>
+                <el-option
+                  label="区域二"
+                  value="beijing"
+                ></el-option>
               </el-select>
             </el-form-item>
           </el-form>
-          <div slot="footer" class="dialog-footer">
+          <div
+            slot="footer"
+            class="dialog-footer"
+          >
             <el-button @click="dialog2 = false">取 消</el-button>
-            <el-button type="primary" @click="dialog2 = false">确 定</el-button>
+            <el-button
+              type="primary"
+              @click="dialog2 = false"
+            >确 定</el-button>
           </div>
         </el-dialog>
         <!-- 远程推送金额2 -->
-        <el-dialog title="远程推送金额" :visible.sync="dialog3">
+        <el-dialog
+          title="远程推送金额"
+          :visible.sync="dialog3"
+        >
           <el-form :model="formdia">
-            <el-form-item label="活动名称" label-width="150">
-              <el-input v-model="formdia.name" autocomplete="off"></el-input>
+            <el-form-item
+              label="活动名称"
+              label-width="150"
+            >
+              <el-input
+                v-model="formdia.name"
+                autocomplete="off"
+              ></el-input>
             </el-form-item>
-            <el-form-item label="活动区域" label-width="150">
-              <el-select v-model="formdia.region" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+            <el-form-item
+              label="活动区域"
+              label-width="150"
+            >
+              <el-select
+                v-model="formdia.region"
+                placeholder="请选择活动区域"
+              >
+                <el-option
+                  label="区域一"
+                  value="shanghai"
+                ></el-option>
+                <el-option
+                  label="区域二"
+                  value="beijing"
+                ></el-option>
               </el-select>
             </el-form-item>
           </el-form>
-          <div slot="footer" class="dialog-footer">
+          <div
+            slot="footer"
+            class="dialog-footer"
+          >
             <el-button @click="dialog3 = false">取 消</el-button>
-            <el-button type="primary" @click="dialog3 = false">确 定</el-button>
+            <el-button
+              type="primary"
+              @click="dialog3 = false"
+            >确 定</el-button>
           </div>
         </el-dialog>
         <!-- 第三列下方 -->
         <div class="grid-l3-3">
           <el-row>
             <el-col :span="12">
-              <el-button icon="el-icon-view el-icon--right" class="el-button-grid-l3-3" @click="dialogVisible = true">车辆历史轨迹</el-button>
+              <el-button
+                icon="el-icon-view el-icon--right"
+                class="el-button-grid-l3-3"
+                @click="dialogVisible = true"
+              >车辆历史轨迹</el-button>
             </el-col>
             <el-col :span="12">
-              <el-button @click="hangup()" class="el-button-grid-l3-3" style="background-color:rgb(158,234,106)">挂断</el-button>
+              <el-button
+                @click="hangup()"
+                class="el-button-grid-l3-3"
+                style="background-color:rgb(158,234,106)"
+              >挂断</el-button>
             </el-col>
             <el-col :span="12">
-              <el-button type="primary" @click="dialog2 = true" class="el-button-grid-l3-3">远程推送金额1</el-button>
+              <el-button
+                type="primary"
+                @click="dialog2 = true"
+                class="el-button-grid-l3-3"
+              >远程推送金额1</el-button>
             </el-col>
             <el-col :span="12">
-              <el-button type="primary" @click="dialog3 = true" class="el-button-grid-l3-3">远程推送金额2</el-button>
+              <el-button
+                type="primary"
+                @click="dialog3 = true"
+                class="el-button-grid-l3-3"
+              >远程推送金额2</el-button>
             </el-col>
           </el-row>
         </div>
@@ -307,7 +724,7 @@ import { get } from 'https'
 import { stringify } from 'querystring'
 
 export default {
-  data() {
+  data () {
     return {
       zhuangtai: false,
       wczhuangtai: false,
@@ -332,8 +749,9 @@ export default {
       ],
       // 用来选择标签页
       activeName: 'first',
-      // 用于存图片地址
+      // 用于存入口图片地址
       imgsrc01: '',
+      imgsrc02: '',
       //通话状态的图片地址
       callstatussrc: '',
       srcList: ['@/assets/img/defaultshow.png'],
@@ -414,25 +832,11 @@ export default {
       dialog3: false,
       tableData: [
         {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          date: '',
+          name: '',
+          address: ''
         },
-        {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }
+
       ],
       formdia: {
         name: '',
@@ -447,14 +851,14 @@ export default {
     }
   },
   methods: {
-    handleClick(tab, event) {
+    handleClick (tab, event) {
       console.log(tab, event)
     },
     // jumpto() {
     //   this.$router.replace('/worktable')
     // },
     // 获取当前时间
-    getNow() {
+    getNow () {
       var date = new Date()
       var seperator1 = '-'
       var year = date.getFullYear()
@@ -483,7 +887,7 @@ export default {
       return currentdate
     },
     // 获取对讲机的详细信息，并保存相关记录
-    getcaller() {
+    getcaller () {
       //如果OM设备传过来的信息中含有ext数组(是OM设备的状态消息)
       if (this.address.ext) {
         //上线之前需要改1为0
@@ -552,7 +956,7 @@ export default {
         })
     },
     //根据设备地址获取最近的一笔交易信息
-    gettrade() {
+    gettrade () {
       // 将获取通话信息传过来的停车场ID,设备地址,设备类型&&&&&是否产生0元订单等传到gettrade方法的request数据中
       this.tradeinfo.datas.parkId = this.callback.parkId
       this.tradeinfo.datas.devConnId = this.callback.devConnId
@@ -572,16 +976,17 @@ export default {
           console.log('gettrade返回的数据' + trb)
           this.tradeback = JSON.parse(JSON.parse(trb).datas)
           this.tradeback.FreeLeaveTime = this.tradeback.FreeLeaveTime + '分钟'
-          console.log('tradeback中的数据' + this.tradeback)
+          console.log('tradeback中的数据' + JSON.stringify(this.tradeback))
           // 对图片进行处理
           this.imgsrc01 = this.tradeback.inpic.replace('+', '%2B')
+          this.imgsrc02 = this.tradeback.outpic.replace('+', '%2B')
         })
         .catch(err => {
           console.log('出现了错误' + err)
         })
     },
     //操作手动开闸
-    openbyhands() {
+    openbyhands () {
       this.opendoorinfo.datas.userId = localStorage.user
       this.opendoorinfo.datas.deviceAdr = this.callback.devConnId
       console.log('打印一下开闸原因看看' + this.reasonId)
@@ -630,7 +1035,7 @@ export default {
         })
     },
     // 提示信息(右上角那种)
-    open1(a) {
+    open1 (a) {
       let time = new Date()
       let now = time.toLocaleTimeString()
       let message = a
@@ -643,7 +1048,7 @@ export default {
         text: msg
       })
     },
-    open2(a) {
+    open2 (a) {
       let time = new Date()
       let now = time.toLocaleTimeString()
       let message = a
@@ -656,7 +1061,7 @@ export default {
         text: msg
       })
     },
-    open3(a) {
+    open3 (a) {
       let time = new Date()
       let now = time.toLocaleTimeString()
       let message = a
@@ -671,7 +1076,7 @@ export default {
       })
     },
     //通过车牌号搜索信息
-    searchinfo0() {
+    searchinfo0 () {
       if (!this.searchinfo.datas.devConnId) {
         this.open2('请输入要搜索的车牌号</br>')
         return
@@ -699,15 +1104,17 @@ export default {
           let trb = JSON.stringify(res.data)
           let partrb = JSON.parse(trb)
 
-          console.log('收到的信息' + trb)
+          console.log('搜索车牌号返回的数据' + trb)
 
-          console.log('搜索车牌号返回的数据' + partrb)
 
-          this.open3(partrb.message)
-          if (partrb.status == 200) {
+          if (partrb.statusCode == 200) {
             this.tradeback = JSON.parse(JSON.parse(trb).datas)
-            console.log(this.tradeback)
+            console.log("搜索返回tradeback" + JSON.stringify(this.tradeback))
             this.imgsrc01 = this.tradeback.inpic
+            this.imgsrc02 = this.tradeback.outpic
+            // this.imgsrc02 = this.tradeback.outpic.replace('+', '%2B')
+          } else {
+            this.open3(partrb.message)
           }
         })
         .catch(err => {
@@ -715,7 +1122,7 @@ export default {
         })
     },
     // 完成本次服务调用接口
-    comService() {
+    comService () {
       if (!this.reasonId) {
         this.open2('请输入原因')
         return
@@ -760,11 +1167,11 @@ export default {
           console.log('完成本次服务接口未联通')
         })
     },
-    imgsrcchange() {
+    imgsrcchange () {
       this.callstatussrc = '@/assets/img/carbw.png'
     },
     //搜索出现问题时返回的信息
-    msgbox3(a, b) {
+    msgbox3 (a, b) {
       this.$alert(a, b, {
         confirmButtonText: '确定',
         callback: action => {
@@ -777,7 +1184,7 @@ export default {
       })
     },
     // 抬杆之前的确认信息
-    msgbox1(a, b) {
+    msgbox1 (a, b) {
       this.$confirm(a, b, {
         // showCancelButton: true,
         // customClass: 'el-message-box",
@@ -795,7 +1202,7 @@ export default {
           })
         })
     },
-    msgbox2(a, b) {
+    msgbox2 (a, b) {
       this.$confirm(a, b, {
         // showCancelButton: true,
         confirmButtonText: '确定',
@@ -814,7 +1221,7 @@ export default {
     },
 
     //获取呼入原因信息
-    getreasoninfo() {
+    getreasoninfo () {
       this.reasoninfo.datas.userId = localStorage.user
       let submit = {}
       submit = JSON.stringify(this.reasoninfo)
@@ -845,7 +1252,7 @@ export default {
         })
     },
     // 获取视频的令牌
-    getvideotoken() {
+    getvideotoken () {
       let submit = this.$qs.stringify(this.videotoken)
       this.$axios({
         method: 'post',
@@ -864,21 +1271,21 @@ export default {
           console.log('出现了错误' + err)
         })
     },
-    initvideo01() {
+    initvideo01 () {
       this.player = new EZUIKit.EZUIPlayer('myplayer')
       this.player.play()
     },
-    initvideo02() {
+    initvideo02 () {
       this.getvideotoken()
       console.log('我要打印看下' + this.tokenback)
       let token = this.tokenback
-      let head = 'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/C71948995/1.live&autoplay=1&accessToken='
+      let head = 'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/C71949064/1.live&autoplay=1&accessToken='
       this.livesrc02 = head + token
       let tk2 = 'at.9wiz6ml83s7oy1cy50se9wc6aerts23b-6t53ia6nke-152k8ob-m9i35gmdm'
       console.log('视屏播放地址' + this.livesrc02)
     },
     // 从token中获取账号绑定的话机号，用来绑定socket的shopid
-    getlocalTel() {
+    getlocalTel () {
       let tel = JSON.parse(localStorage.token)
       let tele = JSON.stringify(tel.hostId).replace('"', '')
       let telep = new Array()
@@ -887,12 +1294,12 @@ export default {
       this.telephone = telep[0]
     },
     //从界面挂断电话
-    hangup() {
+    hangup () {
       // console.log(this.telephone)
       let id = this.telephone
       this.$axios({
         method: 'post',
-        url: 'http://192.168.1.167:8080/sendxml/clearOne',
+        url: 'http://47.111.76.83:8080/sendxml/clearOne',
         data: id
         // emulateJSON: true
       })
@@ -904,15 +1311,15 @@ export default {
         })
     },
     // dialog的关闭
-    handleClose(done) {
+    handleClose (done) {
       console.log('关闭dialog')
       //done来控制窗口的关闭
       done()
     },
     // 初始化websocket
-    initWebSocket() {
+    initWebSocket () {
       let telnum = this.telephone
-      let dizhi = 'ws://192.168.1.167:8080/websocket/'
+      let dizhi = 'ws://47.111.76.83:8080/websocket/'
       // 拼接地址
       const wsuri = dizhi + telnum //这个地址由后端童鞋提供
       this.websock = new WebSocket(wsuri)
@@ -921,16 +1328,16 @@ export default {
       this.websock.onerror = this.websocketonerror
       this.websock.onclose = this.websocketclose
     },
-    websocketonopen() {
+    websocketonopen () {
       //连接建立之后执行send方法发送数据
       this.websocketsend('hello客户端')
       console.log('socket建立连接')
     },
-    websocketonerror() {
+    websocketonerror () {
       //连接建立失败重连
       this.initWebSocket()
     },
-    websocketonmessage(e) {
+    websocketonmessage (e) {
       var da = e.data
       console.log(da)
 
@@ -947,20 +1354,20 @@ export default {
       }
       this.getcaller()
     },
-    websocketsend(Data) {
+    websocketsend (Data) {
       //数据发送
       this.websock.send(Data)
     },
-    websocketclose(e) {
+    websocketclose (e) {
       //关闭
       console.log('断开连接', e)
     }
   },
 
-  created() {
+  created () {
     this.getlocalTel()
   },
-  beforeMount() {
+  beforeMount () {
     this.initWebSocket()
     // this.gettrade()
     this.getvideotoken()
