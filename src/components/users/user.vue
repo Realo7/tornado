@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="margin-bottom:20px;">
+    <!-- <div style="margin-bottom:20px;">
       <el-row>
         <el-col :span="12">
           <el-input
@@ -15,8 +15,9 @@
           >搜索</el-button>
         </el-col>
       </el-row>
-    </div>
-    <el-tabs
+    </div> -->
+
+    <!-- <el-tabs
       tabPosition="left"
       type="border-card"
     >
@@ -48,17 +49,8 @@
         </span>
         <el-button>这是个按钮</el-button>
       </el-tab-pane>
-      <!--<el-tab-pane>
-        <span slot="label">
-          <i class="el-icon-date"></i> 三号停车场
-        </span>
-      </el-tab-pane>
-      <el-tab-pane>
-        <span slot="label">
-          <i class="el-icon-date"></i> 四号停车场
-        </span>
-      </el-tab-pane>-->
-    </el-tabs>
+
+    </el-tabs> -->
   </div>
 </template>
 <script>

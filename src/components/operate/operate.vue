@@ -451,15 +451,17 @@
               >
                 <!-- 获取选取的值只需要取this.kind即可 -->
                 <el-select
-                  v-model="kind"
+                  v-model="reasonId"
                   clearable
                   placeholder="请选择"
+                  style="font-size:24px;"
+                  @click.native="getreasoninfo2()"
                 >
                   <el-option
                     v-for="item in options1"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
+                    :key="item.reasonId"
+                    :label="item.reason"
+                    :value="item.reasonId"
                   ></el-option>
                 </el-select>
               </td>
@@ -533,9 +535,15 @@
           <span class="tit00">{{callback.parkName}}</span>
           <span class="tit03">通道：{{callback.devConnName}}</span>
           <span
+            v-if="ombackrecord.callid"
             class="tit03"
             style="padding-bottom:20px;"
           >呼叫编号：{{ombackrecord.callid}}</span>
+          <span
+            v-if="!ombackrecord.callid"
+            class="tit03"
+            style="padding-bottom:20px;"
+          >呼叫开始时间：{{nowtime}}</span>
           <div class="tit04">
             <div v-if="!ombackansered.attribute&&!ombackrecord.attribute">
               <img
@@ -583,10 +591,17 @@
           <span
             class="tit05"
             style="padding-top:20px;"
+            v-if="callback.parkRules"
           >收费标准 :</span>
           <span class="tit06">{{callback.parkRules}}</span>
-          <span class="tit00">车场业务信息</span>
-          <span class="tit03">免费车辆:{{callback.freeCars}}</span>
+          <span
+            v-if="callback.freeCars"
+            class="tit00"
+          >车场业务信息</span>
+          <span
+            v-if="callback.freeCars"
+            class="tit03"
+          >免费车辆:{{callback.freeCars}}</span>
         </div>
         <!-- 远程推送金额1 -->
         <el-dialog
@@ -695,7 +710,7 @@
                 style="background-color:rgb(158,234,106)"
               >挂断</el-button>
             </el-col>
-            <el-col :span="12">
+            <!-- <el-col :span="12">
               <el-button
                 type="primary"
                 @click="dialog2 = true"
@@ -708,7 +723,7 @@
                 @click="dialog3 = true"
                 class="el-button-grid-l3-3"
               >远程推送金额2</el-button>
-            </el-col>
+            </el-col> -->
           </el-row>
         </div>
         <div class="orangepart">剩余车位数：{{callback.remainSpace}}</div>
@@ -726,6 +741,12 @@ import { stringify } from 'querystring'
 export default {
   data () {
     return {
+      nowtime: '',
+      camera_serial: '',
+      // 用于监控的设备序列号
+      deviceID: '',
+      // 用于监控的频道号
+      chanelNo: '',
       zhuangtai: false,
       wczhuangtai: false,
       kind: '',
@@ -787,6 +808,11 @@ export default {
         privatekey: '',
         datas: { userId: '' }
       },
+      reasoninfo2: {
+        appId: '',
+        privatekey: '',
+        datas: { cashierCode: '' }
+      },
       cominfo: {
         appId: '',
         privatekey: '',
@@ -803,6 +829,7 @@ export default {
       //搜索模块返回的信息
       searchback: {},
       reasonback: [],
+      reasonback2: [],
       value: '',
 
       // 不管OM发来的什么数据，都先通过address保存
@@ -819,8 +846,8 @@ export default {
       },
       //监控地址的KEY和Secret，在萤石平台获取
       videotoken: {
-        appKey: 'fb8fe2aceedd4e358141eb1eec6c2173',
-        appSecret: '3466edb75c40555187c5fe06aa57aed6'
+        appKey: '',
+        appSecret: ''
       },
       tokenback: '',
       //用来保存监控所需的令牌
@@ -897,6 +924,7 @@ export default {
         //被叫变量getcall
         this.getcall = this.address.ext[1].id
 
+        this.nowtime = this.getNow()
         console.log('呼叫的座机号' + this.devMac)
         //上传状态代号
       }
@@ -934,18 +962,21 @@ export default {
         .then(res => {
           let acm = JSON.stringify(res.data)
           console.log('callerback返回的数据' + acm)
-
+          this.callback = JSON.parse(JSON.parse(acm).datas)
+          console.log(this.callback)
           // let reg = new RegExp('/\r\n/', 'g')
           // let acmm = acm.replace(/\\r\n/g, '\\r\\n')
           // console.log('去掉换行符的json字符串' + acmm)
+          this.camera_serial = this.callback.camera_serial
+
           this.initvideo02()
           this.callstatussrc = 'src/assets/img/incalling.png'
           this.showmsg = JSON.parse(acm).message
           // console.log('getcaller的状态信息' + showmsg)
           this.statusCode = JSON.parse(acm).statusCode
-          this.callback = JSON.parse(JSON.parse(acm).datas)
+
           this.zhuangtai = true
-          console.log(this.callback)
+
           if (this.callback != '') {
             this.gettrade()
           }
@@ -960,7 +991,12 @@ export default {
       // 将获取通话信息传过来的停车场ID,设备地址,设备类型&&&&&是否产生0元订单等传到gettrade方法的request数据中
       this.tradeinfo.datas.parkId = this.callback.parkId
       this.tradeinfo.datas.devConnId = this.callback.devConnId
-      this.tradeinfo.datas.devTag = this.callback.devTag
+      if (this.callback.devTag) {
+        this.tradeinfo.datas.devTag = this.callback.devTag
+      } else {
+        this.open3("cuowu")
+      }
+
       this.tradeinfo.datas.IsZeroOrder = 1
       let submit = {}
       submit = JSON.stringify(this.tradeinfo)
@@ -972,14 +1008,20 @@ export default {
         emulateJSON: true
       })
         .then(res => {
-          let trb = JSON.stringify(res.data)
-          console.log('gettrade返回的数据' + trb)
-          this.tradeback = JSON.parse(JSON.parse(trb).datas)
-          this.tradeback.FreeLeaveTime = this.tradeback.FreeLeaveTime + '分钟'
-          console.log('tradeback中的数据' + JSON.stringify(this.tradeback))
-          // 对图片进行处理
-          this.imgsrc01 = this.tradeback.inpic.replace('+', '%2B')
-          this.imgsrc02 = this.tradeback.outpic.replace('+', '%2B')
+          if (res.data.statusCode == 200) {
+            let trb = JSON.stringify(res.data)
+            console.log('gettrade返回的数据' + trb)
+            this.tradeback = JSON.parse(JSON.parse(trb).datas)
+            this.tradeback.FreeLeaveTime = this.tradeback.FreeLeaveTime + '分钟'
+            console.log('tradeback中的数据' + JSON.stringify(this.tradeback))
+            // 对图片进行处理
+            console.log("入场照片地址" + this.tradeback.inpic)
+            this.imgsrc01 = this.tradeback.inpic
+            console.log("出场照片地址" + this.tradeback.outpic)
+            this.imgsrc02 = this.tradeback.outpic
+          } else {
+            console.log(res.data.message)
+          }
         })
         .catch(err => {
           console.log('出现了错误' + err)
@@ -1251,8 +1293,41 @@ export default {
           console.log('原因模块出现了错误' + err)
         })
     },
+    //获取抬杆原因信息
+    getreasoninfo2 () {
+      this.reasoninfo2.datas.cashierCode = 'U1'
+      let submit = {}
+      submit = JSON.stringify(this.reasoninfo2)
+      // submit = this.reasoninfo
+      console.log('原因模块发送的数据：' + submit)
+      this.$axios({
+        method: 'post',
+        url: '/GetOpenReasonListHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+        // headers: { 'Content-Type': 'application/json' },
+        data: submit,
+        emulateJSON: true
+      })
+        .then(res => {
+          let back = JSON.stringify(res.data)
+          console.log('原因模块返回的数据' + back)
+          this.reasonback2 = JSON.parse(JSON.parse(back).datas).list
+
+          //让获取到的值和options1中的label和value相等
+          //或者说把获取到的值遍历到options2中，2个属性label和value
+          //label用于对外界显示，value用于保存key(即呼入原因ID)
+
+          this.options1 = JSON.parse(this.reasonback)
+
+          console.log('options1中的信息' + this.options1)
+        })
+        .catch(err => {
+          console.log('原因模块出现了错误' + err)
+        })
+    },
     // 获取视频的令牌
     getvideotoken () {
+      this.videotoken.appKey = this.$appKey
+      this.videotoken.appSecret = this.$appSecret
       let submit = this.$qs.stringify(this.videotoken)
       this.$axios({
         method: 'post',
@@ -1278,16 +1353,22 @@ export default {
     initvideo02 () {
       this.getvideotoken()
       console.log('我要打印看下' + this.tokenback)
+      console.log(this.camera_serial)
+      this.deviceID = this.camera_serial.split('-')[0]
+      this.chanelNo = this.camera_serial.split('-')[1]
+      console.log(this.deviceID)
+      console.log(this.chanelNo)
       let token = this.tokenback
-      let head = 'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/C71949064/1.live&autoplay=1&accessToken='
+      let head = 'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/' + this.deviceID + '/' + this.chanelNo + '.hd.live&autoplay=1&accessToken='
       this.livesrc02 = head + token
-      let tk2 = 'at.9wiz6ml83s7oy1cy50se9wc6aerts23b-6t53ia6nke-152k8ob-m9i35gmdm'
-      console.log('视屏播放地址' + this.livesrc02)
+      // let tk2 = 'at.cupam2ho91lp6rp04qwr5d6k60btucuq-7p1onnrvlm-0b1f2al-wyx6i96jj'
+      // this.livesrc02 = head + tk2
+      console.log('视频播放地址' + this.livesrc02)
     },
     // 从token中获取账号绑定的话机号，用来绑定socket的shopid
     getlocalTel () {
       let tel = JSON.parse(localStorage.token)
-      let tele = JSON.stringify(tel.hostId).replace('"', '')
+      let tele = JSON.stringify(tel.hostId).replace(new RegExp('"', 'g'), '')
       let telep = new Array()
       telep = tele.split(',')
       console.log('从localStorage中获取到token中保存的与账号绑定的话机一号' + telep[0])
@@ -1295,11 +1376,11 @@ export default {
     },
     //从界面挂断电话
     hangup () {
-      // console.log(this.telephone)
+      console.log("挂断的主机" + this.telephone)
       let id = this.telephone
       this.$axios({
         method: 'post',
-        url: 'http://47.111.76.83:8080/sendxml/clearOne',
+        url: this.$springurl + '/sendxml/clearOne',
         data: id
         // emulateJSON: true
       })
@@ -1319,7 +1400,7 @@ export default {
     // 初始化websocket
     initWebSocket () {
       let telnum = this.telephone
-      let dizhi = 'ws://47.111.76.83:8080/websocket/'
+      let dizhi = this.$wsurl
       // 拼接地址
       const wsuri = dizhi + telnum //这个地址由后端童鞋提供
       this.websock = new WebSocket(wsuri)
@@ -1372,7 +1453,10 @@ export default {
     // this.gettrade()
     this.getvideotoken()
     // this.initvideo02()
-  }
+  },
+  mounted () {
+    // this.initvideo02()
+  },
 }
 </script>
 

@@ -35,6 +35,12 @@ Vue.prototype.$echarts = echarts;
 Vue.prototype.$qs = qs;
 Vue.prototype.$ezuikit = EZUIKIT;
 
+// WebSocket的默认地址,vue文件中用this.$wsurl引用
+Vue.prototype.$wsurl=url.wsurl;
+
+Vue.prototype.$springurl=url.springUrl;
+Vue.prototype.$appKey=url.appKey;
+Vue.prototype.$appSecret=url.appSecret;
 
 Vue.config.productionTip = false
 const originalPush = Router.prototype.push
