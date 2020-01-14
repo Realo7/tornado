@@ -88,8 +88,13 @@
             <div class="middle">
               <span>云座席服务平台</span>
             </div>
+
           </el-col>
-          <el-col :span="2">
+          <el-col :span="1">
+            <span class="mid-right">{{hostID}}</span>
+          </el-col>
+          <el-col :span="1">
+
             <a
               style="font-size:24px;font-family:Microsoft YaHei;"
               href="#"
@@ -134,7 +139,8 @@ export default {
           opContentId: '',
           callId: ''
         }
-      }
+      },
+      hostID: ''
     }
   },
   methods: {
@@ -156,6 +162,14 @@ export default {
     },
     handleClose (key, keyPath) {
       console.log(key, keyPath)
+    },
+    getlocalTel () {
+      let tel = JSON.parse(localStorage.token)
+      let tele = JSON.stringify(tel.hostId).replace(new RegExp('"', 'g'), '')
+      let telep = new Array()
+      telep = tele.split(',')
+      console.log('从localStorage中获取到token中保存的与账号绑定的话机' + telep[0])
+      this.hostID = telep[0]
     },
     handleLoginout () {
       let submit = {}
@@ -193,6 +207,7 @@ export default {
           console.log('出现了错误' + err)
         })
     }
+
   },
   //newVue之前自动触发beforeCreate
   beforeCreate () {
@@ -203,6 +218,9 @@ export default {
       this.$router.push({ name: 'login' })
     }
     //if token 存在 ->继续渲染组件
+  },
+  mounted () {
+    this.getlocalTel()
   }
 }
 </script>
@@ -249,6 +267,13 @@ export default {
   /* padding-top: 10px; */
   /* margin: auto; */
 }
+.mid-right {
+  text-align: center;
+  font-family: Microsoft Yahei;
+  font-size: 24px;
+  position: relative;
+  top: 20px;
+}
 .emi {
   height: 150px;
   width: 125px;
@@ -269,7 +294,6 @@ export default {
 
 .loginout {
   text-decoration-line: none;
-
   position: absolute;
   right: 1%;
   top: 20px;

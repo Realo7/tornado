@@ -6,6 +6,9 @@
       type="flex"
     >
       <el-col :span="8">
+        <div class="grid-l1-0">
+          {{socketinfo}}
+        </div>
         <!-- 入口图片 -->
         <div class="grid-l1">
           <div
@@ -738,6 +741,7 @@ import { stringify } from 'querystring'
 export default {
   data () {
     return {
+      socketinfo: "",
       nowtime: '',
       camera_serial: '',
       // 用于监控的设备序列号
@@ -1246,7 +1250,11 @@ export default {
         customClass: "msgbox"
       })
         .then(() => {
-          this.openbyhands()
+          if (reasonId1) {
+            this.openbyhands()
+          } else {
+            this.open2('请输入开闸原因或类型')
+          }
         })
         .catch(() => {
           this.$message({
@@ -1260,7 +1268,8 @@ export default {
         // showCancelButton: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        center: true
+        center: true,
+        customClass: "msgbox"
       })
         .then(() => {
           this.open2('完成本次服务成功')
@@ -1425,11 +1434,13 @@ export default {
       //连接建立之后执行send方法发送数据
       this.websocketsend('hello客户端')
       console.log('socket建立连接')
+      this.socketinfo = "socket建立连接"
     },
     websocketonerror () {
       //连接建立失败重连
+      this.socketinfo = "socket连接失败，准备10秒后重连"
       console.log('5秒后准备重连')
-      setTimeout(this.initWebSocket(), 5000);
+      setTimeout(this.initWebSocket(), 10000);
     },
     websocketonmessage (e) {
       var da = e.data
@@ -1453,10 +1464,11 @@ export default {
       this.websock.send(Data)
     },
     websocketclose (e) {
+      this.socketinfo = "socket关闭连接，15秒后重连"
       //关闭
       console.log('断开连接', e)
-      console.log('5秒后准备重连')
-      setTimeout(this.initWebSocket(), 5000);
+      console.log('15秒后准备重连')
+      setTimeout(this.initWebSocket(), 15000);
     }
   },
 
@@ -1486,6 +1498,9 @@ export default {
 .orange {
   background-color: rgb(255, 84, 0);
 }
+.grid-l1-0 {
+  height: 5%;
+}
 .grid-l1 {
   height: 43%;
   margin-bottom: 1%;
@@ -1493,7 +1508,7 @@ export default {
   border-radius: 8px;
 }
 .grid-l1-2 {
-  height: 20%;
+  height: 15%;
 }
 .grid-l2-1 {
   background-color: rgb(248, 248, 252);
@@ -1546,6 +1561,7 @@ export default {
 .el-button-grid-l3-3 {
   height: 70px;
   width: 90%;
+  font-size: 24px;
 }
 .orangepart {
   border-radius: 0 0 20px 20px;
