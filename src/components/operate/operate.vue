@@ -13,11 +13,7 @@
             style="width:100%;height:100%"
           >
             <viewer style="width:100%;height:100%">
-              <img
-                src="@/assets/img/carbw.png"
-                width="100%"
-                height="100%"
-              />
+
             </viewer>
           </div>
           <div
@@ -43,8 +39,8 @@
           </div>
         </div>
         <!-- 出口图片 -->
-        <div class="grid-l1">
-          <div
+        <div class="grid-l1-2">
+          <!-- <div
             v-if="!imgsrc02"
             style="width:100%;height:100%"
           >
@@ -74,7 +70,7 @@
                 />
               </div>
             </el-image>
-          </div>
+          </div> -->
         </div>
         <!-- 呼叫口的监控视频 -->
         <iframe
@@ -451,17 +447,17 @@
               >
                 <!-- 获取选取的值只需要取this.kind即可 -->
                 <el-select
-                  v-model="reasonId"
+                  v-model="reasonId1"
                   clearable
                   placeholder="请选择"
                   style="font-size:24px;"
-                  @click.native="getreasoninfo2()"
                 >
+                  <!-- @click.native="getreasoninfo2()" -->
                   <el-option
                     v-for="item in options1"
-                    :key="item.reasonId"
-                    :label="item.reason"
-                    :value="item.reasonId"
+                    :key="item.ReasonId"
+                    :label="item.ReasonInfo"
+                    :value="item.ReasonId"
                   ></el-option>
                 </el-select>
               </td>
@@ -476,12 +472,12 @@
                 style="padding-left:20px;"
               >
                 <el-select
-                  v-model="reasonId"
+                  v-model="reasonId2"
                   clearable
                   placeholder="请选择"
                   style="font-size:24px;"
-                  @click.native="getreasoninfo()"
                 >
+                  <!-- @click.native="getreasoninfo()" -->
                   <el-option
                     v-for="item in options2"
                     :key="item.reasonId"
@@ -504,21 +500,22 @@
               <td>
                 <el-button
                   style="height:90%;width:45%;font-size:24px;"
-                  type="info"
+                  type="primary"
                   icon="el-icon-check"
                   round
                   @click="comService()"
-                  :disabled="!wczhuangtai"
-                  :class="{common: wczhuangtai,gray: !wczhuangtai}"
+                  :disabled="!zhuangtai"
+                  :class="{common: zhuangtai,skyblue: !zhuangtai}"
                 >完成本次服务</el-button>
+                <!-- :disabled="!wczhuangtai" -->
                 <el-button
                   style="height:90%;width:45%;font-size:24px;"
-                  type="info"
+                  type="primary"
                   icon="el-icon-unlock"
                   round
                   @click="msgbox1('您确定要抬杆吗？','提示')"
                   :disabled="!zhuangtai"
-                  :class="{orange: zhuangtai,gray: !zhuangtai}"
+                  :class="{orange: zhuangtai,skyblue: !zhuangtai}"
                 >抬杆</el-button>
               </td>
             </tr>
@@ -757,15 +754,12 @@ export default {
         },
         { value: '2', label: '放行类型2' }
       ],
-      reasonId: '',
+      reasonId1: '',
+      reasonId2: '',
       options2: [
         {
           reasonId: '1',
           reason: '原因1'
-        },
-        {
-          reasonId: '2',
-          reason: '原因2'
         }
       ],
       // 用来选择标签页
@@ -915,6 +909,9 @@ export default {
     },
     // 获取对讲机的详细信息，并保存相关记录
     getcaller () {
+
+      // 清除界面元素数据
+      this.clearinfo()
       //如果OM设备传过来的信息中含有ext数组(是OM设备的状态消息)
       if (this.address.ext) {
         //上线之前需要改1为0
@@ -930,6 +927,7 @@ export default {
       }
       if (this.ombackansered.attribute == '正在应答') {
         this.callerinfo.datas.status = 1
+        this.callerinfo.datas.PA2_serial = this.gocall
       } else if (this.ombackrecord.attribute == '已挂断') {
         this.callerinfo.datas.status = 2
         this.callerinfo.datas.callsumtm = this.ombackrecord.Duration
@@ -1031,50 +1029,61 @@ export default {
     openbyhands () {
       this.opendoorinfo.datas.userId = localStorage.user
       this.opendoorinfo.datas.deviceAdr = this.callback.devConnId
-      console.log('打印一下开闸原因看看' + this.reasonId)
-      this.opendoorinfo.datas.reasonId = this.reasonId
-      // console.log('打印一下tradeback' + JSON.stringify(this.tradeback))
-      // 交易类型
+      if (this.reasonId1) {
+        console.log('打印一下开闸原因看看' + this.reasonId1)
+        this.opendoorinfo.datas.reasonId = this.reasonId1
 
-      if (this.tradeback.ComboMeal == '临停缴费') {
+        // 交易类型
         this.opendoorinfo.datas.dealtype = '1'
-      } else if (this.tradeback.ComboMeal == '月租') {
-        this.opendoorinfo.datas.dealtype = '2'
-      } else if (this.tradeback.ComboMeal == '群租') {
-        this.opendoorinfo.datas.dealtype = '3'
+        // if (this.tradeback.ComboMeal == '临停缴费') {
+        //   this.opendoorinfo.datas.dealtype = '1'
+        // } else if (this.tradeback.ComboMeal == '月租') {
+        //   this.opendoorinfo.datas.dealtype = '2'
+        // } else if (this.tradeback.ComboMeal == '群租') {
+        //   this.opendoorinfo.datas.dealtype = '3'
+        // } else {
+        //   this.open2('请输入开闸原因或类型')
+        // }
+
+        this.opendoorinfo.datas.serialNum = this.tradeback.TradingInfoID
+        //开闸原因
+        // console.log('打印一下开闸原因看看' + this.opendoorinfo.datas.reasonId)
+        // 对讲记录主键ID
+        this.opendoorinfo.datas.callId = this.callback.callId
+        let submit = {}
+        submit = JSON.stringify(this.opendoorinfo)
+        console.log('打印一下开闸提交数据' + submit)
+        this.$axios({
+          method: 'post',
+          url: '/OpenDeviceHandler.ashx?method=POST&lan=zh-CN&type=web&compress=00',
+          // headers: { 'Content-Type': 'application/json' },
+          data: submit,
+          emulateJSON: true
+        })
+          .then(res => {
+            if (res.data.statusCode != 200) {
+              this.open2(res.data.message)
+            }
+            let trb = JSON.stringify(res.data)
+            console.log('手动开闸返回的数据' + trb)
+            //开闸之后自动调用完成本次服务
+            this.comService()
+            // this.tradeback = JSON.parse(JSON.parse(trb).datas)
+            console.log('手动开闸模块需要显示的数据' + this.tradeback)
+            this.clearinfo()
+          })
+          .catch(err => {
+            console.log('出现了错误' + err)
+          })
       } else {
         this.open2('请输入开闸原因或类型')
       }
-
-      this.opendoorinfo.datas.serialNum = this.tradeback.TradingInfoID
-      //开闸原因
-      // console.log('打印一下开闸原因看看' + this.opendoorinfo.datas.reasonId)
-      // 对讲记录主键ID
-      this.opendoorinfo.datas.callId = this.callback.callId
-      let submit = {}
-      submit = JSON.stringify(this.opendoorinfo)
-      console.log('打印一下开闸提交数据' + submit)
-      this.$axios({
-        method: 'post',
-        url: '/OpenDeviceHandler.ashx?method=POST&lan=zh-CN&type=web&compress=00',
-        // headers: { 'Content-Type': 'application/json' },
-        data: submit,
-        emulateJSON: true
-      })
-        .then(res => {
-          let trb = JSON.stringify(res.data)
-          console.log('手动开闸返回的数据' + trb)
-          if (res.data.statusCode != 200) {
-            this.open2(res.data.message)
-            //开闸之后自动调用完成本次服务
-            this.comService()
-          }
-          // this.tradeback = JSON.parse(JSON.parse(trb).datas)
-          console.log('手动开闸模块需要显示的数据' + this.tradeback)
-        })
-        .catch(err => {
-          console.log('出现了错误' + err)
-        })
+    },
+    clearinfo () {
+      this.imgsrc01 = ''
+      this.callback = ''
+      this.tradeback = ''
+      this.livesrc02 = ''
     },
     // 提示信息(右上角那种)
     open1 (a) {
@@ -1148,8 +1157,9 @@ export default {
 
           console.log('搜索车牌号返回的数据' + trb)
 
-
           if (partrb.statusCode == 200) {
+            // 搜索成功之后先清空
+            this.clearinfo()
             this.tradeback = JSON.parse(JSON.parse(trb).datas)
             console.log("搜索返回tradeback" + JSON.stringify(this.tradeback))
             this.imgsrc01 = this.tradeback.inpic
@@ -1165,25 +1175,26 @@ export default {
     },
     // 完成本次服务调用接口
     comService () {
-      if (!this.reasonId) {
+      if (!this.reasonId1) {
         this.open2('请输入原因')
         return
       }
       this.cominfo.datas.userId = localStorage.user
       //交易类型
-      if (this.tradeback.ComboMeal == '临停缴费') {
-        this.cominfo.datas.dealtype = '1'
-      } else if (this.tradeback.ComboMeal == '月租') {
-        this.cominfo.datas.dealtype = '2'
-      } else if (this.tradeback.ComboMeal == '群租') {
-        this.cominfo.datas.dealtype = '3'
-      } else {
-        this.open2('不存在相关完成服务交易类型')
-      }
+      this.cominfo.datas.dealtype = '1'
+      // if (this.tradeback.ComboMeal == '临停缴费') {
+      //   this.cominfo.datas.dealtype = '1'
+      // } else if (this.tradeback.ComboMeal == '月租') {
+      //   this.cominfo.datas.dealtype = '2'
+      // } else if (this.tradeback.ComboMeal == '群租') {
+      //   this.cominfo.datas.dealtype = '3'
+      // } else {
+      //   this.open2('不存在相关完成服务交易类型')
+      // }
       this.cominfo.datas.serialNum = this.tradeback.TradingInfoID
       this.cominfo.datas.callId = this.callback.callId
       //获取到原因后需要更改
-      this.cominfo.datas.reasonId = this.reasonId
+      this.cominfo.datas.reasonId = this.reasonId1
       let submit = {}
       submit = JSON.stringify(this.cominfo)
       console.log('结束服务模块发送的数据' + submit)
@@ -1229,10 +1240,10 @@ export default {
     msgbox1 (a, b) {
       this.$confirm(a, b, {
         // showCancelButton: true,
-        // customClass: 'el-message-box",
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        center: true
+        center: true,
+        customClass: "msgbox"
       })
         .then(() => {
           this.openbyhands()
@@ -1248,7 +1259,8 @@ export default {
       this.$confirm(a, b, {
         // showCancelButton: true,
         confirmButtonText: '确定',
-        cancelButtonText: '取消'
+        cancelButtonText: '取消',
+        center: true
       })
         .then(() => {
           this.open2('完成本次服务成功')
@@ -1295,7 +1307,7 @@ export default {
     },
     //获取抬杆原因信息
     getreasoninfo2 () {
-      this.reasoninfo2.datas.cashierCode = 'U1'
+      this.reasoninfo2.datas.cashierCode = localStorage.user
       let submit = {}
       submit = JSON.stringify(this.reasoninfo2)
       // submit = this.reasoninfo
@@ -1316,7 +1328,7 @@ export default {
           //或者说把获取到的值遍历到options2中，2个属性label和value
           //label用于对外界显示，value用于保存key(即呼入原因ID)
 
-          this.options1 = JSON.parse(this.reasonback)
+          this.options1 = JSON.parse(this.reasonback2)
 
           console.log('options1中的信息' + this.options1)
         })
@@ -1416,7 +1428,8 @@ export default {
     },
     websocketonerror () {
       //连接建立失败重连
-      this.initWebSocket()
+      console.log('5秒后准备重连')
+      setTimeout(this.initWebSocket(), 5000);
     },
     websocketonmessage (e) {
       var da = e.data
@@ -1442,6 +1455,8 @@ export default {
     websocketclose (e) {
       //关闭
       console.log('断开连接', e)
+      console.log('5秒后准备重连')
+      setTimeout(this.initWebSocket(), 5000);
     }
   },
 
@@ -1455,7 +1470,8 @@ export default {
     // this.initvideo02()
   },
   mounted () {
-    // this.initvideo02()
+    this.getreasoninfo()
+    this.getreasoninfo2()
   },
 }
 </script>
@@ -1471,10 +1487,13 @@ export default {
   background-color: rgb(255, 84, 0);
 }
 .grid-l1 {
-  height: 29%;
+  height: 43%;
   margin-bottom: 1%;
   background-color: gainsboro;
   border-radius: 8px;
+}
+.grid-l1-2 {
+  height: 20%;
 }
 .grid-l2-1 {
   background-color: rgb(248, 248, 252);
@@ -1662,6 +1681,11 @@ export default {
   font-size: 24px;
   height: 50px;
   width: 90px;
+}
+.msgbox {
+  font-size: 50px;
+  padding-bottom: 20px;
+  height: 300px;
 }
 /* .el-message-box__btns {
   height: 15%;
