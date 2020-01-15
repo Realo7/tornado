@@ -6,9 +6,6 @@
       type="flex"
     >
       <el-col :span="8">
-        <div class="grid-l1-0">
-          {{socketinfo}}
-        </div>
         <!-- 入口图片 -->
         <div class="grid-l1">
           <div
@@ -84,6 +81,16 @@
           controls
           allowfullscreen
         ></iframe>
+        <div class="grid-l1-0">
+          <span
+            v-if="socketinfo='服务器连接成功'"
+            class="socket-bg-blue"
+          >{{socketinfo}}</span>
+          <span
+            v-if="socketinfo!='服务器连接成功'"
+            class="socket-bg-red"
+          >{{socketinfo}}</span>
+        </div>
       </el-col>
       <el-dialog
         title="提示"
@@ -516,7 +523,7 @@
                   type="primary"
                   icon="el-icon-unlock"
                   round
-                  @click="msgbox1('您确定要抬杆吗？','提示')"
+                  @click="openbyhands()"
                   :disabled="!zhuangtai"
                   :class="{orange: zhuangtai,skyblue: !zhuangtai}"
                 >抬杆</el-button>
@@ -1031,56 +1038,11 @@ export default {
     },
     //操作手动开闸
     openbyhands () {
-      this.opendoorinfo.datas.userId = localStorage.user
-      this.opendoorinfo.datas.deviceAdr = this.callback.devConnId
       if (this.reasonId1) {
-        console.log('打印一下开闸原因看看' + this.reasonId1)
-        this.opendoorinfo.datas.reasonId = this.reasonId1
-
-        // 交易类型
-        this.opendoorinfo.datas.dealtype = '1'
-        // if (this.tradeback.ComboMeal == '临停缴费') {
-        //   this.opendoorinfo.datas.dealtype = '1'
-        // } else if (this.tradeback.ComboMeal == '月租') {
-        //   this.opendoorinfo.datas.dealtype = '2'
-        // } else if (this.tradeback.ComboMeal == '群租') {
-        //   this.opendoorinfo.datas.dealtype = '3'
-        // } else {
-        //   this.open2('请输入开闸原因或类型')
-        // }
-
-        this.opendoorinfo.datas.serialNum = this.tradeback.TradingInfoID
-        //开闸原因
-        // console.log('打印一下开闸原因看看' + this.opendoorinfo.datas.reasonId)
-        // 对讲记录主键ID
-        this.opendoorinfo.datas.callId = this.callback.callId
-        let submit = {}
-        submit = JSON.stringify(this.opendoorinfo)
-        console.log('打印一下开闸提交数据' + submit)
-        this.$axios({
-          method: 'post',
-          url: '/OpenDeviceHandler.ashx?method=POST&lan=zh-CN&type=web&compress=00',
-          // headers: { 'Content-Type': 'application/json' },
-          data: submit,
-          emulateJSON: true
-        })
-          .then(res => {
-            if (res.data.statusCode != 200) {
-              this.open2(res.data.message)
-            }
-            let trb = JSON.stringify(res.data)
-            console.log('手动开闸返回的数据' + trb)
-            //开闸之后自动调用完成本次服务
-            this.comService()
-            // this.tradeback = JSON.parse(JSON.parse(trb).datas)
-            console.log('手动开闸模块需要显示的数据' + this.tradeback)
-            this.clearinfo()
-          })
-          .catch(err => {
-            console.log('出现了错误' + err)
-          })
+        console.log('开闸原因' + this.reasonId1)
+        this.msgbox1("您确定要抬杆吗", "提示")
       } else {
-        this.open2('请输入开闸原因或类型')
+        this.open2('请选择抬杆原因')
       }
     },
     clearinfo () {
@@ -1088,6 +1050,7 @@ export default {
       this.callback = ''
       this.tradeback = ''
       this.livesrc02 = ''
+      this.zhuangtai = false
     },
     // 提示信息(右上角那种)
     open1 (a) {
@@ -1096,11 +1059,10 @@ export default {
       let message = a
       let msg = message + ' ' + now
       this.$notify({
-        group: 'foo',
-        duration: 8000,
-        type: 'info',
-        title: '注意',
-        text: msg
+        title: '提示',
+        message: msg,
+        customClass: "notify01",
+        duration: 10000,
       })
     },
     open2 (a) {
@@ -1109,11 +1071,11 @@ export default {
       let message = a
       let msg = message + ' ' + now
       this.$notify({
-        group: 'fo2',
-        duration: 8000,
-        type: 'warning',
-        title: '注意',
-        text: msg
+        title: '提示',
+        message: msg,
+        customClass: "notify02",
+        duration: 10000,
+        position: 'bottom-right'
       })
     },
     open3 (a) {
@@ -1122,12 +1084,11 @@ export default {
       let message = a
       let msg = message + ' ' + now
       this.$notify({
-        group: 'coo',
-        duration: 5000,
-        position: 'top-full',
-        type: 'error',
         title: '提示',
-        text: msg
+        message: msg,
+        customClass: "notify03",
+        duration: 10000,
+        position: 'top-right'
       })
     },
     //通过车牌号搜索信息
@@ -1179,50 +1140,11 @@ export default {
     },
     // 完成本次服务调用接口
     comService () {
-      if (!this.reasonId1) {
+      if (!this.reasonId2) {
         this.open2('请输入原因')
         return
       }
-      this.cominfo.datas.userId = localStorage.user
-      //交易类型
-      this.cominfo.datas.dealtype = '1'
-      // if (this.tradeback.ComboMeal == '临停缴费') {
-      //   this.cominfo.datas.dealtype = '1'
-      // } else if (this.tradeback.ComboMeal == '月租') {
-      //   this.cominfo.datas.dealtype = '2'
-      // } else if (this.tradeback.ComboMeal == '群租') {
-      //   this.cominfo.datas.dealtype = '3'
-      // } else {
-      //   this.open2('不存在相关完成服务交易类型')
-      // }
-      this.cominfo.datas.serialNum = this.tradeback.TradingInfoID
-      this.cominfo.datas.callId = this.callback.callId
-      //获取到原因后需要更改
-      this.cominfo.datas.reasonId = this.reasonId1
-      let submit = {}
-      submit = JSON.stringify(this.cominfo)
-      console.log('结束服务模块发送的数据' + submit)
-      this.$axios({
-        method: 'post',
-        url: '/EndServiceHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
-        // headers: { 'Content-Type': 'application/json' },
-        data: submit,
-        emulateJSON: true
-      })
-        .then(res => {
-          let trb = JSON.stringify(res.data)
-          let partrb = JSON.parse(trb)
-          console.log('收到的信息' + trb)
-          console.log('完成服务返回的信息:' + partrb.message)
-          if (partrb.statusCode == 200) {
-            // this.msgbox(partrb.message, '提示')
-            this.msgbox2('您确定要完成本次服务吗？', '提示')
-          }
-          this.hangup()
-        })
-        .catch(err => {
-          console.log('完成本次服务接口未联通')
-        })
+      this.msgbox2("您确定要完成本次服务吗", "提示")
     },
     imgsrcchange () {
       this.callstatussrc = '@/assets/img/carbw.png'
@@ -1250,8 +1172,41 @@ export default {
         customClass: "msgbox"
       })
         .then(() => {
-          if (reasonId1) {
-            this.openbyhands()
+          if (this.reasonId1) {
+            this.opendoorinfo.datas.userId = localStorage.user
+            this.opendoorinfo.datas.deviceAdr = this.callback.devConnId
+            this.opendoorinfo.datas.reasonId = this.reasonId1
+            // 交易类型
+            this.opendoorinfo.datas.dealtype = '1'
+            this.opendoorinfo.datas.serialNum = this.tradeback.TradingInfoID
+            //开闸原因
+            // console.log('打印一下开闸原因看看' + this.opendoorinfo.datas.reasonId)
+            // 对讲记录主键ID
+            this.opendoorinfo.datas.callId = this.callback.callId
+            let submit = {}
+            submit = JSON.stringify(this.opendoorinfo)
+            console.log('打印一下开闸提交数据' + submit)
+            this.$axios({
+              method: 'post',
+              url: '/OpenDeviceHandler.ashx?method=POST&lan=zh-CN&type=web&compress=00',
+              // headers: { 'Content-Type': 'application/json' },
+              data: submit,
+              emulateJSON: true
+            })
+              .then(res => {
+                if (res.data.statusCode != 200) {
+                  this.open2(res.data.message)
+                }
+                let trb = JSON.stringify(res.data)
+                console.log('手动开闸返回的数据' + trb)
+                //开闸之后自动调用完成本次服务
+                this.com2msg()
+                // this.tradeback = JSON.parse(JSON.parse(trb).datas)
+                console.log('手动开闸模块需要显示的数据' + this.tradeback)
+              })
+              .catch(err => {
+                console.log('出现了错误' + err)
+              })
           } else {
             this.open2('请输入开闸原因或类型')
           }
@@ -1272,8 +1227,7 @@ export default {
         customClass: "msgbox"
       })
         .then(() => {
-          this.open2('完成本次服务成功')
-          this.$router.go(0)
+          this.com2msg()
         })
         .catch(() => {
           this.$message({
@@ -1283,6 +1237,41 @@ export default {
         })
     },
 
+    com2msg () {
+      this.cominfo.datas.userId = localStorage.user
+      //交易类型
+      this.cominfo.datas.dealtype = '1'
+      this.cominfo.datas.serialNum = this.tradeback.TradingInfoID
+      this.cominfo.datas.callId = this.callback.callId
+      //获取到原因后需要更改
+      this.cominfo.datas.reasonId = this.reasonId2
+
+      let submit = {}
+      submit = JSON.stringify(this.cominfo)
+      console.log('结束服务模块发送的数据' + submit)
+      this.$axios({
+        method: 'post',
+        url: '/EndServiceHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+        // headers: { 'Content-Type': 'application/json' },
+        data: submit,
+        emulateJSON: true
+      })
+        .then(res => {
+          let trb = JSON.stringify(res.data)
+          let partrb = JSON.parse(trb)
+          console.log('收到的信息' + trb)
+          console.log('完成服务返回的信息:' + partrb.message)
+          if (partrb.statusCode == 200) {
+            // this.msgbox(partrb.message, '提示')
+            this.open2('完成本次服务成功')
+            this.clearinfo()
+            this.hangup()
+          }
+        })
+        .catch(err => {
+          console.log('完成本次服务接口未联通')
+        })
+    },
     //获取呼入原因信息
     getreasoninfo () {
       this.reasoninfo.datas.userId = localStorage.user
@@ -1434,11 +1423,11 @@ export default {
       //连接建立之后执行send方法发送数据
       this.websocketsend('hello客户端')
       console.log('socket建立连接')
-      this.socketinfo = "socket建立连接"
+      this.socketinfo = "连接服务器成功"
     },
     websocketonerror () {
       //连接建立失败重连
-      this.socketinfo = "socket连接失败，准备10秒后重连"
+      this.socketinfo = "连接服务器失败，准备10秒后重连"
       console.log('5秒后准备重连')
       setTimeout(this.initWebSocket(), 10000);
     },
@@ -1450,8 +1439,10 @@ export default {
       // console.log(this.address)
       // 判断address中是不是有ext.id
       if (this.address.ext) {
+        let num0 = this.address.ext[0].id
+        let num1 = this.address.ext[1].id
         this.ombackansered = this.address
-        this.open1('有电话呼入')
+        this.open1(num0 + '呼入电话')
       } else {
         this.ombackansered.attribute = ''
         this.ombackrecord = this.address
@@ -1464,7 +1455,7 @@ export default {
       this.websock.send(Data)
     },
     websocketclose (e) {
-      this.socketinfo = "socket关闭连接，15秒后重连"
+      this.socketinfo = "服务器关闭连接，15秒后重连"
       //关闭
       console.log('断开连接', e)
       console.log('15秒后准备重连')
@@ -1500,6 +1491,9 @@ export default {
 }
 .grid-l1-0 {
   height: 5%;
+  /* margin-bottom: 5%; */
+  position: fixed;
+  bottom: 0;
 }
 .grid-l1 {
   height: 43%;
@@ -1702,6 +1696,47 @@ export default {
   font-size: 50px;
   padding-bottom: 20px;
   height: 300px;
+}
+.socket-bg-blue {
+  color: blue;
+}
+.socket-bg-red {
+  color: red;
+}
+.notify01 {
+  border-radius: 10px;
+  opacity: 1;
+  width: 400px;
+  height: 160px;
+  background-color: rgb(243, 174, 44);
+  font-size: 24px;
+  padding-top: 30px;
+  padding-left: 20px;
+  line-height: 40px;
+}
+.notify02 {
+  border-radius: 10px 10px 10px 10px;
+  opacity: 1;
+  max-width: 600px;
+  height: 240px;
+  background-color: rgb(240, 243, 44);
+  font-size: 24px;
+  padding-top: 30px;
+  padding-left: 20px;
+  line-height: 40px;
+}
+.notify03 {
+  border-radius: 10px;
+  opacity: 0.8;
+  width: 400px;
+  height: 160px;
+  background-color: rgb(252, 47, 47);
+  font-size: 24px;
+  padding-top: 30px;
+  padding-left: 20px;
+}
+.el-notification__content {
+  font-size: 22px;
 }
 /* .el-message-box__btns {
   height: 15%;

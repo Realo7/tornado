@@ -11,7 +11,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import '@/assets/css/reset.css'
 import echarts from 'echarts'
 import qs from 'qs'
-import Notifications from 'vue-notification'
+// import Notifications from 'vue-notification'
 
 // 为axios的baseurl引入变量文件
 import url from '../static/config'
@@ -53,7 +53,7 @@ Vue.use(ElementUI)
 Vue.use(VueAxios, axios)
 Vue.use(echarts)
 Vue.use(qs)
-Vue.use(Notifications)
+// Vue.use(Notifications)
 Vue.use(EZUIKIT)
 
 

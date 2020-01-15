@@ -4,33 +4,79 @@
       <table style="width:100%;">
         <tr>
           <td style="width:14%;">
-            <el-form-item label="车牌号" class="big">
-              <el-input v-model="userinfo.datas.plate" style="width:90%;"></el-input>
+            <el-form-item
+              label="车牌号"
+              class="big"
+            >
+              <el-input
+                v-model="userinfo.datas.plate"
+                style="width:90%;"
+              ></el-input>
             </el-form-item>
           </td>
           <td style="width:20%;">
-            <el-form-item label="停车场名称" class="big">
-              <el-select v-model="userinfo.datas.parkId" placeholder="请选择是哪个停车场" style="width: 80%;">
-                <el-option label="停车场01" value="停车场01"></el-option>
-                <el-option label="停车场02" value="停车场02"></el-option>
-                <el-option label="停车场03" value="停车场03"></el-option>
-                <el-option label="停车场04" value="停车场04"></el-option>
+            <el-form-item
+              label="停车场名称"
+              class="big"
+            >
+              <el-select
+                v-model="userinfo.datas.parkId"
+                placeholder="请选择是哪个停车场"
+                style="width: 80%;"
+              >
+                <el-option
+                  label="停车场01"
+                  value="停车场01"
+                ></el-option>
+                <el-option
+                  label="停车场02"
+                  value="停车场02"
+                ></el-option>
+                <el-option
+                  label="停车场03"
+                  value="停车场03"
+                ></el-option>
+                <el-option
+                  label="停车场04"
+                  value="停车场04"
+                ></el-option>
               </el-select>
             </el-form-item>
           </td>
           <td style="width:20%;">
-            <el-form-item label="呼叫开始时间" class="big">
-              <el-date-picker type="datetime" placeholder="选择日期时间" v-model="userinfo.datas.startTm" default-value="2019-01-01 00:00:00" style="width:90%;"></el-date-picker>
+            <el-form-item
+              label="呼叫开始时间"
+              class="big"
+            >
+              <el-date-picker
+                type="datetime"
+                placeholder="选择日期时间"
+                v-model="userinfo.datas.startTm"
+                default-value="2019-01-01 00:00:00"
+                style="width:90%;"
+              ></el-date-picker>
             </el-form-item>
           </td>
           <td style="width:20%;">
-            <el-form-item label="呼叫结束时间" class="big">
-              <el-date-picker type="datetime" placeholder="选择日期时间" v-model="userinfo.datas.endTm" default-value="2019-01-01 00:00:00" style="width:90%;"></el-date-picker>
+            <el-form-item
+              label="呼叫结束时间"
+              class="big"
+            >
+              <el-date-picker
+                type="datetime"
+                placeholder="选择日期时间"
+                v-model="userinfo.datas.endTm"
+                default-value="2019-01-01 00:00:00"
+                style="width:90%;"
+              ></el-date-picker>
             </el-form-item>
           </td>
           <td style="width:12%;">
             <el-form-item>
-              <el-button type="primary" @click="searchcallinfo()">立即检索</el-button>
+              <el-button
+                type="primary"
+                @click="searchcallinfo()"
+              >立即检索</el-button>
             </el-form-item>
           </td>
         </tr>
@@ -39,23 +85,76 @@
     <!-- <span contenteditable="true">这是一段可以编辑的文字</span> -->
     <br />
     <hr />
-    <el-table :data="showlist" style="width: 100%" max-height="700">
-      <el-table-column type="index" :index="indexMethod" width="100" label="序号" fixed></el-table-column>
-      <el-table-column prop="plate" label="车牌号" width="150"></el-table-column>
-      <el-table-column prop="parkName" label="停车场名称" width="180"></el-table-column>
-      <el-table-column prop="dealMode" label="停车类型" width="180"></el-table-column>
-      <el-table-column prop="ticketCode" label="票号" width="180"></el-table-column>
-      <el-table-column prop="answerTm" label="呼叫开始时间" width="220"></el-table-column>
-      <el-table-column prop="hangUpTm" label="挂断时间" width="220"></el-table-column>
-      <el-table-column prop="duration" label="通话时长" width="120"></el-table-column>
-      <el-table-column prop="useName" label="客服名称" width="120"></el-table-column>
-      <el-table-column fixed="right" label="操作" width="120">
+    <el-table
+      :data="showlist"
+      style="width: 100%"
+      max-height="700"
+    >
+      <el-table-column
+        type="index"
+        :index="indexMethod"
+        width="100"
+        label="序号"
+        fixed
+      ></el-table-column>
+      <el-table-column
+        prop="plate"
+        label="车牌号"
+        width="150"
+      ></el-table-column>
+      <el-table-column
+        prop="parkName"
+        label="停车场名称"
+        width="180"
+      ></el-table-column>
+      <el-table-column
+        prop="dealMode"
+        label="停车类型"
+        width="180"
+      ></el-table-column>
+      <el-table-column
+        prop="ticketCode"
+        label="票号"
+        width="180"
+      ></el-table-column>
+      <el-table-column
+        prop="answerTm"
+        label="呼叫开始时间"
+        width="220"
+      ></el-table-column>
+      <el-table-column
+        prop="hangUpTm"
+        label="挂断时间"
+        width="220"
+      ></el-table-column>
+      <el-table-column
+        prop="duration"
+        label="通话时长"
+        width="120"
+      ></el-table-column>
+      <el-table-column
+        prop="useName"
+        label="客服名称"
+        width="120"
+      ></el-table-column>
+      <el-table-column
+        fixed="right"
+        label="操作"
+        width="120"
+      >
         <template slot-scope="scope">
-          <el-button @click="getdetail(scope.$index)" type="text" size="small">查看详细</el-button>
+          <el-button
+            @click="getdetail(scope.$index)"
+            type="text"
+            size="small"
+          >查看详细</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <div class="block" style="padding-left:50px;">
+    <div
+      class="block"
+      style="padding-left:50px;"
+    >
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -71,7 +170,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       //前往
       currentPage: 1,
@@ -95,7 +194,7 @@ export default {
     }
   },
   methods: {
-    searchcallinfo() {
+    searchcallinfo () {
       this.userinfo.datas.userId = localStorage.user
       this.userinfo.datas.pageSize = this.pageSize
       this.userinfo.datas.pageNumber = this.page
@@ -143,7 +242,7 @@ export default {
           console.log('出现了错误' + err)
         })
     },
-    msgbox1(a, b) {
+    msgbox1 (a, b) {
       this.$confirm(a, b, {
         // showCancelButton: true,
         confirmButtonText: '确定',
@@ -159,20 +258,19 @@ export default {
           })
         })
     },
-    open1(a) {
+    open1 (a) {
       let time = new Date()
       let now = time.toLocaleTimeString()
       let message = a
       let msg = message + ' ' + now
       this.$notify({
-        group: 'goo',
-        duration: 3000,
-        type: 'success',
-        title: '注意',
-        text: msg
+        title: '提示',
+        message: msg,
+        customClass: "notify04",
+        duration: 10000,
       })
     },
-    getnow() {
+    getnow () {
       var now = new Date()
       let year = now.getFullYear()
       let month = now.getMonth() + 1
@@ -187,27 +285,27 @@ export default {
       this.time = nowtime.toString()
       return nowtime.toString()
     },
-    conver(a) {
+    conver (a) {
       return a < 10 ? '0' + a : a
     },
     // 处理页面变化
-    handleCurrentChange(val) {
+    handleCurrentChange (val) {
       this.page = val
       this.searchcallinfo()
       console.log(`当前页: ${val}`)
     },
     // 处理页码大小
-    handleSizeChange(val) {
+    handleSizeChange (val) {
       this.pageSize = val
       console.log(`每页 ${val} 条`)
       this.searchcallinfo()
     },
     // 处理序号
-    indexMethod(index) {
+    indexMethod (index) {
       return index + 1
     },
     //点击查看详情触发的事件
-    getdetail(index) {
+    getdetail (index) {
       console.log('当前是第' + index + '行')
       // console.log(this.list[index])
       // this.dealInfo = this.list
@@ -220,7 +318,7 @@ export default {
       })
     }
   },
-  mounted() {
+  mounted () {
     this.searchcallinfo()
     this.userinfo.datas.endTm = this.getnow()
   }
@@ -231,6 +329,16 @@ export default {
   font-size: 25px;
   margin: auto;
   /* color: aqua; */
+}
+.notify04 {
+  border-radius: 10px;
+  opacity: 0.8;
+  width: 400px;
+  height: 160px;
+  background-color: rgb(44, 243, 127);
+  font-size: 24px;
+  padding-top: 30px;
+  padding-left: 20px;
 }
 </style>
       
