@@ -854,9 +854,10 @@ export default {
         appKey: '',
         appSecret: ''
       },
-      tokenback: '',
       //用来保存监控所需的令牌
-      videoback: {},
+      tokenback: '',
+      //给监控令牌记录一个时间
+      tokenbacktime: '',
       //保存登录时获取到绑定的设备编号
       telephone: {},
       dialogVisible: false,
@@ -923,6 +924,7 @@ export default {
 
       // 清除界面元素数据
       this.clearinfo()
+      this.zhuangtai = false
       //如果OM设备传过来的信息中含有ext数组(是OM设备的状态消息)
       if (this.address.ext) {
         //上线之前需要改1为0
@@ -1050,7 +1052,9 @@ export default {
       this.callback = ''
       this.tradeback = ''
       this.livesrc02 = ''
-      this.zhuangtai = false
+      this.reasonId1 = ''
+      this.reasonId2 = ''
+
     },
     // 提示信息(右上角那种)
     open1 (a) {
@@ -1265,6 +1269,7 @@ export default {
             // this.msgbox(partrb.message, '提示')
             this.open2('完成本次服务成功')
             this.clearinfo()
+            this.zhuangtai = false
             this.hangup()
           }
         })
@@ -1278,7 +1283,7 @@ export default {
       let submit = {}
       submit = JSON.stringify(this.reasoninfo)
       // submit = this.reasoninfo
-      console.log('原因模块发送的数据：' + submit)
+      // console.log('原因模块发送的数据：' + submit)
       this.$axios({
         method: 'post',
         url: '/GetCallReasonListHandler.ashx?method=GET&lan=zh-CN&type=app&compress=00',
@@ -1288,7 +1293,7 @@ export default {
       })
         .then(res => {
           let back = JSON.stringify(res.data)
-          console.log('原因模块返回的数据' + back)
+          // console.log('原因模块返回的数据' + back)
           this.reasonback = JSON.parse(JSON.parse(back).datas).list
 
           //让获取到的值和options2中的label和value相等
@@ -1297,7 +1302,7 @@ export default {
 
           this.options2 = JSON.parse(this.reasonback)
 
-          console.log('options2中的信息' + this.options2)
+          // console.log('options2中的信息' + this.options2)
         })
         .catch(err => {
           console.log('原因模块出现了错误' + err)
@@ -1309,7 +1314,7 @@ export default {
       let submit = {}
       submit = JSON.stringify(this.reasoninfo2)
       // submit = this.reasoninfo
-      console.log('原因模块发送的数据：' + submit)
+      // console.log('原因模块发送的数据：' + submit)
       this.$axios({
         method: 'post',
         url: '/GetOpenReasonListHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
@@ -1319,7 +1324,7 @@ export default {
       })
         .then(res => {
           let back = JSON.stringify(res.data)
-          console.log('原因模块返回的数据' + back)
+          // console.log('原因模块返回的数据' + back)
           this.reasonback2 = JSON.parse(JSON.parse(back).datas).list
 
           //让获取到的值和options1中的label和value相等
@@ -1328,7 +1333,7 @@ export default {
 
           this.options1 = JSON.parse(this.reasonback2)
 
-          console.log('options1中的信息' + this.options1)
+          // console.log('options1中的信息' + this.options1)
         })
         .catch(err => {
           console.log('原因模块出现了错误' + err)
@@ -1350,6 +1355,7 @@ export default {
           let token = JSON.stringify(res.data)
           console.log('获取视频令牌模块返回的数据' + token)
           this.tokenback = JSON.parse(token).data.accessToken
+          this.tokenbacktime = this.getNow()
           console.log('接到了token:' + this.tokenback)
         })
         .catch(err => {
@@ -1360,14 +1366,29 @@ export default {
       this.player = new EZUIKit.EZUIPlayer('myplayer')
       this.player.play()
     },
+    comparedate () {
+      let nowtime00 = this.getNow()
+      console.log(nowtime00 + "nowtime00")
+      console.log(this.tokenbacktime)
+
+      var date1 = new Date(nowtime00);
+      var date2 = new Date(this.tokenbacktime);
+      var date3 = (date1.getTime() - date2.getTime()) / 1000;   //相差秒数
+      console.log("比较2个日期相差秒数" + date3)
+      return date3
+    },
     initvideo02 () {
-      this.getvideotoken()
-      console.log('我要打印看下' + this.tokenback)
-      console.log(this.camera_serial)
+      if (this.comparedate() > 432000) {
+        console.log("wtfffffffffffffffffff")
+        this.getvideotoken()
+
+      }
+      // console.log('我要打印看下' + this.tokenback)
+      // console.log(this.camera_serial)
       this.deviceID = this.camera_serial.split('-')[0]
       this.chanelNo = this.camera_serial.split('-')[1]
-      console.log(this.deviceID)
-      console.log(this.chanelNo)
+      // console.log(this.deviceID)
+      // console.log(this.chanelNo)
       let token = this.tokenback
       let head = 'https://open.ys7.com/ezopen/h5/iframe?url=ezopen://open.ys7.com/' + this.deviceID + '/' + this.chanelNo + '.hd.live&autoplay=1&accessToken='
       this.livesrc02 = head + token
@@ -1429,7 +1450,7 @@ export default {
       //连接建立失败重连
       this.socketinfo = "连接服务器失败，准备10秒后重连"
       console.log('5秒后准备重连')
-      setTimeout(this.initWebSocket(), 10000);
+      // setTimeout(this.initWebSocket(), 10000);
     },
     websocketonmessage (e) {
       var da = e.data
@@ -1459,7 +1480,7 @@ export default {
       //关闭
       console.log('断开连接', e)
       console.log('15秒后准备重连')
-      setTimeout(this.initWebSocket(), 15000);
+      //setTimeout(this.initWebSocket(), 15000);
     }
   },
 
@@ -1479,37 +1500,44 @@ export default {
 }
 </script>
 
-<style scoped>
+<style  scoped>
 .common {
   background-color: rgb(0, 174, 255);
 }
+
 .gray {
   background-color: rgb(133, 133, 133);
 }
+
 .orange {
   background-color: rgb(255, 84, 0);
 }
+
 .grid-l1-0 {
   height: 5%;
   /* margin-bottom: 5%; */
   position: fixed;
   bottom: 0;
 }
+
 .grid-l1 {
   height: 43%;
   margin-bottom: 1%;
   background-color: gainsboro;
   border-radius: 8px;
 }
+
 .grid-l1-2 {
   height: 15%;
 }
+
 .grid-l2-1 {
   background-color: rgb(248, 248, 252);
   margin: auto;
   height: 58%;
   margin-bottom: 1%;
 }
+
 .grid-l2-2 {
   height: 41%;
   border-radius: 0 0 10px 10px;
@@ -1529,6 +1557,7 @@ export default {
   padding-left: 40px;
   height: 42%;
 }
+
 .grid-l3-2 {
   height: 29%;
   margin-bottom: 2%;
@@ -1543,6 +1572,7 @@ export default {
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
 }
+
 .grid-l3-3 {
   background-color: rgb(216, 228, 246);
   border-radius: 0 0 0px 0px;
@@ -1552,11 +1582,13 @@ export default {
   line-height: 90px;
   text-align: center;
 }
+
 .el-button-grid-l3-3 {
   height: 70px;
   width: 90%;
   font-size: 24px;
 }
+
 .orangepart {
   border-radius: 0 0 20px 20px;
   background-color: rgb(255, 84, 0);
@@ -1567,21 +1599,25 @@ export default {
   color: aliceblue;
   display: block;
 }
+
 .spading {
   padding: 30px;
   line-height: 35px;
 }
+
 .spading1 {
   padding: 30px;
   line-height: 35px;
   font-size: 28px;
   /* padding-left: 110px; */
 }
+
 .spadingl2 {
   margin-top: 30px;
   padding-top: 10px;
   font-size: 30px;
 }
+
 .spad2 {
   line-height: 35px;
   font-size: 18px;
@@ -1589,6 +1625,7 @@ export default {
   padding: auto;
   /* display: block; */
 }
+
 .tit00 {
   line-height: 50px;
   padding-top: 5px;
@@ -1598,6 +1635,7 @@ export default {
   display: block;
   font-weight: 550;
 }
+
 .tit01 {
   line-height: 50px;
   padding-top: 10px;
@@ -1606,10 +1644,12 @@ export default {
   font-size: 36px;
   display: block;
 }
+
 .tit02 {
   line-height: 40px;
   font-size: 20px;
 }
+
 .tit03 {
   font-size: 24px;
   text-align: left;
@@ -1617,6 +1657,7 @@ export default {
   display: block;
   white-space: pre-wrap;
 }
+
 .tit04 {
   padding-top: 10px;
   padding-bottom: 50px;
@@ -1624,12 +1665,14 @@ export default {
   font-size: 30px;
   display: block;
 }
+
 .tit05 {
   line-height: 30px;
   font-size: 20px;
   display: block;
   white-space: pre-wrap;
 }
+
 .tit06 {
   font-size: 20px;
   line-height: 30px;
@@ -1637,6 +1680,7 @@ export default {
   display: block;
   white-space: pre-wrap;
 }
+
 .tit07 {
   line-height: 50px;
   padding-top: 30px;
@@ -1650,6 +1694,7 @@ export default {
   font-size: 50px;
   display: block;
 }
+
 .add02 {
   margin-top: 0px;
   text-align: center;
@@ -1657,10 +1702,12 @@ export default {
   line-height: 40px;
   display: block;
 }
+
 .msgbox01 {
   font-size: 50px;
   min-height: 200px;
 }
+
 .row-bg {
   height: 960px;
   /* align-items: flex-start; */
@@ -1674,7 +1721,7 @@ export default {
   border: 1px solid blue;
 } */
 </style>
-<style>
+<style >
 .el-message-box {
   height: 250px;
   width: 600px;
@@ -1708,8 +1755,9 @@ export default {
   opacity: 1;
   width: 400px;
   height: 160px;
+  /*! autoprefixer: off */
   background-color: rgb(243, 174, 44);
-  font-size: 24px;
+  /*! autoprefixer: on */
   padding-top: 30px;
   padding-left: 20px;
   line-height: 40px;
@@ -1719,8 +1767,7 @@ export default {
   opacity: 1;
   max-width: 600px;
   height: 240px;
-  background-color: rgb(240, 243, 44);
-  font-size: 24px;
+  background: rgb(240, 243, 44);
   padding-top: 30px;
   padding-left: 20px;
   line-height: 40px;
@@ -1730,8 +1777,7 @@ export default {
   opacity: 0.8;
   width: 400px;
   height: 160px;
-  background-color: rgb(252, 47, 47);
-  font-size: 24px;
+  background: rgb(252, 47, 47);
   padding-top: 30px;
   padding-left: 20px;
 }

@@ -168,7 +168,7 @@ export default {
       let tele = JSON.stringify(tel.hostId).replace(new RegExp('"', 'g'), '')
       let telep = new Array()
       telep = tele.split(',')
-      console.log('从localStorage中获取到token中保存的与账号绑定的话机' + telep[0])
+      // console.log('从localStorage中获取到token中保存的与账号绑定的话机' + telep[0])
       this.hostID = telep[0]
     },
     handleLoginout () {
