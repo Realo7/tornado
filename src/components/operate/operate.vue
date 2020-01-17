@@ -1417,6 +1417,7 @@ export default {
       })
         .then(res => {
           console.log('挂断成功')
+          this.ombackrecord.attribute == '已挂断'
         })
         .catch(err => {
           console.log('挂断出现了错误' + err)
@@ -1461,7 +1462,13 @@ export default {
       // 判断address中是不是有ext.id
       if (this.address.ext) {
         let num0 = this.address.ext[0].id
-        let num1 = this.address.ext[1].id
+        if (this.address.ext[1].id) {
+          var num1 = this.address.ext[1].id
+        } else if (this.address.outer[0].to) {
+          var num1 = this.address.outer[0].to
+        } else {
+          cosole.log("其他信息")
+        }
         this.ombackansered = this.address
         this.open1(num0 + '呼入电话')
       } else {

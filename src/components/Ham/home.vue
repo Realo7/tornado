@@ -179,7 +179,7 @@ export default {
         method: 'post',
         // baseURL: 'api', //重写baseURL
         url: '/LoginBISHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
         data: submit
       })
         .then(res => {

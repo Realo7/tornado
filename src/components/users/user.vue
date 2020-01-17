@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <div style="margin-bottom:20px;">
+    <div style="margin-bottom:20px;">
       <el-row>
         <el-col :span="12">
           <el-input
@@ -15,9 +15,9 @@
           >搜索</el-button>
         </el-col>
       </el-row>
-    </div> -->
+    </div>
 
-    <!-- <el-tabs
+    <el-tabs
       tabPosition="left"
       type="border-card"
     >
@@ -50,7 +50,7 @@
         <el-button>这是个按钮</el-button>
       </el-tab-pane>
 
-    </el-tabs> -->
+    </el-tabs>
   </div>
 </template>
 <script>
@@ -77,11 +77,11 @@ export default {
       let message = a
       let msg = message + ' ' + now
       this.$notify({
-        group: 'fo2',
+        title: '提示',
+        message: msg,
+        type: "succes",
         duration: 10000,
-        type: 'warning',
-        title: '注意',
-        text: msg
+        position: 'top-right'
       })
     },
     callother () {
@@ -89,8 +89,8 @@ export default {
       // submit = JSON.Stringify(this.callinfo)
       this.$axios({
         method: 'post',
-        url: 'http://47.111.76.83:8080/sendxml/callother',
-        data: { id1: '001', id2: '002' }
+        url: 'http://112.25.208.10:8087/sendxml/callother',
+        data: { id1: '1016', id2: '1017' }
         // headers: { 'Content-Type': 'application/json' }
         // emulateJSON: true
       })
