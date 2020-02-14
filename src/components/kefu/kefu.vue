@@ -19,26 +19,19 @@
               label="停车场名称"
               class="big"
             >
+
               <el-select
                 v-model="userinfo.datas.parkId"
+                clearable
                 placeholder="请选择是哪个停车场"
-                style="width: 80%;"
+                style="font-size:24px;width: 80%;"
               >
+                <!-- @click.native="getreasoninfo2()" -->
                 <el-option
-                  label="停车场01"
-                  value="停车场01"
-                ></el-option>
-                <el-option
-                  label="停车场02"
-                  value="停车场02"
-                ></el-option>
-                <el-option
-                  label="停车场03"
-                  value="停车场03"
-                ></el-option>
-                <el-option
-                  label="停车场04"
-                  value="停车场04"
+                  v-for="item in parklist"
+                  :key="item.parkId"
+                  :label="item.parkName"
+                  :value="item.parkId"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -186,11 +179,19 @@ export default {
         datas: { plate: '', userId: '', opUserId: '', parkId: '', startTm: '', endTm: '', pageNumber: '', pageSize: '' }
       },
       userback: {},
+      getparkinfo: {
+        appId: '',
+        privatekey: '',
+        datas: { userId: '', parkName: '', pageIndex: '', pageSize: '' }
+      },
+      getparkback: {},
       list: [],
       dealInfo: {},
       operateLogList: [],
       time: '',
-      showlist: []
+      showlist: [],
+      parklist: [],
+      parkdataCount: '',
     }
   },
   methods: {
@@ -236,6 +237,36 @@ export default {
           this.showlist = JSON.parse(third)
 
           console.log('分页后需要显示的数据' + JSON.stringify(this.showlist)) //处理数据
+          //
+        })
+        .catch(err => {
+          console.log('出现了错误' + err)
+        })
+    },
+    usergetpark () {
+      this.getparkinfo.datas.userId = localStorage.user
+      this.getparkinfo.datas.pageIndex = 1
+      this.getparkinfo.datas.pageSize = 50
+      let submit = {}
+      submit = JSON.stringify(this.getparkinfo)
+      console.log('获取停车场模块提交的数据' + submit)
+      this.$axios({
+        method: 'post',
+        url: '/GetParkInfoByUserHandler.ashx?method=GET&lan=zh-CN&type=app&compress=00',
+        // headers: { 'Content-Type': 'application/json' },
+        data: submit,
+        emulateJSON: true
+      })
+        .then(res => {
+          let back = JSON.stringify(res.data)
+          console.log('报表返回的数据' + back)
+          this.open1(JSON.parse(back).message)
+          let first = JSON.parse(JSON.parse(back).datas)
+          // 获取总数
+          this.parkdataCount = parseInt(first.totalCount)
+          // 第二个parse
+          let second = JSON.parse(first.list)
+          this.parklist = second
           //
         })
         .catch(err => {
@@ -321,6 +352,7 @@ export default {
   mounted () {
     this.searchcallinfo()
     this.userinfo.datas.endTm = this.getnow()
+    this.usergetpark()
   }
 }
 </script>
