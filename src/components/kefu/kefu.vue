@@ -4,72 +4,52 @@
       <table style="width:100%;">
         <tr>
           <td style="width:14%;">
-            <el-form-item
-              label="车牌号"
-              class="big"
-            >
-              <el-input
-                v-model="userinfo.datas.plate"
-                style="width:90%;"
-              ></el-input>
+            <el-form-item label="车牌号"
+                          class="big">
+              <el-input v-model="userinfo.datas.plate"
+                        style="width:90%;"></el-input>
             </el-form-item>
           </td>
           <td style="width:20%;">
-            <el-form-item
-              label="停车场名称"
-              class="big"
-            >
+            <el-form-item label="停车场名称"
+                          class="big">
 
-              <el-select
-                v-model="userinfo.datas.parkId"
-                clearable
-                placeholder="请选择是哪个停车场"
-                style="font-size:24px;width: 80%;"
-              >
+              <el-select v-model="userinfo.datas.parkId"
+                         clearable
+                         placeholder="请选择是哪个停车场"
+                         style="font-size:24px;width: 80%;">
                 <!-- @click.native="getreasoninfo2()" -->
-                <el-option
-                  v-for="item in parklist"
-                  :key="item.parkId"
-                  :label="item.parkName"
-                  :value="item.parkId"
-                ></el-option>
+                <el-option v-for="item in parklist"
+                           :key="item.parkId"
+                           :label="item.parkName"
+                           :value="item.parkId"></el-option>
               </el-select>
             </el-form-item>
           </td>
           <td style="width:20%;">
-            <el-form-item
-              label="呼叫开始时间"
-              class="big"
-            >
-              <el-date-picker
-                type="datetime"
-                placeholder="选择日期时间"
-                v-model="userinfo.datas.startTm"
-                default-value="2019-01-01 00:00:00"
-                style="width:90%;"
-              ></el-date-picker>
+            <el-form-item label="呼叫开始时间"
+                          class="big">
+              <el-date-picker type="datetime"
+                              placeholder="选择日期时间"
+                              v-model="userinfo.datas.startTm"
+                              default-value="2019-01-01 00:00:00"
+                              style="width:90%;"></el-date-picker>
             </el-form-item>
           </td>
           <td style="width:20%;">
-            <el-form-item
-              label="呼叫结束时间"
-              class="big"
-            >
-              <el-date-picker
-                type="datetime"
-                placeholder="选择日期时间"
-                v-model="userinfo.datas.endTm"
-                default-value="2019-01-01 00:00:00"
-                style="width:90%;"
-              ></el-date-picker>
+            <el-form-item label="呼叫结束时间"
+                          class="big">
+              <el-date-picker type="datetime"
+                              placeholder="选择日期时间"
+                              v-model="userinfo.datas.endTm"
+                              default-value="2019-01-01 00:00:00"
+                              style="width:90%;"></el-date-picker>
             </el-form-item>
           </td>
           <td style="width:12%;">
             <el-form-item>
-              <el-button
-                type="primary"
-                @click="searchcallinfo()"
-              >立即检索</el-button>
+              <el-button type="primary"
+                         @click="searchcallinfo()">立即检索</el-button>
             </el-form-item>
           </td>
         </tr>
@@ -78,85 +58,57 @@
     <!-- <span contenteditable="true">这是一段可以编辑的文字</span> -->
     <br />
     <hr />
-    <el-table
-      :data="showlist"
-      style="width: 100%"
-      max-height="700"
-    >
-      <el-table-column
-        type="index"
-        :index="indexMethod"
-        width="100"
-        label="序号"
-        fixed
-      ></el-table-column>
-      <el-table-column
-        prop="plate"
-        label="车牌号"
-        width="150"
-      ></el-table-column>
-      <el-table-column
-        prop="parkName"
-        label="停车场名称"
-        width="180"
-      ></el-table-column>
-      <el-table-column
-        prop="dealMode"
-        label="停车类型"
-        width="180"
-      ></el-table-column>
-      <el-table-column
-        prop="ticketCode"
-        label="票号"
-        width="180"
-      ></el-table-column>
-      <el-table-column
-        prop="answerTm"
-        label="呼叫开始时间"
-        width="220"
-      ></el-table-column>
-      <el-table-column
-        prop="hangUpTm"
-        label="挂断时间"
-        width="220"
-      ></el-table-column>
-      <el-table-column
-        prop="duration"
-        label="通话时长"
-        width="120"
-      ></el-table-column>
-      <el-table-column
-        prop="useName"
-        label="客服名称"
-        width="120"
-      ></el-table-column>
-      <el-table-column
-        fixed="right"
-        label="操作"
-        width="120"
-      >
+    <el-table :data="showlist"
+              style="width: 100%"
+              max-height="700">
+      <el-table-column type="index"
+                       :index="indexMethod"
+                       width="100"
+                       label="序号"
+                       fixed></el-table-column>
+      <el-table-column prop="plate"
+                       label="车牌号"
+                       width="150"></el-table-column>
+      <el-table-column prop="parkName"
+                       label="停车场名称"
+                       width="180"></el-table-column>
+      <el-table-column prop="dealMode"
+                       label="停车类型"
+                       width="180"></el-table-column>
+      <el-table-column prop="ticketCode"
+                       label="票号"
+                       width="180"></el-table-column>
+      <el-table-column prop="answerTm"
+                       label="呼叫开始时间"
+                       width="220"></el-table-column>
+      <el-table-column prop="hangUpTm"
+                       label="挂断时间"
+                       width="220"></el-table-column>
+      <el-table-column prop="duration"
+                       label="通话时长"
+                       width="120"></el-table-column>
+      <el-table-column prop="useName"
+                       label="客服名称"
+                       width="120"></el-table-column>
+      <el-table-column fixed="right"
+                       label="操作"
+                       width="120">
         <template slot-scope="scope">
-          <el-button
-            @click="getdetail(scope.$index)"
-            type="text"
-            size="small"
-          >查看详细</el-button>
+          <el-button @click="getdetail(scope.$index)"
+                     type="text"
+                     size="small">查看详细</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <div
-      class="block"
-      style="padding-left:50px;"
-    >
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[11, 15 , 20]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="dataCount"
-      ></el-pagination>
+    <div class="block"
+         style="padding-left:50px;">
+      <el-pagination @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
+                     :current-page="currentPage"
+                     :page-sizes="[11, 15 , 20]"
+                     :page-size="pageSize"
+                     layout="total, sizes, prev, pager, next, jumper"
+                     :total="dataCount"></el-pagination>
     </div>
   </div>
 </template>
@@ -252,7 +204,7 @@ export default {
       console.log('获取停车场模块提交的数据' + submit)
       this.$axios({
         method: 'post',
-        url: '/GetParkInfoByUserHandler.ashx?method=GET&lan=zh-CN&type=app&compress=00',
+        url: '/GetParkInfoByUserHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
         // headers: { 'Content-Type': 'application/json' },
         data: submit,
         emulateJSON: true
@@ -260,7 +212,7 @@ export default {
         .then(res => {
           let back = JSON.stringify(res.data)
           console.log('报表返回的数据' + back)
-          this.open1(JSON.parse(back).message)
+          // this.open1(JSON.parse(back).message)
           let first = JSON.parse(JSON.parse(back).datas)
           // 获取总数
           this.parkdataCount = parseInt(first.totalCount)
