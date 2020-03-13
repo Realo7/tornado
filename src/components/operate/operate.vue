@@ -546,7 +546,7 @@
             <span
               v-if="!ombackansered.attribute&&!ombackrecord.attribute"
               class="tit04"
-            >通话状态</span>
+            >空闲状态</span>
             <div v-if="ombackansered.attribute">
               <img
                 src="@/assets/img/incalling.png"
@@ -963,7 +963,7 @@ export default {
       if (this.ombackansered.attribute == '正在应答') {
         this.callerinfo.datas.status = 1
         this.callerinfo.datas.PA2_serial = this.gocall
-      } else if (this.ombackrecord.attribute == '已挂断') {
+      } else if (this.ombackansered.attribute == '已挂断') {
         this.callerinfo.datas.status = 2
         this.callerinfo.datas.callsumtm = this.ombackrecord.Duration
         this.callerinfo.datas.om_callId = this.ombackrecord.callid
@@ -1470,8 +1470,8 @@ export default {
     //获取远程推送金额分档
     getmoneykindinfo () {
       this.moneyinfo.datas.userId = localStorage.user
-      // this.moneyinfo.datas.parkId = this.callback.parkId
-      this.moneyinfo.datas.parkId = 'PK0067'
+      this.moneyinfo.datas.parkId = this.callback.parkId
+      // this.moneyinfo.datas.parkId = 'PK0067'
       let submit = {}
       submit = JSON.stringify(this.moneyinfo)
       console.log('远程推送金额分档发送的数据：' + submit)
@@ -1526,8 +1526,8 @@ export default {
     },
     //远程推送收费信息到缴费机
     pushtomech () {
-      // this.mechineinfo.datas.userId = localStorage.user
-      this.mechineinfo.datas.userId = 'lmf123'
+      this.mechineinfo.datas.userId = localStorage.user
+      // this.mechineinfo.datas.userId = 'lmf123'
 
       this.mechineinfo.datas.userType = 1
 
@@ -1536,19 +1536,19 @@ export default {
 
       this.mechineinfo.datas.dealtype = 0
 
-      // this.mechineinfo.datas.serialNum = this.tradeback.TradingInfoID
-      this.mechineinfo.datas.serialNum = 'TP2019062509102785840FF'
+      this.mechineinfo.datas.serialNum = this.tradeback.TradingInfoID
+      // this.mechineinfo.datas.serialNum = 'TP2019062509102785840FF'
 
       this.mechineinfo.datas.reason = 0
       this.mechineinfo.datas.pushTag = 1
 
-      // this.mechineinfo.datas.plate = this.tradeback.plate
-      this.mechineinfo.datas.plate = '苏B003A2'
+      this.mechineinfo.datas.plate = this.tradeback.plate
+      // this.mechineinfo.datas.plate = '苏B003A2'
 
       this.mechineinfo.datas.fixAmont = this.moneykind
 
-      // this.mechineinfo.datas.parkId = this.callback.parkId
-      this.mechineinfo.datas.parkId = 'PK0067'
+      this.mechineinfo.datas.parkId = this.callback.parkId
+      // this.mechineinfo.datas.parkId = 'PK0067'
       let submit = {}
       submit = JSON.stringify(this.mechineinfo)
       console.log('远程推送发送的数据：' + submit)
@@ -1646,7 +1646,7 @@ export default {
       })
         .then(res => {
           console.log('挂断成功')
-          this.ombackrecord.attribute == '已挂断'
+          this.ombackansered.attribute = '已挂断'
         })
         .catch(err => {
           console.log('挂断出现了错误' + err)
@@ -1687,7 +1687,7 @@ export default {
       console.log(da)
 
       this.address = JSON.parse(da)
-      // console.log(this.address)
+      console.log("OM设备发来的消息" + this.address)
       // 判断address中是不是有ext.id
       if (this.address.ext) {
         let num0 = this.address.ext[0].id
@@ -1699,13 +1699,16 @@ export default {
           cosole.log("其他信息")
         }
         this.ombackansered = this.address
-        this.open1(num0 + '呼入电话')
+        if (this.address.attribute == '正在应答') {
+          this.open1(num0 + '呼入电话')
+          this.getcaller()
+        }
       } else {
-        this.ombackansered.attribute = ''
+        this.ombackrecord.attribute = ''
         this.ombackrecord = this.address
         this.gettrade()
       }
-      this.getcaller()
+
     },
     websocketsend (Data) {
       //数据发送

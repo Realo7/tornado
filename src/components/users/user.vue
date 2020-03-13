@@ -29,7 +29,7 @@
           type="primary"
           icon="el-icon-phone-outline"
           @click="callother"
-        >0号分机</el-button>
+        >1017</el-button>
         <el-button
           type="primary"
           icon="el-icon-phone-outline"
@@ -89,7 +89,7 @@ export default {
       // submit = JSON.Stringify(this.callinfo)
       this.$axios({
         method: 'post',
-        url: 'http://112.25.208.10:8087/sendxml/callother',
+        url: this.$springurl + '/sendxml/callother',
         data: { id1: '1016', id2: '1017' }
         // headers: { 'Content-Type': 'application/json' }
         // emulateJSON: true
