@@ -107,8 +107,8 @@
             :data="Coupon"
             style="width: 100%"
             max-height="250"
-            v-if="tagtype=='1'"
           >
+            <!-- v-if="tagtype=='1'" -->
             <el-table-column
               prop="serialNum"
               label="交易流水号"
@@ -165,8 +165,8 @@
             :data="inoutimgs"
             style="width: 100%"
             max-height="250"
-            v-if="tagtype=='2'"
           >
+            <!-- v-if="tagtype=='2'" -->
             <el-table-column
               prop="serialNum"
               label="交易流水号"
@@ -232,8 +232,8 @@
             :data="paymes"
             style="width: 100%"
             max-height="250"
-            v-if="tagtype=='3'"
           >
+            <!-- v-if="tagtype=='3'" -->
             <el-table-column
               prop="addmonId"
               label="ID"
@@ -663,7 +663,7 @@
         <!-- 第三列下方 -->
         <div class="grid-l3-3">
           <el-row>
-            <el-col :span="12">
+            <!-- <el-col :span="12">
               <el-select
                 v-model="tagtype"
                 placeholder="选择需要查看的历史轨迹"
@@ -676,12 +676,12 @@
                   :value="item.tagId"
                 ></el-option>
               </el-select>
-            </el-col>
+            </el-col> -->
             <el-col :span="12">
               <el-button
                 icon="el-icon-view el-icon--right"
                 class="el-button-grid-l3-3"
-                @click="dialogVisible = true;getcarhistory()"
+                @click="dialogVisible = true;getcarhistory0()"
               >车辆历史轨迹</el-button>
             </el-col>
             <el-col :span="12">
@@ -1078,6 +1078,14 @@ export default {
       this.reasonId2 = ''
 
     },
+    getcarhistory0 () {
+      this.tagtype = 1
+      this.getcarhistory()
+      this.tagtype = 2
+      this.getcarhistory()
+      this.tagtype = 3
+      this.getcarhistory()
+    },
     //车辆历史轨迹
     getcarhistory () {
       this.carhisinfo.datas.userId = localStorage.user
@@ -1126,7 +1134,7 @@ export default {
             let third = JSON.stringify(this.Coupon)
             this.Coupon = JSON.parse(third)
 
-            console.log('his显示的数据' + JSON.stringify(this.Coupon)) //处理数据
+            console.log('his显示的数据1' + JSON.stringify(this.Coupon)) //处理数据
             //
           } else if (this.carhisinfo.datas.tag == 2) {
             for (var i = 0; i < second.length; i++) {
@@ -1150,7 +1158,7 @@ export default {
             let third = JSON.stringify(this.inoutimgs)
             this.inoutimgs = JSON.parse(third)
 
-            console.log('his显示的数据' + JSON.stringify(this.inoutimgs)) //处理数据
+            console.log('his显示的数据2' + JSON.stringify(this.inoutimgs)) //处理数据
             //
           } else if (this.carhisinfo.datas.tag == 3) {
             for (var i = 0; i < second.length; i++) {
@@ -1174,8 +1182,7 @@ export default {
             }
             let third = JSON.stringify(this.paymes)
             this.paymes = JSON.parse(third)
-
-            console.log('his显示的数据' + JSON.stringify(this.paymes)) //处理数据
+            console.log('his显示的数据3' + JSON.stringify(this.paymes)) //处理数据
             //
           }
 

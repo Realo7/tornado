@@ -21,7 +21,7 @@
       tabPosition="left"
       type="border-card"
     >
-      <el-tab-pane>
+      <!-- <el-tab-pane>
         <span slot="label">
           <i class="el-icon-date"></i> 一号停车场
         </span>
@@ -33,21 +33,32 @@
         <el-button
           type="primary"
           icon="el-icon-phone-outline"
+          @click="getlinkparklist()"
         >1号分机</el-button>
         <el-button
-          type="primary"
+          type="
+          primary"
           icon="el-icon-phone-outline"
+          @click="gettelephonelist ()"
         >2号分机</el-button>
-      </el-tab-pane>
+      </el-tab-pane> -->
+
       <el-tab-pane
-        :key="item.parkname"
-        v-for="item in parkback"
+        :key="item.parkName"
+        v-for="(item,index) in parklistback"
       >
-        <span slot="label">
+        <span
+          slot="label"
+          @click="gettelephonelist(index)"
+        >
           <i class="el-icon-coordinate" />
-          {{item.parkname}}
+          {{item.parkName}}
         </span>
-        <el-button>这是个按钮</el-button>
+        <el-button
+          :key="item.devId"
+          v-for="(item,index) in telephoneback"
+          @click="callother(index)"
+        >{{item.devName}}</el-button>
       </el-tab-pane>
 
     </el-tabs>
@@ -57,7 +68,9 @@
 export default {
   data () {
     return {
+      index: '',
       input: '',
+      // parkId: 'PK0067',
       callinfo: {
         id1: '001',
         id2: '002'
@@ -67,7 +80,20 @@ export default {
         { parkname: '停车场二号', nirong: 'button1' },
         { parkname: '停车场三号', nirong: 'button1' },
         { parkname: 'givemefive', nirong: 'button1' }
-      ]
+      ],
+      parklistinfo: {
+        appId: '',
+        privatekey: '',
+        datas: { userId: '', parkName: '', pageIndex: '', pageSize: '' }
+      },
+      parklistback: {},
+      telephoneinfo: {
+        appId: '',
+        privatekey: '',
+        datas: { parkId: '', userId: '' }
+      },
+      telephoneback: {},
+      devId: {}
     }
   },
   methods: {
@@ -84,13 +110,16 @@ export default {
         position: 'top-right'
       })
     },
-    callother () {
+    callother (index) {
       let submit = {}
       // submit = JSON.Stringify(this.callinfo)
+      this.devId = this.telephoneback[index].devId
+      console.log(this.devId)
+      var id2 = this.devId
       this.$axios({
         method: 'post',
         url: this.$springurl + '/sendxml/callother',
-        data: { id1: '1016', id2: '1017' }
+        data: { id1: '1016', id2: id2 }
         // headers: { 'Content-Type': 'application/json' }
         // emulateJSON: true
       })
@@ -105,7 +134,71 @@ export default {
         .catch(err => {
           console.log('呼叫模块出现了错误' + err)
         })
-    }
+    },
+    //获取员工关联停车场列表
+    getlinkparklist () {
+      this.parklistinfo.datas.userId = localStorage.user
+      // 模糊查询停车场名称
+      // this.parklistinfo.datas.parkName = '停车场名称'
+      this.parklistinfo.datas.pageIndex = 0
+      this.parklistinfo.datas.pageSize = 0
+      let submit = {}
+      submit = JSON.stringify(this.parklistinfo)
+      console.log('搜索信息模块发送的数据' + submit)
+      this.$axios({
+        method: 'post',
+        url: '/GetParkInfoByUserHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+        data: submit,
+        emulateJSON: true
+      })
+        .then(res => {
+          let trb = JSON.stringify(res.data)
+          let partrb = JSON.parse(trb)
+          console.log('获取员工关联停车场列表返回的数据' + trb)
+          if (partrb.statusCode == 200) {
+            this.parklistback = JSON.parse(JSON.parse(JSON.parse(trb).datas).list)
+            // console.log("WWWWWWWWWWWWWWW" + JSON.stringify(this.parklistback))
+          } else {
+
+          }
+        })
+        .catch(err => {
+          console.log("获取员工关联停车场列表模块出现了错误")
+        })
+    },
+    gettelephonelist (index) {
+      // console.log("获取index" + index)
+      // console.log("LOOOOOOL" + this.parklistback[index].parkId)
+      this.telephoneinfo.datas.userId = localStorage.user
+      this.telephoneinfo.datas.parkId = this.parklistback[index].parkId
+      let submit = {}
+      submit = JSON.stringify(this.telephoneinfo)
+      console.log('搜索信息模块发送的数据' + submit)
+      this.$axios({
+        method: 'post',
+        url: '/GetInterphoneHandler.ashx?method=POST&lan=zh-CN&type=app&compress=00',
+        data: submit,
+        emulateJSON: true
+      })
+        .then(res => {
+          let trb = JSON.stringify(res.data)
+          let partrb = JSON.parse(trb)
+          console.log('根据停车场ID获取对讲分机列表返回的数据' + trb)
+          if (partrb.statusCode == 200) {
+            this.telephoneback = JSON.parse(JSON.parse(JSON.parse(trb).datas).list)
+            console.log(this.telephoneback)
+          } else {
+
+          }
+        })
+        .catch(err => {
+          console.log("根据停车场ID获取对讲分机列表模块出现了错误")
+        })
+    },
+    //根据停车场ID获取对讲分机列表
+  },
+  mounted () {
+    this.getlinkparklist()
   }
 }
 </script>
