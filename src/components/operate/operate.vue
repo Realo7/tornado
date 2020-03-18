@@ -1079,19 +1079,21 @@ export default {
 
     },
     getcarhistory0 () {
-      this.tagtype = 1
-      this.getcarhistory()
-      this.tagtype = 2
-      this.getcarhistory()
-      this.tagtype = 3
-      this.getcarhistory()
+
+      this.getcarhistory(1)
+      setTimeout(() => {
+        this.getcarhistory(2)
+        setTimeout(() => {
+          this.getcarhistory(3)
+        }, 500);
+      }, 500);
     },
     //车辆历史轨迹
-    getcarhistory () {
+    getcarhistory (numb) {
       this.carhisinfo.datas.userId = localStorage.user
       this.carhisinfo.datas.plate = this.tradeback.plate
       this.carhisinfo.datas.ticketNo = this.tradeback.ticketCode
-      this.carhisinfo.datas.tag = this.tagtype
+      this.carhisinfo.datas.tag = numb
       let submit = {}
       submit = JSON.stringify(this.carhisinfo)
       console.log('车辆轨迹模块提交的数据' + submit)
@@ -1105,7 +1107,8 @@ export default {
         .then(res => {
           let back = JSON.stringify(res.data)
           console.log('车辆轨迹返回的数据' + back)
-          this.open1(JSON.parse(back).message)
+          // 使用通知返回信息
+          // this.open1(JSON.parse(back).message)
           let first = JSON.parse(JSON.parse(back).datas)
           // 获取总数
           this.hisdataCount = parseInt(first.totalCount)

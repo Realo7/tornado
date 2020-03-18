@@ -55,6 +55,7 @@
           {{item.parkName}}
         </span>
         <el-button
+          class="buttonoftele"
           :key="item.devId"
           v-for="(item,index) in telephoneback"
           @click="callother(index)"
@@ -86,7 +87,7 @@ export default {
         privatekey: '',
         datas: { userId: '', parkName: '', pageIndex: '', pageSize: '' }
       },
-      parklistback: {},
+      parklistback: [],
       telephoneinfo: {
         appId: '',
         privatekey: '',
@@ -136,7 +137,7 @@ export default {
         })
     },
     //获取员工关联停车场列表
-    getlinkparklist () {
+    async getlinkparklist () {
       this.parklistinfo.datas.userId = localStorage.user
       // 模糊查询停车场名称
       // this.parklistinfo.datas.parkName = '停车场名称'
@@ -158,6 +159,8 @@ export default {
           if (partrb.statusCode == 200) {
             this.parklistback = JSON.parse(JSON.parse(JSON.parse(trb).datas).list)
             // console.log("WWWWWWWWWWWWWWW" + JSON.stringify(this.parklistback))
+            //回调根据停车场ID获取分机列表的方法
+            this.gettelephonelist(0)
           } else {
 
           }
@@ -166,11 +169,13 @@ export default {
           console.log("获取员工关联停车场列表模块出现了错误")
         })
     },
-    gettelephonelist (index) {
+    //根据停车场ID获取对讲分机列表
+    async gettelephonelist (index) {
       // console.log("获取index" + index)
       // console.log("LOOOOOOL" + this.parklistback[index].parkId)
       this.telephoneinfo.datas.userId = localStorage.user
       this.telephoneinfo.datas.parkId = this.parklistback[index].parkId
+
       let submit = {}
       submit = JSON.stringify(this.telephoneinfo)
       console.log('搜索信息模块发送的数据' + submit)
@@ -195,11 +200,16 @@ export default {
           console.log("根据停车场ID获取对讲分机列表模块出现了错误")
         })
     },
-    //根据停车场ID获取对讲分机列表
   },
   mounted () {
     this.getlinkparklist()
+    // 设置定时器的方法好蠢, 等会换一个async尝试,需要异步请求相关知识
+    // setTimeout(() => {
+    //   this.gettelephonelist(0)
+    // }, 2000);
+
   }
+
 }
 </script>
 <style>
@@ -218,10 +228,14 @@ export default {
 }
 </style>
 <style scoped>
-.el-button {
+/* local styles */
+.buttonoftele {
   height: 100px;
-  width: 180px;
-  font-size: 26px;
+  width: 240px;
+  font-size: 24px;
+  margin: 20px;
+  text-align: center;
+  /* background-color: deepskyblue; */
 }
 .btn2 {
   height: 40px;
