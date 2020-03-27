@@ -83,7 +83,7 @@
         ></iframe>
         <div class="grid-l1-0">
           <span
-            v-if="socketinfo='服务器连接成功'"
+            v-if="socketinfo=='服务器连接成功'"
             class="socket-bg-blue"
           >{{socketinfo}}</span>
           <span
@@ -1076,6 +1076,8 @@ export default {
       this.livesrc02 = ''
       this.reasonId1 = ''
       this.reasonId2 = ''
+      this.ombackrecord = ''
+      this.ombackansered = ''
 
     },
     getcarhistory0 () {
@@ -1342,7 +1344,8 @@ export default {
                 let trb = JSON.stringify(res.data)
                 console.log('手动开闸返回的数据' + trb)
                 //开闸之后自动调用完成本次服务
-                this.com2msg()
+                this.comService()
+                // this.com2msg()
                 // this.tradeback = JSON.parse(JSON.parse(trb).datas)
                 console.log('手动开闸模块需要显示的数据' + this.tradeback)
               })

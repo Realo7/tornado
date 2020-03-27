@@ -115,7 +115,7 @@ export default {
       let submit = {}
       // submit = JSON.Stringify(this.callinfo)
       this.devId = this.telephoneback[index].devId
-      console.log(this.devId)
+      console.log("准备呼叫的话机" + this.devId)
       var id2 = this.devId
       this.$axios({
         method: 'post',
