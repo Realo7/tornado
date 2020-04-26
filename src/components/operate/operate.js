@@ -641,10 +641,7 @@ export default {
           }
         })
         .catch(() => {
-          this.$message({
-            type: 'info',
-            message: 'ok'
-          })
+          
         })
     },
     msgbox2 (a, b) {
@@ -659,10 +656,7 @@ export default {
           this.com2msg()
         })
         .catch(() => {
-          this.$message({
-            type: 'info',
-            message: 'ok'
-          })
+          
         })
     },
 
@@ -997,7 +991,7 @@ export default {
         }
         this.ombackansered = this.address
         if (this.address.attribute == '正在接听') {
-          this.open1(num0 + '呼入电话')
+          this.open1(this.callback.devConnName+num0 + '呼入电话')
           this.getcaller()
         }
       } else {

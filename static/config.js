@@ -1,4 +1,6 @@
-const BaseUrl = "http://47.111.76.83:9901/Handlers"
+//正式环境
+// const BaseUrl = "http://47.111.76.83:9901/Handlers"
+const BaseUrl="http://192.168.1.99:3830/Handlers"
 const wsurl="ws://192.168.1.3:8089/websocket/"
 // const wsurl="ws://112.25.208.10:8087/websocket/"
 const springUrl="http://192.168.1.3:8089"
