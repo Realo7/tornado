@@ -17,9 +17,12 @@
       </el-row>
     </div>
 
+    <div v-if="parklistback==''">请绑定该账户下的话机信息</div>
+
     <el-tabs
       tabPosition="left"
       type="border-card"
+      v-if="parklistback!=''"
     >
       <!-- <el-tab-pane>
         <span slot="label">
